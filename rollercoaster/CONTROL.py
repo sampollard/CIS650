@@ -15,6 +15,8 @@ from datetime import datetime as dt
 #   leds.append(led)
 #   time.sleep(0.05)
 #   led.write(1)
+
+passenger_total = 0
 def control_c_handler(signum, frame):
 #     for led in leds:
 #         led.write(1)
@@ -47,11 +49,33 @@ def on_connect(client, userdata, flags, rc):
 
 #For now, when you get a message print it
 def on_message(client, userdata, msg):
-	print(client)
+	
+        print("client")
+        print(client)
+	print("userdata")
 	print(userdata)
+	print("msg.topic")
 	print(msg.topic)
-	print(msg.payload)
-   
+	print("msg.payload")
+	
+        print(msg.payload)
+        read = open('output.txt','r')
+        append = open('output.txt', 'a+')
+        ## To do, save message to file
+        try:
+            myString = str(msg.payload).split("====")
+            if (myString[1] == "Passenger"):
+                passenger_total = passenger_total + 1
+                #TODO: Turn Led on, ensure they are on per passenger
+                try:
+                    append.write(str(myString[1]) + "\n")
+                except:
+                    print("Error writting  message to file")
+        except:
+            print("Error in message")
+            pass
+        read.close()
+        append.close()
 
 # You can also add specific callbacks that match specific topics.
 # See message_callback_add at https://pypi.python.org/pypi/paho-mqtt#callbacks.
@@ -90,10 +114,21 @@ mqtt_client.subscribe(topicname + "/#") #subscribe to all students in class
 
 mqtt_client.loop_start()  # just in case - starts a loop that listens for incoming data and keeps client alive
 
+people_on_platform =0
+
 while True:
     timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
-    mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '==== '+MY_NAME
-    mqtt_client.publish(mqtt_topic, mqtt_message)  
+    
+    if (passenger_total == 3)
+        #TODO: Turn off all 3 led lights, 
+        #TODO: Send notice to car we are ready to leave
+        #TODO: Same notice to car, used for turnstile, to notify platform has room
+        mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '==== '+ "3"
+        mqtt_client.publish(mqtt_topic, mqtt_message)  
+    else:
+        #TODO: Need to send a message we are not ready yet
+        mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '==== '+ str(passenger_total)
+        mqtt_client.publish(mqtt_topic, mqtt_message)  
 
     time.sleep(5)
 

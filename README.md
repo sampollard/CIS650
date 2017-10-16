@@ -1,14 +1,15 @@
 # CIS 650
 Group members: Prachi Desai, Robert Sappington, Sam Pollard
 ## Group assignment - Rollercoaster
-`usage: python mqtt_update.py`
 
-## Description
-Each process is on its own edision. Each process is described below.
+### Description
+Each process is on its own edision. Each process is described below. The groupings are as follows:
+1. TURNSTILE and MONITOR
+2. CONTROL
+3. All CARs
 
 #### TURNSTILE AND MONITOR
-The turnstile counts up to 3 people on the platform. Monitor display what is going
-on in our environment. 
+The turnstile counts up to 3 people on the platform. The monitor logs everything to a file. No lights.
 
 #### CONTROL
 Control keeps track of how many passengers are on the platform and allows only 3 at

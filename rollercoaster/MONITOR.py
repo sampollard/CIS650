@@ -7,17 +7,25 @@ import sys
 from datetime import datetime as dt
 
 # Set LEDs and sigint handler
-# import mraa
-# leds = []
-# for i in range(2,10):
-#   led = mraa.Gpio(i)
-#   led.dir(mraa.DIR_OUT)
-#   leds.append(led)
-#   time.sleep(0.05)
-#   led.write(1)
+try:
+    import mraa
+except ImportError:
+    on_edison = False
+else: 
+    on_edison = True
+    # Initialize lights
+    leds = []
+    for i in range(2,10):
+        led = mraa.Gpio(i)
+        led.dir(mraa.DIR_OUT)
+        leds.append(led)
+        time.sleep(0.1)
+        led.write(1)
+
 def control_c_handler(signum, frame):
-#     for led in leds:
-#         led.write(1)
+    if on_edison:
+        for led in leds:
+            led.write(1)
     sys.exit()
     print('saw control-c')
     mqtt_client.disconnect()
@@ -27,7 +35,7 @@ def control_c_handler(signum, frame):
 signal.signal(signal.SIGINT, control_c_handler)
 
 # Set MQTT stuff
-MY_NAME = 'Sam'
+MY_NAME = 'MONITOR'
 broker = 'iot.eclipse.org'
 topicname = "cis650prs"
 # Public brokers: https://github.com/mqtt/mqtt.github.io/wiki/public_brokers
@@ -40,15 +48,22 @@ print('IP address: {}'.format(ip_addr))
 s.close()
 
 def on_connect(client, userdata, flags, rc):
-	print('connected')
+    print('connected')
+
+# Truncate log file
+f = open('MONITOR.log', 'w')
+f.close()
 
 # The callback for when a PUBLISH message is received from the server that matches any of your topics.
 # However, see note below about message_callback_add.
 def on_message(client, userdata, msg):
-	print(client)
-	print(userdata)
-	print(msg.topic)
-	print(msg.payload)
+    print(userdata)
+    print(msg.topic)
+    print(msg.payload)
+    if all([msg.topic, msg.payload]):
+        f = open('MONITOR.log', 'a')
+        f.write("\n".join([msg.topic, msg.payload]))
+        f.close()
 
 # You can also add specific callbacks that match specific topics.
 # See message_callback_add at https://pypi.python.org/pypi/paho-mqtt#callbacks.
@@ -57,12 +72,12 @@ def on_message(client, userdata, msg):
 # handler for this problem.
 
 def on_disconnect(client, userdata, rc):
-	print("Disconnected in a normal way")
-	#graceful so won't send will
+    print("Disconnected in a normal way")
+    #graceful so won't send will
 
 def on_log(client, userdata, level, buf):
-	pass
-	# print("log: {}".format(buf)) # only semi-useful IMHO
+    pass
+    # print("log: {}".format(buf)) # only semi-useful IMHO
 
 # Instantiate the MQTT client
 mqtt_client = paho.Client()
@@ -77,20 +92,28 @@ mqtt_topic = topicname + '/' + socket.gethostname()  # don't change this or you 
 
 # See https://pypi.python.org/pypi/paho-mqtt#option-functions.
 mqtt_client.will_set(mqtt_topic, '______________Will of '+MY_NAME+' _________________\n\n', 0, False)
-
 mqtt_client.connect(broker, '1883')
 
 # You can subscribe to more than one topic: https://pypi.python.org/pypi/paho-mqtt#subscribe-unsubscribe.
 # If you do list more than one topic, consdier using message_callback_add for each topic as described above.
 # For below, wild-card should do it.
-mqtt_client.subscribe(topicname + "/#") #subscribe to all students in class
+mqtt_client.subscribe(topicname + "/#")
 
 mqtt_client.loop_start()  # just in case - starts a loop that listens for incoming data and keeps client alive
 
+tic = False
 while True:
     timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
-    mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '==== '+MY_NAME
-    mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
+    if tic:
+        mqtt_message = "[%s] %s " % (timestamp,ip_addr) + 'MONITOR keepalive'
+        mqtt_client.publish(mqtt_topic, mqtt_message) # by doing this publish, we should keep client alive
+        tic = False
+    else:
+        # TODO: Check if we got a passenger from the turnstile
+        mqtt_message = "[%s] %s " % (timestamp,ip_addr) + 'PASSENGER'
+        # by doing this publish, we should keep client alive
+        mqtt_client.publish(mqtt_topic, mqtt_message)
+        tic = True
     time.sleep(5)
 
 # I have the loop_stop() in the control_c_handler above. A bit kludgey.

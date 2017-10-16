@@ -2,6 +2,7 @@
 Group members: Prachi Desai, Robert Sappington, Sam Pollard
 ## Group assignment - Rollercoaster
 `usage: python mqtt_update.py`
+
 ##Description
 Each process is on its own edision. Each process is described below.
 

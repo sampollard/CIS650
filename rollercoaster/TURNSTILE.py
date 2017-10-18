@@ -41,8 +41,9 @@ topicname = "cis650prs"
 # Public brokers: https://github.com/mqtt/mqtt.github.io/wiki/public_brokers
 
 # Initialize state variables
+starting = True
 max_passengers = 3
-n_passengers = 0
+n_passengers = 3 # Assume full to be safe
 
 # Get your IP address
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -57,13 +58,22 @@ def on_connect(client, userdata, flags, rc):
 # The callback for when a PUBLISH message is received from the server that matches any of your topics.
 # However, see note below about message_callback_add.
 def on_message(client, userdata, msg):
+    global starting
+    global n_passengers
     print(userdata)
     print(msg.topic)
     print(msg.payload)
     mlist = str(msg.payload).split("====")
     if (len(mlist) <= 1):
         return
-    if (mlist[1] == "pickup"): 
+    try: 
+        control_n = int(mlist[1])
+    except ValueError:
+        control_n = -1
+    if starting and control_n >= 0:
+        starting = False
+        n_passengers = control_n
+    elif mlist[1] == "pickup":
         n_passengers = 0
 
 # You can also add specific callbacks that match specific topics.

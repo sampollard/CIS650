@@ -8,15 +8,28 @@ import sys
 from datetime import datetime as dt
 
 # Set LEDs and sigint handler
-# import mraa
-# leds = []
-# for i in range(2,10):
-#   led = mraa.Gpio(i)
-#   led.dir(mraa.DIR_OUT)
-#   leds.append(led)
-#   time.sleep(0.05)
-#   led.write(1)
-
+leds = []
+try:
+    import mraa
+except ImportError:
+    on_edison = False
+else: 
+    on_edison = True
+    # Initialize lights
+    for i in range(2,10):
+        led = mraa.Gpio(i)
+        led.dir(mraa.DIR_OUT)
+        leds.append(led)
+        time.sleep(0.1)
+        led.write(1)
+def light_passengers(n):
+    if on_edison == False:
+        return
+    global leds
+    for led in leds:
+        led.write(1)
+    for i in range(n):
+        leds[i].write(0)
 
 passenger_total = 0
 waiting_cars = []
@@ -71,42 +84,42 @@ def on_message(client, userdata, msg):
             myString = str(msg.payload).split("====")
             print("printing parsed string")
             print(myString)
-            if( len(myString) <1):
-                return
+            if( len(myString) >1):
+                
            
-            if (myString[1] == "passenger" and passenger_total <3):
-                print("adding")
-                passenger_total = passenger_total + 1
-                print("added")
-                #TODO: Turn Led on, ensure they are on per passenger
-                #try:
-                #    append.write(str(myString[1]) + "\n")
-                #except:
-                #    print("Error writting  message to file")
-            elif( myString[1] == "arrive"):
-                 waiting_cars.append(myString[1])                 
+                if (myString[1] == "passenger" and passenger_total <3):
+                    passenger_total = passenger_total + 1
+                    #TODO: Turn Led on, ensure they are on per passenger
+                    #try:
+                    #    append.write(str(myString[1]) + "\n")
+                    #except:
+                    #    print("Error writting  message to file")
+                elif( myString[1] == "arrive"):
+                     waiting_cars.append(myString[2])                 
 
-                 '''
-                 if myString[2]=="a":
-                    #TODO Add a to list
-                    waiting_cars.append('a')
-                 elif myString[2]=="b":
-                     waiting_cars.append('b')
-                 elif myString[2]=="c":
-                    #TODO Add c to list
+                     '''
+                     if myString[2]=="a":
+                        #TODO Add a to list
+                        waiting_cars.append('a')
+                     elif myString[2]=="b":
+                        waiting_cars.append('b')
+                     elif myString[2]=="c":
+                        #TODO Add c to list
                       aiting_cars.append('c')
-                 else:
-                     print("Error, unknown car")
+                     else:
+                         print("Error, unknown car")
                  '''  
 
-            elif (myString[1] == "passenger" and passenger_total >=3):
-                print("Error with passengers")
+                elif (myString[1] == "passenger" and passenger_total >=3):
+                    print("Error with passengers")
             else:
                 #if message is anything that is not passenger, ignore it
                 pass
         except:
             print("Error in message")
             pass
+        finally:
+            light_passengers(passenger_total)
         #read.close()
         #append.close()
 

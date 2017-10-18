@@ -7,14 +7,30 @@ import sys
 from datetime import datetime as dt
 
 # Set LEDs and sigint handler
-# import mraa
-# leds = []
-# for i in range(2,10):
-#   led = mraa.Gpio(i)
-#   led.dir(mraa.DIR_OUT)
-#   leds.append(led)
-#   time.sleep(0.05)
-#   led.write(1)
+leds = []
+try:
+    import mraa
+except ImportError:
+    on_edison = False
+else: 
+    on_edison = True
+    # Initialize lights
+    for i in range(2,10):
+        led = mraa.Gpio(i)
+        led.dir(mraa.DIR_OUT)
+        leds.append(led)
+        time.sleep(0.1)
+        led.write(1)
+def light_riding(carname):
+    if on_edison == False:
+        return
+    global leds
+    for led in leds:
+        led.write(1)
+    if carname:
+        idx = ord(carname[0])
+        leds[idx].write(0)
+
 start=False
 carName=sys.argv[1]
 carAction="arrive"+"===="+carName
@@ -69,7 +85,7 @@ def on_message(client, userdata, msg):
 
     if (len(myString)>2 and myString[1] == "pickup" and myString[2]==carName):
         print("**************I am in pickup")
-        carAction='ridding'+'===='+carName
+        carAction='riding'+'===='+carName
         # start=True
     #Log all the details for now This can be removed later when not needed
     # if all([msg.topic, msg.payload]):
@@ -126,11 +142,13 @@ while True:
     if ('arrive' in carAction and carName in carAction):
         carAction="waiting"+"===="+carName
         time.sleep(5)
-    if ('ridding' in carAction and carName in carAction):
-        print("I have come in ridding")
+
+   
+    if ('riding' in carAction and carName in carAction):
+        print("I have come in riding")
         time.sleep(1)
     
-    if(cnt==0 and 'ridding' in carAction and carName in carAction):
+    if(cnt==0 and 'riding' in carAction and carName in carAction):
         carAction="arrive"+"===="+carName
         cnt=5
     cnt-=1   

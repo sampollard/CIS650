@@ -8,15 +8,28 @@ import sys
 from datetime import datetime as dt
 
 # Set LEDs and sigint handler
-# import mraa
-# leds = []
-# for i in range(2,10):
-#   led = mraa.Gpio(i)
-#   led.dir(mraa.DIR_OUT)
-#   leds.append(led)
-#   time.sleep(0.05)
-#   led.write(1)
-
+leds = []
+try:
+    import mraa
+except ImportError:
+    on_edison = False
+else: 
+    on_edison = True
+    # Initialize lights
+    for i in range(2,10):
+        led = mraa.Gpio(i)
+        led.dir(mraa.DIR_OUT)
+        leds.append(led)
+        time.sleep(0.1)
+        led.write(1)
+def light_passengers(n):
+    if on_edison == False:
+        return
+    global leds
+    for led in leds:
+        led.write(1)
+    for i in range(n):
+        leds[i].write(0)
 
 passenger_total = 0
 waiting_cars = []
@@ -150,6 +163,7 @@ while True:
     timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
     global passenger_total 
     global waiting_cars
+    light_passengers(passenger_total)
     #if have 3 passengers and have a car ready
     if (passenger_total == 3 and len(waiting_cars) >1):
         #TODO: Turn off all 3 led lights, 

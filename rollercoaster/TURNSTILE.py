@@ -7,20 +7,25 @@ import sys
 from datetime import datetime as dt
 
 # Set LEDs and sigint handler
-# import mraa
-# leds = []
-# for i in range(2,10):
-#   led = mraa.Gpio(i)
-#   led.dir(mraa.DIR_OUT)
-#   leds.append(led)
-#   time.sleep(0.05)
-#   led.write(1)
-start=False
-carName=sys.argv[1]
-carAction="arrive"+"===="+carName
+try:
+    import mraa
+except ImportError:
+    on_edison = False
+else: 
+    on_edison = True
+    # Initialize lights
+    leds = []
+    for i in range(2,10):
+        led = mraa.Gpio(i)
+        led.dir(mraa.DIR_OUT)
+        leds.append(led)
+        time.sleep(0.1)
+        led.write(1)
+
 def control_c_handler(signum, frame):
-#     for led in leds:
-#         led.write(1)
+    if on_edison:
+        for led in leds:
+            led.write(1)
     sys.exit()
     print('saw control-c')
     mqtt_client.disconnect()
@@ -30,10 +35,15 @@ def control_c_handler(signum, frame):
 signal.signal(signal.SIGINT, control_c_handler)
 
 # Set MQTT stuff
-MY_NAME = 'CARS'
+MY_NAME = 'TURNSTILE'
 broker = 'iot.eclipse.org'
 topicname = "cis650prs"
 # Public brokers: https://github.com/mqtt/mqtt.github.io/wiki/public_brokers
+
+# Initialize state variables
+starting = True
+max_passengers = 3
+n_passengers = 3 # Assume full to be safe
 
 # Get your IP address
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -43,40 +53,28 @@ print('IP address: {}'.format(ip_addr))
 s.close()
 
 def on_connect(client, userdata, flags, rc):
-	print('connected')
+    print('connected')
 
 # The callback for when a PUBLISH message is received from the server that matches any of your topics.
 # However, see note below about message_callback_add.
 def on_message(client, userdata, msg):
-    global start
-    global carAction
-    print("client")
-    print(client)
-    print("userdata")
+    global starting
+    global n_passengers
     print(userdata)
-    print("msg.topic")
     print(msg.topic)
-    print("msg.payload")
     print(msg.payload)
-    
-    myString = str(msg.payload).split("====")
-    print(myString)
-    # print (myString[1])
-    if(start==False):
-     if (len(myString)>1 and myString[1].isdigit()):
-       print("Will start cars now")
-       start=True
-
-    if (len(myString)>2 and myString[1] == "pickup" and myString[2]==carName):
-        print("**************I am in pickup")
-        carAction='ridding'+'===='+carName
-        # start=True
-    #Log all the details for now This can be removed later when not needed
-    # if all([msg.topic, msg.payload]):
-    #     f = open('CAR.log', 'a')
-    #     f.write("\n".join([msg.topic, msg.payload]))
-    #     f.close()
-
+    mlist = str(msg.payload).split("====")
+    if (len(mlist) <= 1):
+        return
+    try: 
+        control_n = int(mlist[1])
+    except ValueError:
+        control_n = -1
+    if starting and control_n >= 0:
+        starting = False
+        n_passengers = control_n
+    elif mlist[1] == "pickup":
+        n_passengers = 0
 
 # You can also add specific callbacks that match specific topics.
 # See message_callback_add at https://pypi.python.org/pypi/paho-mqtt#callbacks.
@@ -85,16 +83,15 @@ def on_message(client, userdata, msg):
 # handler for this problem.
 
 def on_disconnect(client, userdata, rc):
-	print("Disconnected in a normal way")
-	#graceful so won't send will
+    print("Disconnected in a normal way")
+    #graceful so won't send will
 
 def on_log(client, userdata, level, buf):
-	pass
-	# print("log: {}".format(buf)) # only semi-useful IMHO
+    pass
+    # print("log: {}".format(buf)) # only semi-useful IMHO
 
 # Instantiate the MQTT client
 mqtt_client = paho.Client()
-
 # set up handlers
 mqtt_client.on_connect = on_connect
 mqtt_client.on_message = on_message
@@ -105,34 +102,25 @@ mqtt_topic = topicname + '/' + socket.gethostname()  # don't change this or you 
 
 # See https://pypi.python.org/pypi/paho-mqtt#option-functions.
 mqtt_client.will_set(mqtt_topic, '______________Will of '+MY_NAME+' _________________\n\n', 0, False)
-
 mqtt_client.connect(broker, '1883')
 
 # You can subscribe to more than one topic: https://pypi.python.org/pypi/paho-mqtt#subscribe-unsubscribe.
 # If you do list more than one topic, consdier using message_callback_add for each topic as described above.
 # For below, wild-card should do it.
-mqtt_client.subscribe(topicname + "/#") #subscribe to all students in class
+mqtt_client.subscribe(topicname + "/#")
 
 mqtt_client.loop_start()  # just in case - starts a loop that listens for incoming data and keeps client alive
-cnt=5
+
 while True:
-  if start==True:
-    # print("I am in while loop")
     timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
-    print carAction
-    mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+carAction
-    mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
-    time.sleep(5)
-    if ('arrive' in carAction):
-        carAction="waiting"+"===="+carName
-        time.sleep(5)
-    if ('ridding' in carAction):
-        print("I have come in ridding")
-        time.sleep(1)
-    
-    if(cnt==0 and 'ridding' in carAction):
-        carAction="arrive"+"===="+carName
-        cnt=5
-    cnt-=1   
-  
+    if n_passengers < max_passengers:
+        # TODO: Check if we got a passenger from the turnstile
+        mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '====' + 'passenger'
+        # by doing this publish, we should keep client alive
+        mqtt_client.publish(mqtt_topic, mqtt_message)
+        n_passengers += 1
+
+    mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '====' + 'turnstile' + '====' + str(n_passengers)
+    mqtt_client.publish(mqtt_topic, mqtt_message)
+    time.sleep(3)
 

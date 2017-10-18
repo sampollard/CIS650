@@ -118,6 +118,8 @@ def on_message(client, userdata, msg):
         except:
             print("Error in message")
             pass
+        finally:
+            light_passengers(passenger_total)
         #read.close()
         #append.close()
 
@@ -163,7 +165,6 @@ while True:
     timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
     global passenger_total 
     global waiting_cars
-    light_passengers(passenger_total)
     #if have 3 passengers and have a car ready
     if (passenger_total == 3 and len(waiting_cars) >1):
         #TODO: Turn off all 3 led lights, 

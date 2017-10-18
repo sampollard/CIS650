@@ -74,7 +74,7 @@ def on_message(client, userdata, msg):
             if( len(myString) <1):
                 return
            
-            if (myString[1] == "passenger"):
+            if (myString[1] == "passenger" and passenger_total <3):
                 print("adding")
                 passenger_total = passenger_total + 1
                 print("added")
@@ -99,7 +99,10 @@ def on_message(client, userdata, msg):
                      print("Error, unknown car")
                  '''  
 
-            else:#if message is anything that is not passenger, ignore it
+            elif (myString[1] == "passenger" and passenger_total >=3):
+                print("Error with passengers")
+            else:
+                #if message is anything that is not passenger, ignore it
                 pass
         except:
             print("Error in message")
@@ -149,7 +152,8 @@ while True:
     timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
     global passenger_total 
     global waiting_cars
-    if (passenger_total == 3):
+    #if have 3 passengers and have a car ready
+    if (passenger_total == 3 and len(waiting_cars) >1):
         #TODO: Turn off all 3 led lights, 
         #TODO: Send notice to car we are ready to leave
         #TODO: Same notice to car, used for turnstile, to notify platform has room

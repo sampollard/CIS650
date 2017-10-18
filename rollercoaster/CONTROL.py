@@ -19,7 +19,7 @@ from datetime import datetime as dt
 
 
 passenger_total = 0
-waiting_cars = ['a','b','c']
+waiting_cars = []
 
 def control_c_handler(signum, frame):
 #     for led in leds:
@@ -83,7 +83,10 @@ def on_message(client, userdata, msg):
                 #    append.write(str(myString[1]) + "\n")
                 #except:
                 #    print("Error writting  message to file")
-            elif( myString[1] == "passenger"):
+            elif( myString[1] == "arrive"):
+                 waiting_cars.append(myString[1])                 
+
+                 '''
                  if myString[2]=="a":
                     #TODO Add a to list
                     waiting_cars.append('a')
@@ -94,7 +97,7 @@ def on_message(client, userdata, msg):
                       aiting_cars.append('c')
                  else:
                      print("Error, unknown car")
-                   
+                 '''  
 
             else:#if message is anything that is not passenger, ignore it
                 pass

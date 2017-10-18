@@ -71,36 +71,34 @@ def on_message(client, userdata, msg):
             myString = str(msg.payload).split("====")
             print("printing parsed string")
             print(myString)
-            if( len(myString) <1):
-                return
+            if( len(myString) >1):
+                
            
-            if (myString[1] == "passenger" and passenger_total <3):
-                print("adding")
-                passenger_total = passenger_total + 1
-                print("added")
-                #TODO: Turn Led on, ensure they are on per passenger
-                #try:
-                #    append.write(str(myString[1]) + "\n")
-                #except:
-                #    print("Error writting  message to file")
-            elif( myString[1] == "arrive"):
-                 waiting_cars.append(myString[1])                 
+                if (myString[1] == "passenger" and passenger_total <3):
+                    passenger_total = passenger_total + 1
+                    #TODO: Turn Led on, ensure they are on per passenger
+                    #try:
+                    #    append.write(str(myString[1]) + "\n")
+                    #except:
+                    #    print("Error writting  message to file")
+                elif( myString[1] == "arrive"):
+                     waiting_cars.append(myString[2])                 
 
-                 '''
-                 if myString[2]=="a":
-                    #TODO Add a to list
-                    waiting_cars.append('a')
-                 elif myString[2]=="b":
-                     waiting_cars.append('b')
-                 elif myString[2]=="c":
-                    #TODO Add c to list
+                     '''
+                     if myString[2]=="a":
+                        #TODO Add a to list
+                        waiting_cars.append('a')
+                     elif myString[2]=="b":
+                        waiting_cars.append('b')
+                     elif myString[2]=="c":
+                        #TODO Add c to list
                       aiting_cars.append('c')
-                 else:
-                     print("Error, unknown car")
+                     else:
+                         print("Error, unknown car")
                  '''  
 
-            elif (myString[1] == "passenger" and passenger_total >=3):
-                print("Error with passengers")
+                elif (myString[1] == "passenger" and passenger_total >=3):
+                    print("Error with passengers")
             else:
                 #if message is anything that is not passenger, ignore it
                 pass

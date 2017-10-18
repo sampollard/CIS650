@@ -123,14 +123,14 @@ while True:
     mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+carAction
     mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
     time.sleep(5)
-    if ('arrive' in carAction):
+    if ('arrive' in carAction and carName in carAction):
         carAction="waiting"+"===="+carName
         time.sleep(5)
-    if ('ridding' in carAction):
+    if ('ridding' in carAction and carName in carAction):
         print("I have come in ridding")
         time.sleep(1)
     
-    if(cnt==0 and 'ridding' in carAction):
+    if(cnt==0 and 'ridding' in carAction and carName in carAction):
         carAction="arrive"+"===="+carName
         cnt=5
     cnt-=1   

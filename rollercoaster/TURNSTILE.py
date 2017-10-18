@@ -41,7 +41,8 @@ topicname = "cis650prs"
 # Public brokers: https://github.com/mqtt/mqtt.github.io/wiki/public_brokers
 
 # Initialize state variables
-room_in_q = 3
+max_passengers = 3
+n_passengers = 0
 
 # Get your IP address
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -63,7 +64,7 @@ def on_message(client, userdata, msg):
     if (len(mlist) <= 1):
         return
     if (mlist[1] == "pickup"): 
-        room_in_q = 3
+        n_passengers = 0
 
 # You can also add specific callbacks that match specific topics.
 # See message_callback_add at https://pypi.python.org/pypi/paho-mqtt#callbacks.
@@ -102,15 +103,14 @@ mqtt_client.loop_start()  # just in case - starts a loop that listens for incomi
 
 while True:
     timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
-    if room_in_q > 0:
+    if n_passengers < max_passengers:
         # TODO: Check if we got a passenger from the turnstile
         mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '====' + 'passenger'
         # by doing this publish, we should keep client alive
         mqtt_client.publish(mqtt_topic, mqtt_message)
-        room_in_q -= 1
+        n_passengers += 1
 
-    mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '====' + 'turnstile' + '====' + str(room_in_q)
+    mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '====' + 'turnstile' + '====' + str(n_passengers)
     mqtt_client.publish(mqtt_topic, mqtt_message)
-    # TODO: What about if we don't get room_in_q for a while. Will we timeout?
     time.sleep(3)
 

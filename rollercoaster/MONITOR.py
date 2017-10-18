@@ -104,16 +104,8 @@ mqtt_client.loop_start()  # just in case - starts a loop that listens for incomi
 tic = False
 while True:
     timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
-    if tic:
-        mqtt_message = "[%s] %s " % (timestamp,ip_addr) + 'MONITOR keepalive'
-        mqtt_client.publish(mqtt_topic, mqtt_message) # by doing this publish, we should keep client alive
-        tic = False
-    else:
-        # TODO: Check if we got a passenger from the turnstile
-        mqtt_message = "[%s] %s " % (timestamp,ip_addr) + 'PASSENGER'
-        # by doing this publish, we should keep client alive
-        mqtt_client.publish(mqtt_topic, mqtt_message)
-        tic = True
+    mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '====monitor====keepalive'
+    mqtt_client.publish(mqtt_topic, mqtt_message) # by doing this publish, we should keep client alive
     time.sleep(5)
 
 # I have the loop_stop() in the control_c_handler above. A bit kludgey.

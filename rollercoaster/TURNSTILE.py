@@ -62,7 +62,7 @@ def on_message(client, userdata, msg):
     mlist = str(msg.payload).split("====")
     if (len(mlist) <= 1):
         return
-    if (mlist[1] == "passenger"): 
+    if (mlist[1] == "pickup"): 
         room_in_q = 3
 
 # You can also add specific callbacks that match specific topics.
@@ -108,6 +108,9 @@ while True:
         # by doing this publish, we should keep client alive
         mqtt_client.publish(mqtt_topic, mqtt_message)
         room_in_q -= 1
+
+    mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '====' + 'turnstile' + '====' + str(room_in_q)
+    mqtt_client.publish(mqtt_topic, mqtt_message)
     # TODO: What about if we don't get room_in_q for a while. Will we timeout?
     time.sleep(3)
 

@@ -15,7 +15,9 @@ from datetime import datetime as dt
 #   leds.append(led)
 #   time.sleep(0.05)
 #   led.write(1)
-carAction='IDLE'
+start=False
+carName=sys.argv[1]
+carAction="arrive"+"===="+carName
 def control_c_handler(signum, frame):
 #     for led in leds:
 #         led.write(1)
@@ -46,7 +48,8 @@ def on_connect(client, userdata, flags, rc):
 # The callback for when a PUBLISH message is received from the server that matches any of your topics.
 # However, see note below about message_callback_add.
 def on_message(client, userdata, msg):
-	
+    global start
+    global carAction
     print("client")
     print(client)
     print("userdata")
@@ -57,13 +60,22 @@ def on_message(client, userdata, msg):
     print(msg.payload)
     
     myString = str(msg.payload).split("====")
-    if (myString[1] == "CAR"):
-        carAction='PICKUP'
+    print(myString)
+    # print (myString[1])
+    if(start==False):
+     if (len(myString)>1 and myString[1].isdigit()):
+       print("Will start cars now")
+       start=True
+
+    if (len(myString)>2 and myString[1] == "pickup" and myString[2]==carName):
+        print("**************I am in pickup")
+        carAction='ridding'+'===='+carName
+        # start=True
     #Log all the details for now This can be removed later when not needed
-    if all([msg.topic, msg.payload]):
-        f = open('CAR.log', 'a')
-        f.write("\n".join([msg.topic, msg.payload]))
-        f.close()
+    # if all([msg.topic, msg.payload]):
+    #     f = open('CAR.log', 'a')
+    #     f.write("\n".join([msg.topic, msg.payload]))
+    #     f.close()
 
 
 # You can also add specific callbacks that match specific topics.
@@ -102,9 +114,25 @@ mqtt_client.connect(broker, '1883')
 mqtt_client.subscribe(topicname + "/#") #subscribe to all students in class
 
 mqtt_client.loop_start()  # just in case - starts a loop that listens for incoming data and keeps client alive
-
+cnt=5
 while True:
+  if start==True:
+    # print("I am in while loop")
     timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
-    mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '==== '+carAction
+    print carAction
+    mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+carAction
     mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
     time.sleep(5)
+    if ('arrive' in carAction):
+        carAction="waiting"+"===="+carName
+        time.sleep(5)
+    if ('ridding' in carAction):
+        print("I have come in ridding")
+        time.sleep(1)
+    
+    if(cnt==0 and 'ridding' in carAction):
+        carAction="arrive"+"===="+carName
+        cnt=5
+    cnt-=1   
+  
+

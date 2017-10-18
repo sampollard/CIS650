@@ -1,3 +1,4 @@
+from random import randint
 import socket
 import paho.mqtt.client as paho
 import signal
@@ -16,7 +17,10 @@ from datetime import datetime as dt
 #   time.sleep(0.05)
 #   led.write(1)
 
+
 passenger_total = 0
+waiting_cars = ['a','b','c']
+
 def control_c_handler(signum, frame):
 #     for led in leds:
 #         led.write(1)
@@ -49,33 +53,56 @@ def on_connect(client, userdata, flags, rc):
 
 #For now, when you get a message print it
 def on_message(client, userdata, msg):
-	
-        print("client")
-        print(client)
-	print("userdata")
-	print(userdata)
-	print("msg.topic")
-	print(msg.topic)
+	global passenger_total
+        global waiting_cars
+        #print("client")
+        #print(client)
+	#print("userdata")
+	#print(userdata)
+	#print("msg.topic")
+	#print(msg.topic)
 	print("msg.payload")
 	
         print(msg.payload)
-        read = open('output.txt','r')
-        append = open('output.txt', 'a+')
+        #read = open('output.txt','r')
+        #append = open('output.txt', 'a+')
         ## To do, save message to file
         try:
             myString = str(msg.payload).split("====")
-            if (myString[1] == "Passenger"):
+            print("printing parsed string")
+            print(myString)
+            if( len(myString) <1):
+                return
+           
+            if (myString[1] == "passenger"):
+                print("adding")
                 passenger_total = passenger_total + 1
+                print("added")
                 #TODO: Turn Led on, ensure they are on per passenger
-                try:
-                    append.write(str(myString[1]) + "\n")
-                except:
-                    print("Error writting  message to file")
+                #try:
+                #    append.write(str(myString[1]) + "\n")
+                #except:
+                #    print("Error writting  message to file")
+            elif( myString[1] == "passenger"):
+                 if myString[2]=="a":
+                    #TODO Add a to list
+                    waiting_cars.append('a')
+                 elif myString[2]=="b":
+                     waiting_cars.append('b')
+                 elif myString[2]=="c":
+                    #TODO Add c to list
+                      aiting_cars.append('c')
+                 else:
+                     print("Error, unknown car")
+                   
+
+            else:#if message is anything that is not passenger, ignore it
+                pass
         except:
             print("Error in message")
             pass
-        read.close()
-        append.close()
+        #read.close()
+        #append.close()
 
 # You can also add specific callbacks that match specific topics.
 # See message_callback_add at https://pypi.python.org/pypi/paho-mqtt#callbacks.
@@ -114,22 +141,25 @@ mqtt_client.subscribe(topicname + "/#") #subscribe to all students in class
 
 mqtt_client.loop_start()  # just in case - starts a loop that listens for incoming data and keeps client alive
 
-people_on_platform =0
 
 while True:
     timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
-    
-    if (passenger_total == 3)
+    global passenger_total 
+    global waiting_cars
+    if (passenger_total == 3):
         #TODO: Turn off all 3 led lights, 
         #TODO: Send notice to car we are ready to leave
         #TODO: Same notice to car, used for turnstile, to notify platform has room
-        mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '==== '+ "3"
-        mqtt_client.publish(mqtt_topic, mqtt_message)  
+        index=randint(0, len(waiting_cars)-1)
+        car = waiting_cars[index]
+        del waiting_cars[index]
+        mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+ "pickup"+'===='+car
+        mqtt_client.publish(mqtt_topic, mqtt_message) 
+        passenger_total = 0 
     else:
-        #TODO: Need to send a message we are not ready yet
-        mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '==== '+ str(passenger_total)
+        #Send ready for pickup
+        mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+ str(passenger_total)
         mqtt_client.publish(mqtt_topic, mqtt_message)  
-
     time.sleep(5)
 
 # I have the loop_stop() in the control_c_handler above. A bit kludgey.

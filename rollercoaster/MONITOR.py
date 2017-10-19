@@ -62,7 +62,7 @@ def on_message(client, userdata, msg):
     print(msg.payload)
     if all([msg.topic, msg.payload]):
         f = open('MONITOR.log', 'a')
-        f.write("\n".join([msg.topic, msg.payload]))
+        f.write("\n".join([msg.topic, msg.payload + ", "]))
         f.close()
 
 # You can also add specific callbacks that match specific topics.

@@ -21,15 +21,15 @@ else:
         leds.append(led)
         time.sleep(0.1)
         led.write(1)
-def light_riding(carname):
+def light_riding(carname, status):
     if on_edison == False:
         return
     global leds
-    for led in leds:
-        led.write(1)
+#    for led in leds:
+ #       led.write(1)
     if carname:
-        idx = ord(carname[0])
-        leds[idx].write(0)
+        idx = ord(carname[0])%8
+        leds[idx].write(status)
 
 start=False
 carName=sys.argv[1]
@@ -141,16 +141,23 @@ while True:
     time.sleep(5)
     if ('arrive' in carAction and carName in carAction):
         carAction="waiting"+"===="+carName
+        light_riding(carName,1)
         time.sleep(5)
 
    
     if ('riding' in carAction and carName in carAction):
-        print("I have come in riding")
-        time.sleep(1)
+        # print("I have come in riding")
+        light_riding(carName,0)
+        time.sleep(0.5)
     
     if(cnt==0 and 'riding' in carAction and carName in carAction):
         carAction="arrive"+"===="+carName
+        light_riding(carName,1)
         cnt=5
-    cnt-=1   
+    cnt-=1  
+  else:
+	 print("I am arriving at  turnstile")
+	 time.sleep(3)
+
   
 

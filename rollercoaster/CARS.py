@@ -145,7 +145,7 @@ while True:
         time.sleep(5)
 
    
-    elif ('riding' in carAction and carName in carAction):
+    elif (cnt!=0 and 'riding' in carAction and carName in carAction):
         # print("I have come in riding")
         light_riding(carName,0)
         #time.sleep(0.5)

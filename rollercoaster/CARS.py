@@ -136,21 +136,21 @@ while True:
     # print("I am in while loop")
     timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
     # print carAction
-    #mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+carAction
-    #mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
+    mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+carAction
+    mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
     time.sleep(5)
     if ('arrive' in carAction and carName in carAction):
         carAction="waiting"+"===="+carName
         light_riding(carName,1)
-        time.sleep(5)
+        #time.sleep(5)
 
    
-    elif (cnt!=0 and 'riding' in carAction and carName in carAction):
+    if ( 'riding' in carAction and carName in carAction):
         # print("I have come in riding")
         light_riding(carName,0)
         #time.sleep(0.5)
     
-    elif(cnt==0 and 'riding' in carAction and carName in carAction):
+    if(cnt==0 and 'riding' in carAction and carName in carAction):
         carAction="arrive"+"===="+carName
         mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+carAction
         #mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
@@ -159,8 +159,8 @@ while True:
         cnt=5
     cnt-=1
      
-    mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+carAction
-    mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
+    #mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+carAction
+    #mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
     time.sleep(3)
   else:
 	 print("I am arriving at  turnstile")

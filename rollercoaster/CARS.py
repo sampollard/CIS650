@@ -85,7 +85,7 @@ def on_message(client, userdata, msg):
 
     if (len(myString)>2 and myString[1] == "pickup" and myString[2]==carName):
         print("**************I am in pickup")
-        carAction='riding'+'===='+carName
+        carAction='riding and bonding'+'===='+carName
         # start=True
     #Log all the details for now This can be removed later when not needed
     # if all([msg.topic, msg.payload]):
@@ -135,7 +135,7 @@ while True:
   if start==True:
     # print("I am in while loop")
     timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
-    print carAction
+    # print carAction
     mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+carAction
     mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
     time.sleep(5)
@@ -152,6 +152,9 @@ while True:
     
     if(cnt==0 and 'riding' in carAction and carName in carAction):
         carAction="arrive"+"===="+carName
+        mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+carAction
+        mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
+        carAction="form social group"+"===="+carName
         light_riding(carName,1)
         cnt=5
     cnt-=1  

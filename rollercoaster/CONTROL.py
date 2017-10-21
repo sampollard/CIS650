@@ -35,9 +35,6 @@ passenger_total = 0
 waiting_cars = []
 
 def control_c_handler(signum, frame):
-#     for led in leds:
-#         led.write(1)
-    sys.exit()
     print('saw control-c')
     mqtt_client.disconnect()
     mqtt_client.loop_stop()  # waits until DISCONNECT message is sent out
@@ -113,6 +110,7 @@ def on_message(client, userdata, msg):
                 elif (myString[1] == "passenger" and passenger_total >=3):
                     print("Error with passengers")
             else:
+                print("throwing away msg " + str(myString))
                 #if message is anything that is not passenger, ignore it
                 pass
         except:
@@ -166,7 +164,7 @@ while True:
     global passenger_total 
     global waiting_cars
     #if have 3 passengers and have a car ready
-    if (passenger_total == 3 and len(waiting_cars) >1):
+    if (passenger_total == 3 and len(waiting_cars) >0):
         #TODO: Turn off all 3 led lights, 
         #TODO: Send notice to car we are ready to leave
         #TODO: Same notice to car, used for turnstile, to notify platform has room

@@ -142,26 +142,22 @@ while True:
     if ('arrive' in carAction and carName in carAction):
         carAction="waiting"+"===="+carName
         light_riding(carName,1)
-        #time.sleep(5)
+        time.sleep(5)
 
    
-    if ( 'riding' in carAction and carName in carAction):
+    if ('riding' in carAction and carName in carAction):
         # print("I have come in riding")
         light_riding(carName,0)
-        #time.sleep(0.5)
+        time.sleep(0.5)
     
     if(cnt==0 and 'riding' in carAction and carName in carAction):
         carAction="arrive"+"===="+carName
         mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+carAction
-        #mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
+        mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
         carAction="form social group"+"===="+carName
         light_riding(carName,1)
         cnt=5
-    cnt-=1
-     
-    #mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+carAction
-    #mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
-    time.sleep(3)
+    cnt-=1  
   else:
 	 print("I am arriving at  turnstile")
 	 time.sleep(3)

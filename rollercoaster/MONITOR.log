@@ -1,0 +1,281 @@
+cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:55:30.438567] 10.111.70.167 ====monitor====keepalive, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:55:32.979581] 10.111.70.167 ====turnstile====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:55:35.444117] 10.111.70.167 ====monitor====keepalive, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:55:35.985393] 10.111.70.167 ====turnstile====3, cis650prs/edison07
+[2017-10-20 00:55:34.223424] 10.111.77.109 ====0, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:55:38.991024] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:55:38.991024] 10.111.70.167 ====turnstile====1, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:55:40.449800] 10.111.70.167 ====monitor====keepalive, cis650prs/edison07
+[2017-10-20 00:55:39.226033] 10.111.77.109 ====1, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:55:41.995963] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:55:41.995963] 10.111.70.167 ====turnstile====2, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:55:45.001775] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:55:45.001775] 10.111.70.167 ====turnstile====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:55:45.455471] 10.111.70.167 ====monitor====keepalive, cis650prs/edison07
+[2017-10-20 00:55:44.232814] 10.111.77.109 ====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:55:48.007481] 10.111.70.167 ====turnstile====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:55:50.461171] 10.111.70.167 ====monitor====keepalive, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:55:51.013083] 10.111.70.167 ====turnstile====3, cis650prs/edison07
+[2017-10-20 00:55:49.238422] 10.111.77.109 ====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:55:54.018744] 10.111.70.167 ====turnstile====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:55:55.466838] 10.111.70.167 ====monitor====keepalive, cis650prs/edison07
+[2017-10-20 00:55:54.245131] 10.111.77.109 ====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:55:57.024343] 10.111.70.167 ====turnstile====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:00.025347] 10.111.70.167 ====turnstile====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:00.472518] 10.111.70.167 ====monitor====keepalive, cis650prs/edison07
+[2017-10-20 00:55:59.251859] 10.111.77.109 ====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:03.030978] 10.111.70.167 ====turnstile====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:05.478189] 10.111.70.167 ====monitor====keepalive, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:06.036524] 10.111.70.167 ====turnstile====3, cis650prs/edison07
+[2017-10-20 00:56:04.258705] 10.111.77.109 ====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:09.042121] 10.111.70.167 ====turnstile====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:10.483902] 10.111.70.167 ====monitor====keepalive, cis650prs/edison07
+[2017-10-20 00:56:09.265525] 10.111.77.109 ====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:12.047735] 10.111.70.167 ====turnstile====3, cis650prs/edison04
+[2017-10-20 00:56:10.486680] 10.111.86.248 ====arrive====BB, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:15.053365] 10.111.70.167 ====turnstile====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:15.488981] 10.111.70.167 ====monitor====keepalive, cis650prs/edison07
+[2017-10-20 00:56:14.272327] 10.111.77.109 ====pickup====BB, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:18.059022] 10.111.70.167 ====passenger, cis650prs/edison04
+[2017-10-20 00:56:15.994677] 10.111.86.248 ====riding and bonding====BB, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:18.059022] 10.111.70.167 ====turnstile====1, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:20.494747] 10.111.70.167 ====monitor====keepalive, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:21.064829] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:21.064829] 10.111.70.167 ====turnstile====2, cis650prs/edison07
+[2017-10-20 00:56:19.279175] 10.111.77.109 ====2, cis650prs/edison04
+[2017-10-20 00:56:20.482579] 10.111.86.248 ====arrive====DD, cis650prs/edison04
+[2017-10-20 00:56:21.502425] 10.111.86.248 ====riding and bonding====BB, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:24.067679] 10.111.70.167 ====passenger, cis650prs/edison04
+[2017-10-20 00:56:21.946298] 10.111.86.248 ====arrive====FF, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:24.067679] 10.111.70.167 ====turnstile====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:25.500486] 10.111.70.167 ====monitor====keepalive, cis650prs/edison07
+[2017-10-20 00:56:24.286034] 10.111.77.109 ====pickup====DD, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:27.073471] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:27.073471] 10.111.70.167 ====turnstile====1, cis650prs/edison04
+[2017-10-20 00:56:25.990640] 10.111.86.248 ====riding and bonding====DD, cis650prs/edison04
+[2017-10-20 00:56:27.010160] 10.111.86.248 ====riding and bonding====BB, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:30.079287] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:30.079287] 10.111.70.167 ====turnstile====2, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:30.502438] 10.111.70.167 ====monitor====keepalive, cis650prs/edison07
+[2017-10-20 00:56:29.292755] 10.111.77.109 ====2, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:33.085040] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:33.085040] 10.111.70.167 ====turnstile====3, cis650prs/edison04
+[2017-10-20 00:56:31.498691] 10.111.86.248 ====riding and bonding====DD, cis650prs/edison04
+[2017-10-20 00:56:31.958773] 10.111.86.248 ====waiting====FF, cis650prs/edison04
+[2017-10-20 00:56:32.517939] 10.111.86.248 ====riding and bonding====BB, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:35.508105] 10.111.70.167 ====monitor====keepalive, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:36.085785] 10.111.70.167 ====turnstile====3, cis650prs/edison07
+[2017-10-20 00:56:34.299453] 10.111.77.109 ====pickup====FF, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:39.090201] 10.111.70.167 ====passenger, cis650prs/edison04
+[2017-10-20 00:56:37.006557] 10.111.86.248 ====riding and bonding====DD, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:39.090201] 10.111.70.167 ====turnstile====1, cis650prs/edison04
+[2017-10-20 00:56:37.466692] 10.111.86.248 ====riding and bonding====FF, cis650prs/edison04
+[2017-10-20 00:56:38.025821] 10.111.86.248 ====riding and bonding====BB, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:40.511300] 10.111.70.167 ====monitor====keepalive, cis650prs/edison07
+[2017-10-20 00:56:39.306247] 10.111.77.109 ====1, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:42.093021] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:42.093021] 10.111.70.167 ====turnstile====2, cis650prs/edison04
+[2017-10-20 00:56:42.514374] 10.111.86.248 ====riding and bonding====DD, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:45.098813] 10.111.70.167 ====passenger, cis650prs/edison04
+[2017-10-20 00:56:42.974451] 10.111.86.248 ====riding and bonding====FF, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:45.098813] 10.111.70.167 ====turnstile====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:45.512132] 10.111.70.167 ====monitor====keepalive, cis650prs/edison04
+[2017-10-20 00:56:38.025821] 10.111.86.248 ====arrive====BB, cis650prs/edison04
+[2017-10-20 00:56:43.534770] 10.111.86.248 ====form social group====BB, cis650prs/edison07
+[2017-10-20 00:56:44.312604] 10.111.77.109 ====pickup====BB, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:48.104657] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:48.104657] 10.111.70.167 ====turnstile====1, cis650prs/edison04
+[2017-10-20 00:56:48.022144] 10.111.86.248 ====riding and bonding====DD, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:50.512827] 10.111.70.167 ====monitor====keepalive, cis650prs/edison04
+[2017-10-20 00:56:48.482259] 10.111.86.248 ====riding and bonding====FF, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:51.110422] 10.111.70.167 ====passenger, cis650prs/edison04
+[2017-10-20 00:56:49.042602] 10.111.86.248 ====riding and bonding====BB, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:51.110422] 10.111.70.167 ====turnstile====2, cis650prs/edison07
+[2017-10-20 00:56:49.319411] 10.111.77.109 ====2, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:54.116214] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:54.116214] 10.111.70.167 ====turnstile====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:55.518454] 10.111.70.167 ====monitor====keepalive, cis650prs/edison04
+[2017-10-20 00:56:48.022144] 10.111.86.248 ====arrive====DD, cis650prs/edison04
+[2017-10-20 00:56:53.532342] 10.111.86.248 ====form social group====DD, cis650prs/edison04
+[2017-10-20 00:56:53.990102] 10.111.86.248 ====riding and bonding====FF, cis650prs/edison07
+[2017-10-20 00:56:54.322358] 10.111.77.109 ====pickup====DD, cis650prs/edison04
+[2017-10-20 00:56:54.550381] 10.111.86.248 ====riding and bonding====BB, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:57.122042] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:56:57.122042] 10.111.70.167 ====turnstile====1, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:00.125211] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:00.125211] 10.111.70.167 ====turnstile====2, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:00.524128] 10.111.70.167 ====monitor====keepalive, cis650prs/edison04
+[2017-10-20 00:56:59.038463] 10.111.86.248 ====riding and bonding====DD, cis650prs/edison07
+[2017-10-20 00:56:59.329118] 10.111.77.109 ====2, cis650prs/edison04
+[2017-10-20 00:56:53.990102] 10.111.86.248 ====arrive====FF, cis650prs/edison04
+[2017-10-20 00:56:59.499159] 10.111.86.248 ====form social group====FF, cis650prs/edison04
+[2017-10-20 00:57:00.058094] 10.111.86.248 ====riding and bonding====BB, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:03.131016] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:03.131016] 10.111.70.167 ====turnstile====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:05.529811] 10.111.70.167 ====monitor====keepalive, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:06.136765] 10.111.70.167 ====turnstile====3, cis650prs/edison07
+[2017-10-20 00:57:04.335830] 10.111.77.109 ====pickup====FF, cis650prs/edison04
+[2017-10-20 00:57:04.505962] 10.111.86.248 ====form social group====FF, cis650prs/edison04
+[2017-10-20 00:57:04.546307] 10.111.86.248 ====riding and bonding====DD, cis650prs/edison04
+[2017-10-20 00:57:05.562503] 10.111.86.248 ====riding and bonding====BB, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:09.142384] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:09.142384] 10.111.70.167 ====turnstile====1, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:10.535614] 10.111.70.167 ====monitor====keepalive, cis650prs/edison07
+[2017-10-20 00:57:09.342647] 10.111.77.109 ====1, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:12.148132] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:12.148132] 10.111.70.167 ====turnstile====2, cis650prs/edison04
+[2017-10-20 00:57:10.012458] 10.111.86.248 ====riding and bonding====FF, cis650prs/edison04
+[2017-10-20 00:57:10.054115] 10.111.86.248 ====riding and bonding====DD, cis650prs/edison04
+[2017-10-20 00:57:05.562503] 10.111.86.248 ====arrive====BB, cis650prs/edison04
+[2017-10-20 00:57:11.071727] 10.111.86.248 ====form social group====BB, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:15.153987] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:15.153987] 10.111.70.167 ====turnstile====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:15.536847] 10.111.70.167 ====monitor====keepalive, cis650prs/edison07
+[2017-10-20 00:57:14.349376] 10.111.77.109 ====pickup====BB, cis650prs/edison04
+[2017-10-20 00:57:15.520394] 10.111.86.248 ====riding and bonding====FF, cis650prs/edison04
+[2017-10-20 00:57:15.561981] 10.111.86.248 ====riding and bonding====DD, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:18.159650] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:18.159650] 10.111.70.167 ====turnstile====1, cis650prs/edison04
+[2017-10-20 00:57:16.579268] 10.111.86.248 ====riding and bonding====BB, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:20.542463] 10.111.70.167 ====monitor====keepalive, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:21.165515] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:21.165515] 10.111.70.167 ====turnstile====2, cis650prs/edison07
+[2017-10-20 00:57:19.352335] 10.111.77.109 ====2, cis650prs/edison04
+[2017-10-20 00:57:21.028350] 10.111.86.248 ====riding and bonding====FF, cis650prs/edison04
+[2017-10-20 00:57:15.561981] 10.111.86.248 ====arrive====DD, cis650prs/edison04
+[2017-10-20 00:57:21.070789] 10.111.86.248 ====form social group====DD, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:24.171791] 10.111.70.167 ====passenger, cis650prs/edison04
+[2017-10-20 00:57:22.087035] 10.111.86.248 ====riding and bonding====BB, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:24.171791] 10.111.70.167 ====turnstile====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:25.548133] 10.111.70.167 ====monitor====keepalive, cis650prs/edison07
+[2017-10-20 00:57:24.359061] 10.111.77.109 ====pickup====DD, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:27.172912] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:27.172912] 10.111.70.167 ====turnstile====1, cis650prs/edison04
+[2017-10-20 00:57:21.028350] 10.111.86.248 ====arrive====FF, cis650prs/edison04
+[2017-10-20 00:57:26.578481] 10.111.86.248 ====riding and bonding====DD, cis650prs/edison04
+[2017-10-20 00:57:26.537260] 10.111.86.248 ====form social group====FF, cis650prs/edison04
+[2017-10-20 00:57:27.594831] 10.111.86.248 ====riding and bonding====BB, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:30.178753] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:30.178753] 10.111.70.167 ====turnstile====2, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:30.550044] 10.111.70.167 ====monitor====keepalive, cis650prs/edison07
+[2017-10-20 00:57:29.362353] 10.111.77.109 ====2, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:33.184514] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:33.184514] 10.111.70.167 ====turnstile====3, cis650prs/edison04
+[2017-10-20 00:57:31.544062] 10.111.86.248 ====form social group====FF, cis650prs/edison04
+[2017-10-20 00:57:32.086212] 10.111.86.248 ====riding and bonding====DD, cis650prs/edison04
+[2017-10-20 00:57:33.102542] 10.111.86.248 ====riding and bonding====BB, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:35.555730] 10.111.70.167 ====monitor====keepalive, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:36.190248] 10.111.70.167 ====turnstile====3, cis650prs/edison07
+[2017-10-20 00:57:34.369056] 10.111.77.109 ====pickup====FF, cis650prs/edison04
+[2017-10-20 00:57:37.049558] 10.111.86.248 ====riding and bonding====FF, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:39.193095] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:39.193095] 10.111.70.167 ====turnstile====1, cis650prs/edison04
+[2017-10-20 00:57:37.594009] 10.111.86.248 ====riding and bonding====DD, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:40.561406] 10.111.70.167 ====monitor====keepalive, cis650prs/edison04
+[2017-10-20 00:57:33.102542] 10.111.86.248 ====arrive====BB, cis650prs/edison04
+[2017-10-20 00:57:38.611562] 10.111.86.248 ====form social group====BB, cis650prs/edison07
+[2017-10-20 00:57:39.375811] 10.111.77.109 ====1, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:42.198852] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:42.198852] 10.111.70.167 ====turnstile====2, cis650prs/edison04
+[2017-10-20 00:57:42.552275] 10.111.86.248 ====riding and bonding====FF, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:45.204625] 10.111.70.167 ====passenger, cis650prs/edison04
+[2017-10-20 00:57:43.101735] 10.111.86.248 ====riding and bonding====DD, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:45.204625] 10.111.70.167 ====turnstile====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:45.566262] 10.111.70.167 ====monitor====keepalive, cis650prs/edison04
+[2017-10-20 00:57:43.618396] 10.111.86.248 ====form social group====BB, cis650prs/edison07
+[2017-10-20 00:57:44.382378] 10.111.77.109 ====pickup====BB, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:48.210483] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:48.210483] 10.111.70.167 ====turnstile====1, cis650prs/edison04
+[2017-10-20 00:57:48.060035] 10.111.86.248 ====riding and bonding====FF, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:50.566969] 10.111.70.167 ====monitor====keepalive, cis650prs/edison04
+[2017-10-20 00:57:43.101735] 10.111.86.248 ====arrive====DD, cis650prs/edison04
+[2017-10-20 00:57:48.608485] 10.111.86.248 ====form social group====DD, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:51.216284] 10.111.70.167 ====passenger, cis650prs/edison04
+[2017-10-20 00:57:49.123121] 10.111.86.248 ====riding and bonding====BB, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:51.216284] 10.111.70.167 ====turnstile====2, cis650prs/edison07
+[2017-10-20 00:57:49.389139] 10.111.77.109 ====2, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:54.222116] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:54.222116] 10.111.70.167 ====turnstile====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:55.568557] 10.111.70.167 ====monitor====keepalive, cis650prs/edison04
+[2017-10-20 00:57:48.060035] 10.111.86.248 ====arrive====FF, cis650prs/edison04
+[2017-10-20 00:57:53.614670] 10.111.86.248 ====form social group====DD, cis650prs/edison04
+[2017-10-20 00:57:53.569071] 10.111.86.248 ====form social group====FF, cis650prs/edison07
+[2017-10-20 00:57:54.392400] 10.111.77.109 ====pickup====DD, cis650prs/edison04
+[2017-10-20 00:57:54.630991] 10.111.86.248 ====riding and bonding====BB, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:57.222869] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:57:57.222869] 10.111.70.167 ====turnstile====1, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:00.228550] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:00.228550] 10.111.70.167 ====turnstile====2, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:00.574313] 10.111.70.167 ====monitor====keepalive, cis650prs/edison04
+[2017-10-20 00:57:58.575581] 10.111.86.248 ====form social group====FF, cis650prs/edison04
+[2017-10-20 00:57:59.122471] 10.111.86.248 ====riding and bonding====DD, cis650prs/edison07
+[2017-10-20 00:57:59.399189] 10.111.77.109 ====2, cis650prs/edison04
+[2017-10-20 00:58:00.138835] 10.111.86.248 ====riding and bonding====BB, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:03.234354] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:03.234354] 10.111.70.167 ====turnstile====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:05.579972] 10.111.70.167 ====monitor====keepalive, cis650prs/edison04
+[2017-10-20 00:58:03.582290] 10.111.86.248 ====form social group====FF, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:06.238783] 10.111.70.167 ====turnstile====3, cis650prs/edison07
+[2017-10-20 00:58:04.405934] 10.111.77.109 ====pickup====FF, cis650prs/edison04
+[2017-10-20 00:58:04.630247] 10.111.86.248 ====riding and bonding====DD, cis650prs/edison04
+______________Will of CARS _________________
+
+, cis650prs/edison04
+[2017-10-20 00:58:00.138835] 10.111.86.248 ====arrive====BB, cis650prs/edison04
+[2017-10-20 00:58:05.647835] 10.111.86.248 ====form social group====BB, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:09.244468] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:09.244468] 10.111.70.167 ====turnstile====1, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:10.585642] 10.111.70.167 ====monitor====keepalive, cis650prs/edison04
+[2017-10-20 00:58:09.090281] 10.111.86.248 ====riding and bonding====FF, cis650prs/edison04
+______________Will of CARS _________________
+
+, cis650prs/edison07
+[2017-10-20 00:58:09.408415] 10.111.77.109 ====1, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:12.250159] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:12.250159] 10.111.70.167 ====turnstile====2, cis650prs/edison04
+[2017-10-20 00:58:10.654468] 10.111.86.248 ====form social group====BB, cis650prs/edison04
+______________Will of CARS _________________
+
+, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:15.255911] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:15.255911] 10.111.70.167 ====turnstile====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:15.591384] 10.111.70.167 ====monitor====keepalive, cis650prs/edison07
+[2017-10-20 00:58:14.415157] 10.111.77.109 ====pickup====BB, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:18.261701] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:18.261701] 10.111.70.167 ====turnstile====1, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:20.597106] 10.111.70.167 ====monitor====keepalive, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:21.267426] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:21.267426] 10.111.70.167 ====turnstile====2, cis650prs/edison07
+[2017-10-20 00:58:19.422073] 10.111.77.109 ====2, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:24.273248] 10.111.70.167 ====passenger, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:24.273248] 10.111.70.167 ====turnstile====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:25.602884] 10.111.70.167 ====monitor====keepalive, cis650prs/edison07
+[2017-10-20 00:58:24.428665] 10.111.77.109 ====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:27.279035] 10.111.70.167 ====turnstile====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:30.284591] 10.111.70.167 ====turnstile====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:30.608570] 10.111.70.167 ====monitor====keepalive, cis650prs/edison07
+[2017-10-20 00:58:29.435357] 10.111.77.109 ====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:33.290200] 10.111.70.167 ====turnstile====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:35.614242] 10.111.70.167 ====monitor====keepalive, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:36.295802] 10.111.70.167 ====turnstile====3, cis650prs/edison07
+[2017-10-20 00:58:34.442142] 10.111.77.109 ====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:39.301403] 10.111.70.167 ====turnstile====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:40.619909] 10.111.70.167 ====monitor====keepalive, cis650prs/edison07
+[2017-10-20 00:58:39.448872] 10.111.77.109 ====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:42.307014] 10.111.70.167 ====turnstile====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:45.312616] 10.111.70.167 ====turnstile====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:45.622884] 10.111.70.167 ====monitor====keepalive, cis650prs/edison07
+[2017-10-20 00:58:44.455627] 10.111.77.109 ====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:48.318193] 10.111.70.167 ====turnstile====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:50.628384] 10.111.70.167 ====monitor====keepalive, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:51.320853] 10.111.70.167 ====turnstile====3, cis650prs/edison07
+[2017-10-20 00:58:49.462345] 10.111.77.109 ====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:54.326545] 10.111.70.167 ====turnstile====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:55.630392] 10.111.70.167 ====monitor====keepalive, cis650prs/edison07
+[2017-10-20 00:58:54.469033] 10.111.77.109 ====3, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:58:57.332250] 10.111.70.167 ====turnstile====3, cis650prs/Robers-MacBook-Pro.local
+______________Will of TURNSTILE _________________
+
+, cis650prs/Robers-MacBook-Pro.local
+[2017-10-19 17:59:00.631196] 10.111.70.167 ====monitor====keepalive, 

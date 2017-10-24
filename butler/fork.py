@@ -112,10 +112,13 @@ def main():
     mqtt_client.loop_start()  # just in case - starts a loop that listens for incoming data and keeps client alive
     while True:
         timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
-        if(inUse):
+        if 'granted' in forkAction: 
             mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+forkAction
             mqtt_client.publish(mqtt_topic, mqtt_message) # by doing this publish, we should keep client alive
-            time.sleep(3)
+        # if inUse:
+        #     mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+'waiting'
+        #     mqtt_client.publish(mqtt_topic, mqtt_message) # by doing this publish, we should keep client alive
+        time.sleep(3)
 
 if __name__ == '__main__':
     main()

@@ -51,8 +51,16 @@ ip_addr = str(s.getsockname()[0])
 print('IP address: {}'.format(ip_addr))
 s.close()
 
+
+mqtt_client = paho.Client()
+
+mqtt_topic = topicname + '/' + socket.gethostname()
+
 def on_connect(client, userdata, flags, rc):
     print('connected')
+
+
+
 
 # The callback for when a PUBLISH message is received from the server that matches any of your topics.
 # However, see note below about message_callback_add.
@@ -61,15 +69,25 @@ def on_message(client, userdata, msg):
     global sem_max
     global sem_count
     global listPhil
+    global mqtt_client
+    global mqtt_topic
     myString = str(msg.payload).split("====")
     print(myString)
     print("Received" + ", ".join([msg.topic, msg.payload + "\n"]))
     if (len(myString)==3 and myString[2] == "req_sitdown"):
+        print("************sem count")
+        print(sem_count)
         if sem_count<sem_max:
             if(listPhil[int(myString[1])]==False):
                 butlerAction=myString[1]+"===="+"sitdown_granted"
                 listPhil[int(myString[1])]=True
                 sem_count+=1
+                timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
+                mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+butlerAction
+                mqtt_client.publish(mqtt_topic, mqtt_message)
+                time.sleep(2)
+                butlerAction="butler_waiting"
+                time.sleep(1)
             else:
                 butlerAction="butler_waiting"
             #led code for fluent
@@ -107,7 +125,7 @@ def main():
         print("usage: butler.py <int>")
         sys.exit(1)
     # Instantiate the MQTT client
-    mqtt_client = paho.Client()
+    global mqtt_client
 
     # set up handlers
     mqtt_client.on_connect = on_connect
@@ -115,22 +133,21 @@ def main():
     mqtt_client.on_disconnect = on_disconnect
     mqtt_client.on_log = on_log
 
-    mqtt_topic = topicname + '/' + socket.gethostname()
+    global mqtt_topic
 
     mqtt_client.will_set(mqtt_topic, '______________Will of '+MY_NAME+' _________________\n\n', 0, False)
     mqtt_client.connect(broker, '1883')
     mqtt_client.subscribe(topicname + "/#") #subscribe to all students in class
     mqtt_client.loop_start()  # just in case - starts a loop that listens for incoming data and keeps client alive
     while True:
-        timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
-        mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+butlerAction
-        mqtt_client.publish(mqtt_topic, mqtt_message) # by doing this publish, we should keep client alive
-        time.sleep(3)
-        if("sitdown_granted" in butlerAction):
+        # timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
+        # mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+butlerAction
+        # mqtt_client.publish(mqtt_topic, mqtt_message) # by doing this publish, we should keep client alive
+       
             timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
             mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+butlerAction
             mqtt_client.publish(mqtt_topic, mqtt_message) # by doing this publish, we should keep client alive
-            butlerAction="butler_waiting"
+           
             time.sleep(3)
                    
 if __name__ == '__main__':

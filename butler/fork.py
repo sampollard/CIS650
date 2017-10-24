@@ -90,6 +90,8 @@ def on_log(client, userdata, level, buf):
     # print("log: {}".format(buf)) # only semi-useful IMHO
 
 def main():
+    global forkAction
+    global forkName
     if len(sys.argv) > 1:
         forknum = sys.argv[1]
     else:
@@ -112,9 +114,10 @@ def main():
     mqtt_client.loop_start()  # just in case - starts a loop that listens for incoming data and keeps client alive
     while True:
         timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
-        if 'granted' in forkAction: 
+        if 'granted' in forkAction and forkName in forkAction: 
             mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+forkAction
             mqtt_client.publish(mqtt_topic, mqtt_message) # by doing this publish, we should keep client alive
+            forkAction=forkName+ " in use"
         # if inUse:
         #     mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+'waiting'
         #     mqtt_client.publish(mqtt_topic, mqtt_message) # by doing this publish, we should keep client alive

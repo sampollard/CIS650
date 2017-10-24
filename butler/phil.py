@@ -71,6 +71,7 @@ def on_log(client, userdata, level, buf):
     # print("log: {}".format(buf)) # only semi-useful IMHO
 
 def main():
+    state = "req sitdown"
     if len(sys.argv) == 4:
         philname = sys.argv[1]
         leftfork = sys.argv[2]

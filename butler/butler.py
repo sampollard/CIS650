@@ -60,6 +60,7 @@ def on_message(client, userdata, msg):
     global butlerAction
     global sem_max
     global sem_count
+    global listPhil
     myString = str(msg.payload).split("====")
     print(myString)
     print("Received" + ", ".join([msg.topic, msg.payload + "\n"]))
@@ -67,12 +68,17 @@ def on_message(client, userdata, msg):
         if sem_count<sem_max:
             if(listPhil[int(myString[1])]==False):
                 butlerAction=myString[1]+"===="+"sitdown_granted"
+                listPhil[int(myString[1])]=True
                 sem_count+=1
             else:
                 butlerAction="butler_waiting"
             #led code for fluent
     if (len(myString)==3 and myString[2] == "leave"):
-        sem_count-=1
+        if(listPhil[int(myString[1])]==False):
+            print("Try to leave twice*********")
+        else:
+            sem_count-=1
+            listPhil[int(myString[1])]=False
     if(sem_count==sem_max):
         print("its full")
         butlerAction="butler_full"
@@ -121,10 +127,10 @@ def main():
         mqtt_client.publish(mqtt_topic, mqtt_message) # by doing this publish, we should keep client alive
         time.sleep(3)
         if("sitdown_granted" in butlerAction):
-            butlerAction="butler_waiting"
             timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
             mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+butlerAction
             mqtt_client.publish(mqtt_topic, mqtt_message) # by doing this publish, we should keep client alive
+            butlerAction="butler_waiting"
             time.sleep(3)
                    
 if __name__ == '__main__':

@@ -153,6 +153,7 @@ def main():
             time.sleep(2)
             mqtt_message =  msg_start + '====' + philname + '====leave'
             mqtt_client.publish(mqtt_topic, mqtt_message)
+            time.sleep(10)
             state = 'req_sitdown'
         else:
             print("Error, you should never be in state " + state)

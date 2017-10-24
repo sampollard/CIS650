@@ -36,6 +36,11 @@ def control_c_handler(signum, frame):
     sys.exit(0)
 signal.signal(signal.SIGINT, control_c_handler)
 
+#start=False
+forkName=sys.argv[1]
+inUse=False
+forkAction="in_use"+"===="+forkName
+
 # Set MQTT stuff
 MY_NAME = 'fork'
 broker = 'iot.eclipse.org'
@@ -54,8 +59,22 @@ def on_connect(client, userdata, flags, rc):
 # The callback for when a PUBLISH message is received from the server that matches any of your topics.
 # However, see note below about message_callback_add.
 def on_message(client, userdata, msg):
+    global forkName
+    global inUse
+    global forkAction
     print("Received" + ", ".join([msg.topic, msg.payload + "\n"]))
-
+    myString = str(msg.payload).split("====")
+    print(myString)
+    if (len(myString)==4 and myString[2] == "req_fork" and myString[3]==forkName):
+        if(inUse == False):
+            forkAction=myString[1]+"===="+"fork_granted"+"===="+forkName
+            inUse=True
+        else:
+            print(forkName+"  in use  wait")
+            #forkAction="in_use"+"===="+forkName+"===="+inUse
+    if (len(myString)==4 and myString[2] == "put_down" and myString[3]==forkName):
+        inUse=False
+        print(forkName+"  done")
 # You can also add specific callbacks that match specific topics.
 # See message_callback_add at https://pypi.python.org/pypi/paho-mqtt#callbacks.
 # When you have add ins, then the on_message handler just deals with topics
@@ -93,9 +112,10 @@ def main():
     mqtt_client.loop_start()  # just in case - starts a loop that listens for incoming data and keeps client alive
     while True:
         timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
-        mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+forknum
-        mqtt_client.publish(mqtt_topic, mqtt_message) # by doing this publish, we should keep client alive
-        time.sleep(3)
+        if(inUse):
+            mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+forkAction
+            mqtt_client.publish(mqtt_topic, mqtt_message) # by doing this publish, we should keep client alive
+            time.sleep(3)
 
 if __name__ == '__main__':
     main()

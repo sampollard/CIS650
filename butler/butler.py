@@ -99,6 +99,8 @@ def on_message(client, userdata, msg):
                 mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+butlerAction
                 mqtt_client.publish(mqtt_topic, mqtt_message)
                 turnOn(int(myString[1]))
+                if(sem_count ==sem_max):
+                    turnOn(7)
                 butlerAction="butler_waiting"
                 time.sleep(10)
             else:

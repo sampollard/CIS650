@@ -80,7 +80,7 @@ def on_message(client, userdata, msg):
     print(myString)
     if (len(myString)==4 and myString[2] == "req_fork" and myString[3]==forkName):
         if(inUse == False):
-            turnOn(forkName)
+            #turnOn(forkName)
             forkAction=myString[1]+"===="+"fork_granted"+"===="+forkName
             inUse=True
         else:
@@ -130,7 +130,8 @@ def main():
     while True:
         timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
         if 'granted' in forkAction and forkName in forkAction: 
-            mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+forkAction
+            turnOn(forkName)
+	    mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+forkAction
             mqtt_client.publish(mqtt_topic, mqtt_message) # by doing this publish, we should keep client alive
             forkAction=forkName+ " in use"
         # if inUse:

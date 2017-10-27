@@ -103,6 +103,7 @@ def on_message(client, userdata, msg):
                 time.sleep(1)
             else:
                 butlerAction="butler_waiting"
+            #led code for fluent
     if (len(myString)==3 and myString[2] == "leave"):
         if(listPhil[int(myString[1])]==False):
             print("Try to leave twice*********")
@@ -113,9 +114,18 @@ def on_message(client, userdata, msg):
     if(sem_count==sem_max):
         print("its full")
         butlerAction="butler_full"
+        print"**********************"
+        print"**********************"
+        print"**********************"
+        print"**********************"
         turnOn(7)
     else:
+        print("sem count")
+        print(sem_count)
+        print("sem_max")
+        print(sem_max)
         turnOff(7)
+        #led code will be here for full stack
             
 # You can also add specific callbacks that match specific topics.
 # See message_callback_add at https://pypi.python.org/pypi/paho-mqtt#callbacks.

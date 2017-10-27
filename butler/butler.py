@@ -110,6 +110,8 @@ def on_message(client, userdata, msg):
             print("Try to leave twice*********")
         else:
             sem_count-=1
+            if(sem_count ==sem_max):
+                turnOff(7)
             turnOff(int(myString[1]))
             listPhil[int(myString[1])]=False
     if(sem_count==sem_max):

@@ -136,7 +136,7 @@ def main():
         # if inUse:
         #     mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+'waiting'
         #     mqtt_client.publish(mqtt_topic, mqtt_message) # by doing this publish, we should keep client alive
-        time.sleep(3)
+        time.sleep(8)
 
 if __name__ == '__main__':
     main()

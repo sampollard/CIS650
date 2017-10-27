@@ -32,13 +32,15 @@ def turnOn(light):
     if on_edison==True:
         leds[light].write(0)
     else:
-        print("Simulate light on")
+        pass
+        #print("Simulate light on")
 
 def turnOff(light):
     if on_edison==True:
         leds[light].write(1)
     else:
-        print("Simulate light off")
+        pass
+        #print("Simulate light off")
 
 def control_c_handler(signum, frame):
     sys.exit()
@@ -87,8 +89,7 @@ def on_message(client, userdata, msg):
     print(myString)
     print("Received" + ", ".join([msg.topic, msg.payload + "\n"]))
     if (len(myString)==3 and myString[2] == "req_sitdown"):
-        print("************sem count")
-        print(sem_count)
+        print("************sem count: {}".format(sem_count))
         if sem_count<sem_max:
             if(listPhil[int(myString[1])]==False):
                 butlerAction=myString[1]+"===="+"sitdown_granted"
@@ -98,9 +99,8 @@ def on_message(client, userdata, msg):
                 mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+butlerAction
                 mqtt_client.publish(mqtt_topic, mqtt_message)
                 turnOn(int(myString[1]))
-                time.sleep(2)
                 butlerAction="butler_waiting"
-                time.sleep(1)
+                time.sleep(10)
             else:
                 butlerAction="butler_waiting"
     if (len(myString)==3 and myString[2] == "leave"):
@@ -163,7 +163,7 @@ def main():
             mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+butlerAction
             mqtt_client.publish(mqtt_topic, mqtt_message) # by doing this publish, we should keep client alive
            
-            time.sleep(3)
+            time.sleep(15)
                    
 if __name__ == '__main__':
     main()

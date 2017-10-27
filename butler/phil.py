@@ -171,7 +171,7 @@ def main():
         else:
             print("Error, you should never be in state " + state)
             return
-        time.sleep(2)
+        time.sleep(11)
 
 if __name__ == '__main__':
     main()

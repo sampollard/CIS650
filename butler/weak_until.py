@@ -10,7 +10,7 @@ import os
 import sys
 from datetime import datetime as dt
 
-# TODO: Set GUI
+# TODO: Initialize GUI
 
 global l
 global r
@@ -46,16 +46,17 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     global rb
     global lb
-    print("Received " + ", ".join([msg.topic, msg.payload + "\n"]))
+    # msg.payload is bytes, msg.topic is string. That's stupid.
+    print("Received " + ", ".join([msg.topic, msg.payload.decode('utf-8') + "\n"]))
     myString = str(msg.payload).split("====")
     if "====".join(myString[1:]) == l:
-        print("Matched l")
+        print("Matched {}".format(l)) # TODO: GUI it
         lb = True
     elif "====".join(myString[1:]) == r:
-        print("Matched r")
+        print("Matched {}".format(r)) # TODO: GUI it
         rb = True
     if lb == True and rb == False:
-        print("Assert failed")
+        print("Assert (!{} W {}) failed".format(l, r)) # TODO: GUI it
 
 def on_disconnect(client, userdata, rc):
     print("Disconnected in a normal way")
@@ -86,7 +87,7 @@ def main():
     mqtt_topic = topicname + '/' + socket.gethostname()
 
     mqtt_client.will_set(mqtt_topic, '______________Will of '+MY_NAME+' _________________\n\n', 0, False)
-    mqtt_client.connect(broker, '1883')
+    mqtt_client.connect(broker, 1883)
     mqtt_client.subscribe(topicname + "/#") #subscribe to all students in class
     mqtt_client.loop_start() # just in case - starts a loop that listens for incoming data and keeps client alive
     while True:

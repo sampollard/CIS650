@@ -22,7 +22,7 @@ def control_c_handler(signum, frame):
     print('saw control-c')
     mqtt_client.disconnect()
     mqtt_client.loop_stop()  # waits until DISCONNECT message is sent out
-    print "Now I am done."
+    print("Now I am done.")
     sys.exit(0)
 signal.signal(signal.SIGINT, control_c_handler)
 

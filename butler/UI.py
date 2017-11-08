@@ -70,52 +70,52 @@ class mainClass(QWidget):
         lineSpace =  QLabel()
         #Add different labels 
         title1 = QLabel()
-        weakUntillAssert= QLabel()
-        weakTimeStamp = QLabel()
-        weakStatus = QLabel()
+        self.weakUntilAssert= QLabel()
+        self.weakTimeStamp = QLabel()
+        self.weakStatus = QLabel()
     
         lineBreak=QLabel()   
      
         title2 = QLabel()
-        progressProperty= QLabel()
-        progressPropertyTimeStamp = QLabel()
-        progressPropertyStatus = QLabel()
+        self.progressProperty= QLabel()
+        self.progressPropertyTimeStamp = QLabel()
+        self.progressPropertyStatus = QLabel()
         
         title1.setText("Weak untill Assert")
-        weakUntillAssert.setText("! lw W rw ")
-        weakTimeStamp.setText("Time Stamp: No updated yet")
-        weakStatus.setText("Status: ok/failed")
+        self.weakUntilAssert.setText("! lw W rw ")
+        self.weakTimeStamp.setText("Time Stamp: No updated yet")
+        self.weakStatus.setText("Status: ok/failed")
   
         lineBreak.setText("---------------------------------------------------------------------------")       
  
         title2.setText("Progress property")
-        progressProperty.setText("lp -->  rp ")
-        progressPropertyTimeStamp.setText("Time Stamp: No updated yet")
-        progressPropertyStatus.setText("Status: ok/failed")
+        self.progressProperty.setText("lp -->  rp ")
+        self.progressPropertyTimeStamp.setText("Time Stamp: No updated yet")
+        self.progressPropertyStatus.setText("Status: ok/failed")
 	
         title1.setAlignment(Qt.AlignCenter)
-        weakUntillAssert.setAlignment(Qt.AlignLeft)
-        weakTimeStamp.setAlignment(Qt.AlignLeft)
-        weakStatus.setAlignment(Qt.AlignLeft)
+        self.weakUntilAssert.setAlignment(Qt.AlignLeft)
+        self.weakTimeStamp.setAlignment(Qt.AlignLeft)
+        self.weakStatus.setAlignment(Qt.AlignLeft)
        
         lineBreak.setAlignment(Qt.AlignCenter)
  
         title2.setAlignment(Qt.AlignCenter)
-        progressProperty.setAlignment(Qt.AlignLeft)
-        progressPropertyTimeStamp.setAlignment(Qt.AlignLeft)
-        progressPropertyStatus.setAlignment(Qt.AlignLeft)
+        self.progressProperty.setAlignment(Qt.AlignLeft)
+        self.progressPropertyTimeStamp.setAlignment(Qt.AlignLeft)
+        self.progressPropertyStatus.setAlignment(Qt.AlignLeft)
 
         layout.addWidget(title1)
-        layout.addWidget(weakUntillAssert)
-        layout.addWidget(weakTimeStamp)
-        layout.addWidget(weakStatus)
+        layout.addWidget(self.weakUntilAssert)
+        layout.addWidget(self.weakTimeStamp)
+        layout.addWidget(self.weakStatus)
 
         layout.addWidget(lineBreak)
            
         layout.addWidget(title2)
-        layout.addWidget(progressProperty)
-        layout.addWidget(progressPropertyTimeStamp)
-        layout.addWidget(progressPropertyStatus)
+        layout.addWidget(self.progressProperty)
+        layout.addWidget(self.progressPropertyTimeStamp)
+        layout.addWidget(self.progressPropertyStatus)
         #Add layout and widgets to window , set window size, name window
         self.setLayout(layout)
         
@@ -126,7 +126,7 @@ class mainClass(QWidget):
         self.update_label2()
     
     def update_label1(self):
-        self.weakUntillAssert.setText("! adfasdlasdfasdw W rw ")
+        self.weakUntilAssert.setText("! adfasdlasdfasdw W rw ")
         self.weakTimeStamp.setText("Time safdasStamp: No updatasdfed yet")
         self.weakStatus.setText("Status:asdf ok/fasdfailed")
  

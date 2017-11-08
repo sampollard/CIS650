@@ -1,4 +1,5 @@
 import sys, os
+from PyQt5.QtCore import QObject, pyqtSignal
 from PyQt5 import QtCore, QtGui, QtWidgets, QtGui
 from PyQt5.QtCore import *
 from PyQt5.QtGui import * #import QIcon, QPixmap
@@ -34,55 +35,23 @@ ip_addr = str(s.getsockname()[0])
 print('IP address: {}'.format(ip_addr))
 s.close()
 
-'''
-def on_connect(client, userdata, flags, rc):
-    print('connected')
-
-def on_message(client, userdata, msg):
-    # msg.payload is bytes, msg.topic is string. That's stupid.
-    print("Received " + ", ".join([msg.topic, msg.payload.decode('utf-8') + "\n"]))
-    myString = str(msg.payload).split("====")
-    if "====".join(myString[1:]) == l:
-        print("Matched {}".format(l))
-        lb = True
-    elif "====".join(myString[1:]) == r:
-        print("Matched {}".format(r)) # TODO: GUI it
-        rb = True
-    if lb == True and rb == False:
-        print("Assert (!{} W {}) failed".format(l, r)) # TODO: GUI it
-        failed = True
-
-def on_disconnect(client, userdata, rc):
-    print("Disconnected in a normal way")
-    #graceful so won't send will
-
-def on_log(client, userdata, level, buf):
-    pass
-    # print("log: {}".format(buf)) # only semi-useful IMHO
-
-'''
 
 class mainClass(QWidget):
-    from PyQt5.QtCore import QObject, pyqtSignal
     #client_message = QtCore.pyqtSignal(object)
     #client_message = pyqtSignal(object)
-    client_message = pyqtSignal()
+    #client_message = pyqtSignal([str])
+    #trigger = pyqtSignal()
+
+   
+    #def test(self):
+    #    print("hello test")
+
+    
 
     def __init__(self, mqtt_client, parent = None):
         super().__init__()
-        self._mqtt_client = mqtt_client
-        self.startUI()         
-   
-    def test(self):
-        print("hello test")
-
-
-    def update_label(self):
-        pass
-    
-    def startUI(self, parent = None ):
-        #super().__init__()
-        
+        self.initUI()
+    def initUI(self): 
         #This is the layout
         layout = QVBoxLayout(self)
         #Add the two layouts for the scroll boxes
@@ -152,54 +121,91 @@ class mainClass(QWidget):
         
         self.setMinimumSize(600, 800)
         self.setWindowTitle("Model Checker")
-      
+     
+        self.update_label1()
+        self.update_label2()
+    
+    def update_label1(self):
+        self.weakUntillAssert.setText("! adfasdlasdfasdw W rw ")
+        self.weakTimeStamp.setText("Time safdasStamp: No updatasdfed yet")
+        self.weakStatus.setText("Status:asdf ok/fasdfailed")
+ 
+    def update_label2(self):
+        self.progressProperty.setText("lp --adsfasdf>  rp ")
+        self.progressPropertyTimeStamp.setText("Timeadsfasd Stamp: No updated yet")
+        self.progressPropertyStatus.setText("Status: ok/fasdfasdiled")
 
-        #Borrowed  
-        self._mqtt_client.on_connect = self.on_connect
-        print("Pass connected")
-        self._mqtt_client.on_message = self.client_message.emit()
-        #self._mqtt_client.on_message = lambda c, d, msg: self.client_message.emit(msg)
-        print("got on msg")
-        self.client_message.connect(self.on_client_message)   
-        print("end main loop") 
 
-    def on_client_message(self,message):
+ 
+    def handle_trigger(self):
+        print("Trigger signal received")
+
+    def on_client_message(self, _userdata, msg):
         print("on client msg called")
-        print(message)
-        title1.setText(message.payload)
-        weakUntillAssert.setText(message.payload)
-        weakTimeStamp.setText(message.payload)
-        weakStatus.setText(message.payload)
+        print(msg.payload)
+       
+        '''
+        print("Received" + ", ".join([msg.topic, msg.payload + "\n"]))
+        myString = str(msg.payload).split("====")
+        print(myString)
+        if (len(myString)==4 and myString[2] == "req_fork" and myString[3]==forkName):
+            if(inUse == False):
+                #turnOn(forkName)
+                forkAction=myString[1]+"===="+"fork_granted"+"===="+forkName
+                inUse=True
+            else:
+                print(forkName+"  in use  wait")
+                #forkAction="in_use"+"===="+forkName+"===="+inUse
+        if (len(myString)==4 and myString[2] == "put_down" and myString[3]==forkName):
+            inUse=False
+            turnOff(forkName)
+            print(forkName+"  done")
         print("Leaving client msg")
+        '''
         return
  
-    def updatePoints(self):
-        pass 
    
-    def on_connect(self, client, userdata, flags, rc):
-        client.subscribe("#")
+    def on_connect(elf, _userdata, flags_dict, result):
         print("Connected")
 
     def on_disconnect(self,client, userdata, rc):
         print("Disconnected in a normal way")
         #graceful so won't send will
 
-    def on_log(self,client, userdata, level, buf):
+    def on_log(self, _userdata, level, buf):
         pass
+
+    
+    mqtt_client2 = paho.Client()
+
+    # set up handlers
+    mqtt_client2.on_connect = on_connect
+    mqtt_client2.on_message = on_client_message
+    mqtt_client2.on_disconnect = on_disconnect
+    mqtt_client2.on_log = on_log
+    
+    mqtt_topic2 =  '/' + socket.gethostname()
+
+    mqtt_client2.will_set(mqtt_topic2, '______________Will of '+ 'testing '+' _________________\n\n', 0, False)
+    broker = 'iot.eclipse.org'
+    mqtt_client2.connect(broker, 1883)
+    mqtt_client2.subscribe("cis650prs/#") #subscribe to all students in class
+    mqtt_client2.loop_start()
+     
 
 def main():
             # Instantiate the MQTT client
     mqtt_client = paho.Client()
     mqtt_topic = topicname + '/' + socket.gethostname()   
     mqtt_client.will_set(mqtt_topic, '______________Will of '+MY_NAME+' _________________\n\n', 0, False)
-    mqtt_client.connect(broker, 1883)
-    #mqtt_client.subscribe("#")
-    mqtt_client.subscribe(topicname + "/#")
+    mqtt_client.subscribe("#")
+    #mqtt_client.subscribe(topicname + "/#")
     app = QApplication(sys.argv)
-    mainWindow = mainClass(app,mqtt_client)
+    mainWindow = mainClass(app)#,mqtt_client)
     mainWindow.show()
     
-    mqtt_client.loop_start() 
+    #mqtt_client.connect(broker, 1883)
+    #mqtt_client.loop_start() 
     try:
         sys.exit(app.exec_())
     finally:

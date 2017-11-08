@@ -2,6 +2,8 @@
 #     !<l> W <r>
 # where l and r are some messages which can be sent in this protocol.
 # Both <l> and <r> fluents start out false.
+# For the assignment, do
+# python weak_until.py 0====is_eating 0====leave
 import socket
 import paho.mqtt.client as paho
 import signal

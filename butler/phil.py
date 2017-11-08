@@ -4,6 +4,7 @@ import signal
 import time
 import os
 import sys
+import random
 from datetime import datetime as dt
 
 # Set state variables
@@ -15,6 +16,8 @@ if len(sys.argv) == 4:
 else:
     print("usage: phil.py <name> <leftfork> <rightfork>")
     sys.exit(1)
+
+random.seed(int(philname))
 
 # Set LEDs and sigint handler
 leds = []
@@ -143,7 +146,7 @@ def main():
             mqtt_client.publish(mqtt_topic, mqtt_message)
         elif state == 'sitdown':
             print(philname + " sits down")
-            time.sleep(2)
+            time.sleep(1)
             state = 'req_left_fork'
         elif state == 'req_left_fork':
             mqtt_message =  msg_start + '====' + philname + '====req_fork====' + leftfork
@@ -155,7 +158,7 @@ def main():
             print(philname + " is eating")
             mqtt_message =  msg_start + '====' + philname + '====is_eating'
             mqtt_client.publish(mqtt_topic, mqtt_message)
-            time.sleep(2)
+            time.sleep(random.random())
             turnOff(philname)
             state = 'put_down_left_fork'
         elif state == 'put_down_left_fork':
@@ -165,15 +168,15 @@ def main():
         elif state == 'put_down_right_fork':
             mqtt_message =  msg_start + '====' + philname + '====put_down====' + rightfork
             mqtt_client.publish(mqtt_topic, mqtt_message)
-            time.sleep(2)
+            time.sleep(1)
             mqtt_message =  msg_start + '====' + philname + '====leave'
             mqtt_client.publish(mqtt_topic, mqtt_message)
-            time.sleep(3)
+            time.sleep(1)
             state = 'req_sitdown'
         else:
             print("Error, you should never be in state " + state)
             return
-        time.sleep(3)
+        time.sleep(1)
 
 if __name__ == '__main__':
     main()

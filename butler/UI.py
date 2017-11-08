@@ -36,9 +36,7 @@ print('IP address: {}'.format(ip_addr))
 s.close()
 
 # Set up mqtt on_* functions that don't change the GUI
-def on_connect(elf, _userdata, flags_dict, result):
-    print("Connected")
-def on_disconnect(self,client, userdata, rc):
+def on_disconnect(self, client, userdata, rc):
     print("Disconnected in a normal way")
     #graceful so won't send will
 def on_log(self, _userdata, level, buf):
@@ -165,7 +163,7 @@ class mainClass(QWidget):
         self.weakTimeStamp.setText("Timestamp: {}".format(ts))
     def update_label_progress_status(self, status, ts):
         print("update_label_progress_status called")
-        if self.weak_until == False:
+        if self.progress == False:
             return
         if status == "Failed":
             self.progress = False
@@ -193,9 +191,8 @@ def main():
     mqtt_client = paho.Client()
     mqtt_topic = topicname + '/' + socket.gethostname()
     mqtt_client.will_set(mqtt_topic, '______________Will of '+MY_NAME+' _________________\n\n', 0, False)
-    mqtt_client.connect(broker, 1883)
+    mqtt_client.connect(broker, 1883, keepalive=600) # UI is only a listener
     mqtt_client.subscribe(topicname + "/#")
-    mqtt_client.on_message = on_message
     app = QApplication(sys.argv)
     mainWindow = mainClass(mqtt_client)
     mainWindow.show()

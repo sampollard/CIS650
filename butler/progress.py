@@ -38,6 +38,8 @@ ip_addr = str(s.getsockname()[0])
 print('IP address: {}'.format(ip_addr))
 s.close()
 
+mqtt_client = paho.Client()
+mqtt_topic = topicname + '/' + socket.gethostname()
 def on_connect(client, userdata, flags, rc):
     print('connected')
 
@@ -46,18 +48,26 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     global rb
     global lb
+    global mqtt_client
+    global mqtt_topic
     # msg.payload is bytes, msg.topic is string. That's stupid.
     print("**********Received " + ", ".join([msg.topic, msg.payload.decode('utf-8') + "\n"]))
     myString = str(msg.payload).split("====")
     # print "====".join(myString[1:])
     if "====".join(myString[1:]) == l:
+
         print("Matched {}".format(l)) # TODO: GUI it
         lb = True
     elif "====".join(myString[1:]) == r:
         print("Matched {}".format(r)) # TODO: GUI it
         rb = True
-        if lb == False and rb == True:
+        if lb == True and rb == True:
            print("*********Progress (!{} -->{}) failed".format(l, r)) # TODO: GUI it
+           timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
+           mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$' + 'P'+'$$$$'+'Failed'
+           mqtt_client.publish(mqtt_topic, mqtt_message) # by doing this publish, we should keep client alive
+           time.sleep(5)
+           print("Progress Failed thus exiting.")
            sys.exit(0)
            lb=False
            rb=False
@@ -69,33 +79,50 @@ def on_log(client, userdata, level, buf):
     pass
     # print("log: {}".format(buf)) # only semi-useful IMHO
 
+    # set up handlers
+    
+
 def main():
     global l
     global r
+    global mqtt_client
+    global mqtt_topic
     if len(sys.argv) == 3:
         l = sys.argv[1]
         r = sys.argv[2]
     else:
         print("usage: progress.py <l> <r> where we track (<l> --> <r>)")
         sys.exit(1)
+
+    
+
     # Instantiate the MQTT client
-    mqtt_client = paho.Client()
+    # mqtt_client = paho.Client()
 
     # set up handlers
     mqtt_client.on_connect = on_connect
     mqtt_client.on_message = on_message
     mqtt_client.on_disconnect = on_disconnect
     mqtt_client.on_log = on_log
-
-    mqtt_topic = topicname + '/' + socket.gethostname()
+    print ("wtf is happening")
+    
 
     mqtt_client.will_set(mqtt_topic, '______________Will of '+MY_NAME+' _________________\n\n', 0, False)
     mqtt_client.connect(broker, 1883)
     mqtt_client.subscribe(topicname + "/#") #subscribe to all students in class
     mqtt_client.loop_start() # just in case - starts a loop that listens for incoming data and keeps client alive
+    timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
+    mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$' + 'lp'+'$$$$'+l
+    mqtt_client.publish(mqtt_topic, mqtt_message) # by doing this publish, we should keep client alive
+    time.sleep(2)
+    timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
+    mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$' + 'rp'+'$$$$'+r
+    mqtt_client.publish(mqtt_topic, mqtt_message) # by doing this publish, we should keep client alive
+    time.sleep(2)
+
     while True:
         timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
-        mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '====' + 'progress keepalive'
+        mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$' + 'P'+'$$$$'+'OK'
         mqtt_client.publish(mqtt_topic, mqtt_message) # by doing this publish, we should keep client alive
         time.sleep(8)
 

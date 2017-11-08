@@ -14,7 +14,9 @@ from datetime import datetime as dt
 
 global l
 global r
-rb = False # These are global too but we know how to initialize them
+# These are global too but we know how to initialize them
+failed = False # This will only change to True once.
+rb = False
 lb = False
 
 def control_c_handler(signum, frame):
@@ -46,17 +48,19 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     global rb
     global lb
+    global failed
     # msg.payload is bytes, msg.topic is string. That's stupid.
     print("Received " + ", ".join([msg.topic, msg.payload.decode('utf-8') + "\n"]))
     myString = str(msg.payload).split("====")
     if "====".join(myString[1:]) == l:
-        print("Matched {}".format(l)) # TODO: GUI it
+        print("Matched {}".format(l))
         lb = True
     elif "====".join(myString[1:]) == r:
         print("Matched {}".format(r)) # TODO: GUI it
         rb = True
     if lb == True and rb == False:
         print("Assert (!{} W {}) failed".format(l, r)) # TODO: GUI it
+        failed = True
 
 def on_disconnect(client, userdata, rc):
     print("Disconnected in a normal way")
@@ -90,9 +94,20 @@ def main():
     mqtt_client.connect(broker, 1883)
     mqtt_client.subscribe(topicname + "/#") #subscribe to all students in class
     mqtt_client.loop_start() # just in case - starts a loop that listens for incoming data and keeps client alive
+    # Send the <l> message for the GUI
+    timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
+    mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$' + 'lw' + '$$$$' + l
+    mqtt_client.publish(mqtt_topic, mqtt_message) # by doing this publish, we should keep client alive
+    # Send the <r> message for the GUI
+    timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
+    mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$' + 'rw' + '$$$$' + l
+    mqtt_client.publish(mqtt_topic, mqtt_message) # by doing this publish, we should keep client alive
     while True:
         timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
-        mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '====' + 'weak_until keepalive'
+        if failed:
+            mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$' + 'W' + '$$$$' + 'Failed'
+        else:
+            mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$' + 'W' + '$$$$' + 'OK'
         mqtt_client.publish(mqtt_topic, mqtt_message) # by doing this publish, we should keep client alive
         time.sleep(8)
 

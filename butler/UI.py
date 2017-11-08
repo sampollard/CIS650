@@ -51,6 +51,7 @@ class mainClass(QWidget):
     def __init__(self, mqtt_client, parent = None):
         super().__init__()
         self.initUI()
+
     def initUI(self): 
         #This is the layout
         layout = QVBoxLayout(self)
@@ -122,15 +123,13 @@ class mainClass(QWidget):
         self.setMinimumSize(600, 800)
         self.setWindowTitle("Model Checker")
      
-        self.update_label1()
-        self.update_label2()
     
-    def update_label1(self):
-        self.weakUntillAssert.setText("! adfasdlasdfasdw W rw ")
-        self.weakTimeStamp.setText("Time safdasStamp: No updatasdfed yet")
-        self.weakStatus.setText("Status:asdf ok/fasdfailed")
+    def update_label1():
+        sweakUntillAssert.setText("! adfasdlasdfasdw W rw ")
+        weakTimeStamp.setText("Time safdasStamp: No updatasdfed yet")
+        weakStatus.setText("Status:asdf ok/fasdfailed")
  
-    def update_label2(self):
+    def update_label2():
         self.progressProperty.setText("lp --adsfasdf>  rp ")
         self.progressPropertyTimeStamp.setText("Timeadsfasd Stamp: No updated yet")
         self.progressPropertyStatus.setText("Status: ok/fasdfasdiled")
@@ -143,7 +142,7 @@ class mainClass(QWidget):
     def on_client_message(self, _userdata, msg):
         print("on client msg called")
         print(msg.payload)
-       
+        mainClass.update_label1()   
         '''
         print("Received" + ", ".join([msg.topic, msg.payload + "\n"]))
         myString = str(msg.payload).split("====")

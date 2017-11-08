@@ -153,6 +153,8 @@ def main():
             mqtt_client.publish(mqtt_topic, mqtt_message)
         elif state == 'eat':
             print(philname + " is eating")
+            mqtt_message =  msg_start + '====' + philname + '====is_eating'
+            mqtt_client.publish(mqtt_topic, mqtt_message)
             time.sleep(2)
             turnOff(philname)
             state = 'put_down_left_fork'
@@ -166,12 +168,12 @@ def main():
             time.sleep(2)
             mqtt_message =  msg_start + '====' + philname + '====leave'
             mqtt_client.publish(mqtt_topic, mqtt_message)
-            time.sleep(10)
+            time.sleep(3)
             state = 'req_sitdown'
         else:
             print("Error, you should never be in state " + state)
             return
-        time.sleep(11)
+        time.sleep(3)
 
 if __name__ == '__main__':
     main()

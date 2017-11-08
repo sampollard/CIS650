@@ -167,7 +167,7 @@ def main():
             mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+butlerAction
             mqtt_client.publish(mqtt_topic, mqtt_message) # by doing this publish, we should keep client alive
            
-            time.sleep(15)
+            time.sleep(1)
                    
 if __name__ == '__main__':
     main()

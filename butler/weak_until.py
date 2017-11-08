@@ -100,7 +100,7 @@ def main():
     mqtt_client.publish(mqtt_topic, mqtt_message) # by doing this publish, we should keep client alive
     # Send the <r> message for the GUI
     timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
-    mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$' + 'rw' + '$$$$' + l
+    mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$' + 'rw' + '$$$$' + r
     mqtt_client.publish(mqtt_topic, mqtt_message) # by doing this publish, we should keep client alive
     while True:
         timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
@@ -109,7 +109,7 @@ def main():
         else:
             mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$' + 'W' + '$$$$' + 'OK'
         mqtt_client.publish(mqtt_topic, mqtt_message) # by doing this publish, we should keep client alive
-        time.sleep(8)
+        time.sleep(4)
 
 if __name__ == '__main__':
     main()

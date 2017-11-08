@@ -124,7 +124,7 @@ def main():
         timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
         mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$' + 'P'+'$$$$'+'OK'
         mqtt_client.publish(mqtt_topic, mqtt_message) # by doing this publish, we should keep client alive
-        time.sleep(8)
+        time.sleep(4)
 
 if __name__ == '__main__':
     main()

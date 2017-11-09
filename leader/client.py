@@ -18,6 +18,8 @@ global initiator
 global ID
 global NextID
 global SendID
+global mqtt_client
+global mqtt_topic
 
 if len(sys.argv) == 4:
     ID = int(sys.argv[1])
@@ -82,7 +84,6 @@ def on_connect(client, userdata, flags, rc):
 
 # The callback for when a PUBLISH message is received from the server that matches any of your topics.
 # However, see note below about message_callback_add.
-# TODO: Most of the work
 def on_message(client, userdata, msg):
     global state
     global initiator
@@ -91,7 +92,7 @@ def on_message(client, userdata, msg):
     myList = str(msg.payload).split("====")
     timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
     msg_start = "[%s] %s " % (timestamp,ip_addr)
-    if len(myList) == 4 and myList[1] == ID and myList[2] == 'election':
+    if len(myList) == 4 and int(myList[1]) == ID and myList[2] == 'election':
         if state == 'leader':
             # If you're the leader and you get another election message, just drop it
             # XXX: If you're a cheater you want to do something here
@@ -99,7 +100,7 @@ def on_message(client, userdata, msg):
         elif int(myList[3]) == ID:
             # You're a leader now
             state = 'leader'
-            mqtt_message =  mst_start + '====' + NextID + '====' + 'leader' + '====' + ID
+            mqtt_message =  msg_start + '====' + str(NextID) + '====' + 'leader' + '====' + str(ID)
             mqtt_client.publish(mqtt_topic, mqtt_message)
             # TODO: Turn on light
         elif int(myList[3]) > ID:
@@ -107,22 +108,22 @@ def on_message(client, userdata, msg):
             state = 'no_contention'
             initiator = False
             SendID = int(myList[3])
-            mqtt_message =  msg_start + '====' + NextID + '====' + 'election' + '====' + SendID
+            mqtt_message =  msg_start + '====' + str(NextID) + '====' + 'election' + '====' + str(SendID)
             mqtt_client.publish(mqtt_topic, mqtt_message)
             # TODO: Turn on light
         elif int(myList[3]) < ID:
             # Replace the mssage we received with our ID. We're still in contention because
             # we haven't heard of anyone more eligible than us. This might send twice?
             SendID = ID
-            mqtt_message =  msg_start + '====' + NextID + '====' + 'election' + '====' + SendID
+            mqtt_message =  msg_start + '====' + str(NextID) + '====' + 'election' + '====' + str(SendID)
             mqtt_client.publish(mqtt_topic, mqtt_message)
-    elif len(myList) == 4 and myList[1] == ID and myList[2] == 'leader':
+    elif len(myList) == 4 and int(myList[1]) == ID and myList[2] == 'leader':
         if state == 'no_contention':
             # Forward the message
-            SendID = ID
-            mqtt_message =  msg_start + '====' + NextID + '====' + 'election' + '====' + SendID
+            SendID = int(myList[3])
+            mqtt_message =  msg_start + '====' + str(NextID) + '====' + 'leader' + '====' + str(SendID)
             mqtt_client.publish(mqtt_topic, mqtt_message)
-        elif state == 'leader':
+        elif state == 'leader': # Doesn't check if he got back his own ID
             print("Yay! Election is successfully completed.")
         else:
             print("Something went wrong. You should only get a leader message from no_contention")
@@ -146,6 +147,8 @@ def main():
     global state
     global initiator
     global sendID
+    global mqtt_client
+    global mqtt_topic
     # Instantiate the MQTT client
     mqtt_client = paho.Client()
 
@@ -158,7 +161,7 @@ def main():
     mqtt_topic = topicname + '/' + socket.gethostname()
 
     # When we figure out the timeout, remove this line
-    time.sleep(1)
+    time.sleep(3)
 
     mqtt_client.will_set(mqtt_topic, '______________Will of '+MY_NAME+' _________________\n\n', 0, False)
     mqtt_client.connect(broker, '1883')

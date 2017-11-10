@@ -50,13 +50,9 @@ else:
 def turnOn(light):
     if on_edison ==True:
         leds[int(light)].write(0)
-    else:
-        print("Simulate light {} on".format(light))
 def turnOff(light):
     if on_edison ==True:
         leds[int(light)].write(1)
-    else:
-        print("Simulate light {} off".format(light))
 
 def update_light():
     light_lookup = {'in_contention': 7, 'leader': 0, 'no_contention': 4}
@@ -70,6 +66,8 @@ def control_c_handler(signum, frame):
     print('saw control-c')
     mqtt_client.disconnect()
     mqtt_client.loop_stop()  # waits until DISCONNECT message is sent out
+    for i in range(8):
+        turnOff(i)
     print "Now I am done."
     sys.exit(0)
 signal.signal(signal.SIGINT, control_c_handler)

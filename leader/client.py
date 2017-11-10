@@ -24,7 +24,11 @@ global mqtt_topic
 if len(sys.argv) == 4:
     ID = int(sys.argv[1])
     NextID = int(sys.argv[2])
-    initiator = bool(sys.argv[3])
+    initiator = bool(int(sys.argv[3]))
+    if initiator == True:
+        print("I'm an initiator")
+    else:
+        print("I am not an initiator")
     state = 'in_contention'
     SendID = ID
 else:

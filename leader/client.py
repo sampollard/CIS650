@@ -58,6 +58,13 @@ def turnOff(light):
     else:
         print("Simulate light {} off".format(light))
 
+def update_light():
+    light_lookup = {'in_contention': 7, 'leader': 0, 'no_contention': 4}
+    # Turn all lights off
+    for i in range(8):
+        turnOff(i)
+    turnOn(light_lookup[state])
+
 def control_c_handler(signum, frame):
     sys.exit()
     print('saw control-c')
@@ -128,6 +135,7 @@ def on_message(client, userdata, msg):
         else:
             print("Something went wrong. You should only get a leader message from no_contention")
         # TODO: I don't think we need 'no_contention_and_elected' ???
+    update_light()
 
 # You can also add specific callbacks that match specific topics.
 # See message_callback_add at https://pypi.python.org/pypi/paho-mqtt#callbacks.

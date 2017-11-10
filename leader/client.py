@@ -59,6 +59,7 @@ def turnOff(light):
         leds[int(light)].write(1)
 
 def update_light():
+    time.sleep(1)
     light_lookup = {'in_contention': 7, 'leader': 0, 'no_contention': 4}
     # Turn all lights off
     for i in range(8):
@@ -169,7 +170,7 @@ def main():
 
     mqtt_topic = topicname + '/' + socket.gethostname()
 
-    # When we figure out the timeout, remove this line
+    # When we figure out the timeout of everyone starting at once, remove this line
     time.sleep(3)
 
     mqtt_client.will_set(mqtt_topic, '______________Will of '+MY_NAME+' _________________\n\n', 0, False)
@@ -180,7 +181,6 @@ def main():
         timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
         msg_start = "[%s] %s " % (timestamp,ip_addr)
         update_light()
-        time.sleep(1)
         if state == 'in_contention' and initiator == True:
             mqtt_message =  msg_start + '====' + str(NextID) + '====' + 'election' + '====' + str(SendID)
             mqtt_client.publish(mqtt_topic, mqtt_message)

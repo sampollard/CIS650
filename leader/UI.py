@@ -110,7 +110,7 @@ class mainClass(QWidget):
         title.setText("Fluent0")
         self.weakUntilAssert.setText("Fluent goes here")
         self.weakTimeStamp.setText("Time Stamp: Not updated yet")
-        self.weakStatus.setText("Status: ok/failed")
+        self.weakStatus.setText("Status: OK")
   
         lineBreak.setText("---------------------------------------------------------------------------")       
         lineBreak1.setText("---------------------------------------------------------------------------")       
@@ -196,19 +196,19 @@ class mainClass(QWidget):
     def update_label_weak_until_left1(self, l, ts):
         print("update_label_weak_until_left called")
         self.wul1 = l
-        self.weakUntilAssert1.setText("!({} W {})".format(self.wul, self.wur))
+        self.weakUntilAssert1.setText("!({} W {})".format(self.wul1, self.wur1))
         self.weakTimeStamp1.setText("Timestamp: {}".format(ts))
     def update_label_weak_until_right1(self, r, ts):
         print("update_label_weak_until_right called")
         self.wur1 = r
-        self.weakUntilAssert1.setText("!({} W {})".format(self.wul, self.wur))
+        self.weakUntilAssert1.setText("!({} W {})".format(self.wul1, self.wur1))
         self.weakTimeStamp1.setText("Timestamp: {}".format(ts))
     
     def update_label_weak_until_status1(self, status, ts):
         print("update_label_weak_until_status called")
         if self.weak_until1 == False:
             return
-        elif status1 == "Failed":
+        elif status == "Failed":
             self.weak_until1 = False
         self.weakStatus1.setText("Status: {}".format(status))
         self.weakTimeStamp1.setText("Timestamp: {}".format(ts))
@@ -217,19 +217,19 @@ class mainClass(QWidget):
     def update_label_weak_until_left2(self, l, ts):
         print("update_label_weak_until_left called")
         self.wul2 = l
-        self.weakUntilAssert2.setText("!({} W {})".format(self.wul, self.wur))
+        self.weakUntilAssert2.setText("!({} W {})".format(self.wul2, self.wur2))
         self.weakTimeStamp2.setText("Timestamp: {}".format(ts))
     def update_label_weak_until_right2(self, r, ts):
         print("update_label_weak_until_right called")
         self.wur2 = r
-        self.weakUntilAssert2.setText("!({} W {})".format(self.wul, self.wur))
+        self.weakUntilAssert2.setText("!({} W {})".format(self.wul2, self.wur2))
         self.weakTimeStamp2.setText("Timestamp: {}".format(ts))
     
     def update_label_weak_until_status2(self, status, ts):
         print("update_label_weak_until_status called")
         if self.weak_until2 == False:
             return
-        elif status2 == "Failed":
+        elif status == "Failed":
             self.weak_until2 = False
         self.weakStatus2.setText("Status: {}".format(status))
         self.weakTimeStamp2.setText("Timestamp: {}".format(ts))
@@ -241,26 +241,26 @@ class mainClass(QWidget):
         myString = str(msg.payload.decode('utf-8')).split("$$$$")
         #Check WeakUntill
         #Check 1
-        if len(myString) == 3 and myString[1] == "lw" and myString[2] == "0" :
+        if len(myString) == 4 and myString[1] == "lw" and myString[2] == "0" :
             self.update_label_weak_until_left(myString[3], myString[0])
-        elif len(myString) == 3 and myString[1] == "rw" and myString[2] == "0":
+        elif len(myString) == 4 and myString[1] == "rw" and myString[2] == "0":
             self.update_label_weak_until_right(myString[3], myString[0])
-        elif len(myString) == 3 and myString[1] == "W" and myString[2] == "0":
+        elif len(myString) == 4 and myString[1] == "W" and myString[2] == "0" and myString[3] == "Cheater":
             self.update_label_weak_until_status(myString[3], myString[0])
         #Check 2
-        if len(myString) == 3 and myString[1] == "lw" and myString[2] == "1" :
-            self.update_label_weak_until_left(myString[3], myString[0])
-        elif len(myString) == 3 and myString[1] == "rw"and myString[2] == "1":
-            self.update_label_weak_until_right(myString[3], myString[0])
-        elif len(myString) == 3 and myString[1] == "W"and myString[2] == "1":
-            self.update_label_weak_until_status(myString[3], myString[0])
+        if len(myString) == 4 and myString[1] == "lw" and myString[2] == "1" :
+            self.update_label_weak_until_left1(myString[3], myString[0])
+        elif len(myString) == 4 and myString[1] == "rw"and myString[2] == "1":
+            self.update_label_weak_until_right1(myString[3], myString[0])
+        elif len(myString) == 4 and myString[1] == "W"and myString[2] == "1" and myString[3] == "Cheater":
+            self.update_label_weak_until_status1(myString[3], myString[0])
         #Check 3
-        if len(myString) == 3 and myString[1] == "lw" and myString[2] == "2" :
-            self.update_label_weak_until_left(myString[3], myString[0])
-        elif len(myString) == 3 and myString[1] == "rw"and myString[2] == "2":
-            self.update_label_weak_until_right(myString[3], myString[0])
-        elif len(myString) == 3 and myString[1] == "W"and myString[2] == "2":
-            self.update_label_weak_until_status(myString[3], myString[0])
+        if len(myString) == 4 and myString[1] == "lw" and myString[2] == "2" :
+            self.update_label_weak_until_left2(myString[3], myString[0])
+        elif len(myString) == 4 and myString[1] == "rw"and myString[2] == "2":
+            self.update_label_weak_until_right2(myString[3], myString[0])
+        elif len(myString) == 4 and myString[1] == "W"and myString[2] == "2" and myString[3] == "Cheater":
+            self.update_label_weak_until_status2(myString[3], myString[0])
 
 def main():
     # Instantiate the MQTT client

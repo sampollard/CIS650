@@ -1,3 +1,11 @@
+#Notes
+#TODO Adding three asserts to UI
+# Adding three weak untills`
+# !leader0 untill election0
+# ts ==== DEST (id) ==== leader ==== 0
+# So if 0 is the cheater, then 1 would catch it right away
+#
+
 import sys, os
 from PyQt5.QtCore import QObject, pyqtSignal
 from PyQt5 import QtCore, QtGui, QtWidgets, QtGui

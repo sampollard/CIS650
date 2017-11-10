@@ -24,12 +24,12 @@ global mqtt_topic
 if len(sys.argv) == 4:
     ID = int(sys.argv[1])
     NextID = int(sys.argv[2])
-    initiator = bool(int(sys.argv[3]))
+    initiator = True
     if initiator == True:
         print("I'm an initiator")
     else:
         print("I am not an initiator")
-    state = 'in_contention'
+    state = 'leader'
     SendID = ID
 else:
     print("usage: client.py <ID> <NextID> <is_initiator>")
@@ -183,6 +183,11 @@ def main():
         update_light()
         if state == 'in_contention' and initiator == True:
             mqtt_message =  msg_start + '====' + str(NextID) + '====' + 'election' + '====' + str(SendID)
+            mqtt_client.publish(mqtt_topic, mqtt_message)
+        
+        elif state == 'leader' and initiator == True:
+            print("I am not cheating, I swear")
+            mqtt_message =  msg_start + '====' + str(NextID) + '====' + 'leader' + '====' + str(ID)
             mqtt_client.publish(mqtt_topic, mqtt_message)
         else:
             mqtt_message =  msg_start + 'keepalive'

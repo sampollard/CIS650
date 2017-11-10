@@ -93,6 +93,7 @@ def on_message(client, userdata, msg):
     global state
     global initiator
     global SendID
+    update_light()
     print("Received " + ", ".join([msg.topic, msg.payload + "\n"]))
     myList = str(msg.payload).split("====")
     timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
@@ -107,7 +108,6 @@ def on_message(client, userdata, msg):
             state = 'leader'
             mqtt_message =  msg_start + '====' + str(NextID) + '====' + 'leader' + '====' + str(ID)
             mqtt_client.publish(mqtt_topic, mqtt_message)
-            # TODO: Turn on light
         elif int(myList[3]) > ID:
             # We received an ID greater than ours so we only forward
             state = 'no_contention'
@@ -115,7 +115,6 @@ def on_message(client, userdata, msg):
             SendID = int(myList[3])
             mqtt_message =  msg_start + '====' + str(NextID) + '====' + 'election' + '====' + str(SendID)
             mqtt_client.publish(mqtt_topic, mqtt_message)
-            # TODO: Turn on light
         elif int(myList[3]) < ID:
             # Replace the mssage we received with our ID. We're still in contention because
             # we haven't heard of anyone more eligible than us. This might send twice?
@@ -177,6 +176,7 @@ def main():
         timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
         msg_start = "[%s] %s " % (timestamp,ip_addr)
         update_light()
+        time.sleep(1)
         if state == 'in_contention' and initiator == True:
             mqtt_message =  msg_start + '====' + str(NextID) + '====' + 'election' + '====' + str(SendID)
             mqtt_client.publish(mqtt_topic, mqtt_message)

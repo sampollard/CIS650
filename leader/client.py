@@ -24,7 +24,11 @@ global mqtt_topic
 if len(sys.argv) == 4:
     ID = int(sys.argv[1])
     NextID = int(sys.argv[2])
-    initiator = bool(sys.argv[3])
+    initiator = bool(int(sys.argv[3]))
+    if initiator == True:
+        print("I'm an initiator")
+    else:
+        print("I am not an initiator")
     state = 'in_contention'
     SendID = ID
 else:
@@ -55,6 +59,7 @@ def turnOff(light):
         leds[int(light)].write(1)
 
 def update_light():
+    time.sleep(1)
     light_lookup = {'in_contention': 7, 'leader': 0, 'no_contention': 4}
     # Turn all lights off
     for i in range(8):
@@ -93,6 +98,7 @@ def on_message(client, userdata, msg):
     global state
     global initiator
     global SendID
+    update_light()
     print("Received " + ", ".join([msg.topic, msg.payload + "\n"]))
     myList = str(msg.payload).split("====")
     timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
@@ -107,7 +113,6 @@ def on_message(client, userdata, msg):
             state = 'leader'
             mqtt_message =  msg_start + '====' + str(NextID) + '====' + 'leader' + '====' + str(ID)
             mqtt_client.publish(mqtt_topic, mqtt_message)
-            # TODO: Turn on light
         elif int(myList[3]) > ID:
             # We received an ID greater than ours so we only forward
             state = 'no_contention'
@@ -115,7 +120,6 @@ def on_message(client, userdata, msg):
             SendID = int(myList[3])
             mqtt_message =  msg_start + '====' + str(NextID) + '====' + 'election' + '====' + str(SendID)
             mqtt_client.publish(mqtt_topic, mqtt_message)
-            # TODO: Turn on light
         elif int(myList[3]) < ID:
             # Replace the mssage we received with our ID. We're still in contention because
             # we haven't heard of anyone more eligible than us. This might send twice?
@@ -166,7 +170,7 @@ def main():
 
     mqtt_topic = topicname + '/' + socket.gethostname()
 
-    # When we figure out the timeout, remove this line
+    # When we figure out the timeout of everyone starting at once, remove this line
     time.sleep(3)
 
     mqtt_client.will_set(mqtt_topic, '______________Will of '+MY_NAME+' _________________\n\n', 0, False)

@@ -176,6 +176,7 @@ def main():
     while True:
         timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
         msg_start = "[%s] %s " % (timestamp,ip_addr)
+        update_light()
         if state == 'in_contention' and initiator == True:
             mqtt_message =  msg_start + '====' + str(NextID) + '====' + 'election' + '====' + str(SendID)
             mqtt_client.publish(mqtt_topic, mqtt_message)

@@ -56,11 +56,15 @@ class mainClass(QWidget):
     client_handler = QtCore.pyqtSignal(object)
     wul = "????"
     wur = "????"
-    #pl = "????"
-    #pr = "????"
+    wul1 = "????"
+    wur1 = "????"
+    wul2 = "????"
+    wur2 = "????"
+    
     # Start out true, only can turn to False once
     weak_until = True
-    progress = True
+    weak_until1 = True
+    weak_until2 = True
    
     def __init__(self, mqtt_client):
         super().__init__()
@@ -74,7 +78,7 @@ class mainClass(QWidget):
 
         layout.setContentsMargins(10, 0, 10, 600)
         layout.setSpacing(0)
-        layout.insertStretch(0,0);
+        #layout.insertStretch(0,0);
         #Intro message
         self.introductionText = QLabel(" Welcome to our program\n\n")
         self.introductionText.setAlignment(Qt.AlignCenter) 
@@ -84,54 +88,80 @@ class mainClass(QWidget):
         #Line spce
         lineSpace =  QLabel()
         #Add different labels 
-        title1 = QLabel()
+        title = QLabel()
         self.weakUntilAssert= QLabel()
         self.weakTimeStamp = QLabel()
         self.weakStatus = QLabel()
     
-        lineBreak=QLabel()   
-     
-        title2 = QLabel()
-        self.progressProperty= QLabel()
-        self.progressPropertyTimeStamp = QLabel()
-        self.progressPropertyStatus = QLabel()
+        title1 = QLabel()
+        self.weakUntilAssert1= QLabel()
+        self.weakTimeStamp1 = QLabel()
+        self.weakStatus1 = QLabel()
         
-        title1.setText("Fluent")
+
+        title2 = QLabel()
+        self.weakUntilAssert2= QLabel()
+        self.weakTimeStamp2 = QLabel()
+        self.weakStatus2 = QLabel()
+
+        lineBreak=QLabel()   
+        lineBreak1=QLabel()   
+     
+        title.setText("Fluent0")
         self.weakUntilAssert.setText("Fluent goes here")
         self.weakTimeStamp.setText("Time Stamp: Not updated yet")
         self.weakStatus.setText("Status: ok/failed")
   
         lineBreak.setText("---------------------------------------------------------------------------")       
- 
-        title2.setText("Safety property")
-        self.progressProperty.setText("Safety Property ")
-        self.progressPropertyTimeStamp.setText("Time Stamp: Not updated yet")
-        self.progressPropertyStatus.setText("Status: ok/failed")
+        lineBreak1.setText("---------------------------------------------------------------------------")       
+        title1.setText("Fluent1")
+        self.weakUntilAssert1.setText("Fluent goes here")
+        self.weakTimeStamp1.setText("Time Stamp: Not updated yet")
+        self.weakStatus1.setText("Status: ok/failed")
+
+        title2.setText("Fluent2")
+        self.weakUntilAssert2.setText("Fluent goes here")
+        self.weakTimeStamp2.setText("Time Stamp: Not updated yet")
+        self.weakStatus2.setText("Status: ok/failed")
+
 	
-        title1.setAlignment(Qt.AlignCenter)
+        title.setAlignment(Qt.AlignCenter)
         self.weakUntilAssert.setAlignment(Qt.AlignLeft)
         self.weakTimeStamp.setAlignment(Qt.AlignLeft)
         self.weakStatus.setAlignment(Qt.AlignLeft)
        
-        lineBreak.setAlignment(Qt.AlignCenter)
+        title1.setAlignment(Qt.AlignCenter)
+        self.weakUntilAssert1.setAlignment(Qt.AlignLeft)
+        self.weakTimeStamp1.setAlignment(Qt.AlignLeft)
  
         title2.setAlignment(Qt.AlignCenter)
-        self.progressProperty.setAlignment(Qt.AlignLeft)
-        self.progressPropertyTimeStamp.setAlignment(Qt.AlignLeft)
-        self.progressPropertyStatus.setAlignment(Qt.AlignLeft)
+        self.weakUntilAssert2.setAlignment(Qt.AlignLeft)
+        self.weakTimeStamp2.setAlignment(Qt.AlignLeft)
+        
 
-        layout.addWidget(title1)
+
+        #Add to layout
+        layout.addWidget(title)
         layout.addWidget(self.weakUntilAssert)
         layout.addWidget(self.weakTimeStamp)
         layout.addWidget(self.weakStatus)
 
         layout.addWidget(lineBreak)
            
-        layout.addWidget(title2)
-        layout.addWidget(self.progressProperty)
-        layout.addWidget(self.progressPropertyTimeStamp)
-        layout.addWidget(self.progressPropertyStatus)
+        layout.addWidget(title1)
+        layout.addWidget(self.weakUntilAssert1)
+        layout.addWidget(self.weakTimeStamp1)
+        layout.addWidget(self.weakStatus1)
         #Add layout and widgets to window , set window size, name window
+        
+        layout.addWidget(lineBreak1)
+ 
+        layout.addWidget(title2)
+        layout.addWidget(self.weakUntilAssert2)
+        layout.addWidget(self.weakTimeStamp2)
+        layout.addWidget(self.weakStatus2)
+        
+
         self.setLayout(layout) 
         self.setMinimumSize(600, 800)
         self.setWindowTitle("Leader Model Checker")
@@ -141,6 +171,7 @@ class mainClass(QWidget):
         self.client_handler.connect(self.on_client_message)
 
     # Handlers for each message
+    #Weak0
     def update_label_weak_until_left(self, l, ts):
         print("update_label_weak_until_left called")
         self.wul = l
@@ -151,53 +182,85 @@ class mainClass(QWidget):
         self.wur = r
         self.weakUntilAssert.setText("!({} W {})".format(self.wul, self.wur))
         self.weakTimeStamp.setText("Timestamp: {}".format(ts))
-    #def update_label_progress_left(self, l, ts):
-    #    print("update_label_progress_left called")
-    #    self.pl = l
-    #    self.progressProperty.setText("{} --> {}".format(self.pl, self.pr))
-    #    self.progressPropertyTimeStamp.setText("Timestamp: {}".format(ts))
     
-    #def update_label_progress_right(self, r, ts):
-    #    print("update_label_progress_right called")
-    #    self.pr = r
-    #    self.progressProperty.setText("{} --> {}".format(self.pl, self.pr))
-    #    self.progressPropertyTimeStamp.setText("Timestamp: {}".format(ts))
-    
-    #def update_label_weak_until_status(self, status, ts):
-    #    print("update_label_weak_until_status called")
-    #    if self.weak_until == False:
-    #        return
-    #    elif status == "Failed":
-    #        self.weak_until = False
-    #    self.weakStatus.setText("Status: {}".format(status))
-    #    self.weakTimeStamp.setText("Timestamp: {}".format(ts))
-    
-    def update_label_progress_status(self, status, ts):
-        print("update_label_progress_status called")
-        if self.progress == False:
+    def update_label_weak_until_status(self, status, ts):
+        print("update_label_weak_until_status called")
+        if self.weak_until == False:
             return
-        if status == "Failed":
-            self.progress = False
-        self.progressPropertyStatus.setText("Status: {}".format(status))
-        self.progressPropertyTimeStamp.setText("Timestamp: {}".format(ts))
+        elif status == "Failed":
+            self.weak_until = False
+        self.weakStatus.setText("Status: {}".format(status))
+        self.weakTimeStamp.setText("Timestamp: {}".format(ts))
+    
+    #Weak1
+    def update_label_weak_until_left1(self, l, ts):
+        print("update_label_weak_until_left called")
+        self.wul1 = l
+        self.weakUntilAssert1.setText("!({} W {})".format(self.wul, self.wur))
+        self.weakTimeStamp1.setText("Timestamp: {}".format(ts))
+    def update_label_weak_until_right1(self, r, ts):
+        print("update_label_weak_until_right called")
+        self.wur1 = r
+        self.weakUntilAssert1.setText("!({} W {})".format(self.wul, self.wur))
+        self.weakTimeStamp1.setText("Timestamp: {}".format(ts))
+    
+    def update_label_weak_until_status1(self, status, ts):
+        print("update_label_weak_until_status called")
+        if self.weak_until1 == False:
+            return
+        elif status1 == "Failed":
+            self.weak_until1 = False
+        self.weakStatus1.setText("Status: {}".format(status))
+        self.weakTimeStamp1.setText("Timestamp: {}".format(ts))
+   
+    #Weak2 
+    def update_label_weak_until_left2(self, l, ts):
+        print("update_label_weak_until_left called")
+        self.wul2 = l
+        self.weakUntilAssert2.setText("!({} W {})".format(self.wul, self.wur))
+        self.weakTimeStamp2.setText("Timestamp: {}".format(ts))
+    def update_label_weak_until_right2(self, r, ts):
+        print("update_label_weak_until_right called")
+        self.wur2 = r
+        self.weakUntilAssert2.setText("!({} W {})".format(self.wul, self.wur))
+        self.weakTimeStamp2.setText("Timestamp: {}".format(ts))
+    
+    def update_label_weak_until_status2(self, status, ts):
+        print("update_label_weak_until_status called")
+        if self.weak_until2 == False:
+            return
+        elif status2 == "Failed":
+            self.weak_until2 = False
+        self.weakStatus2.setText("Status: {}".format(status))
+        self.weakTimeStamp2.setText("Timestamp: {}".format(ts))
+    
+
 
     def on_client_message(self, msg):
         print("Received" + ", ".join([msg.topic, msg.payload.decode('utf-8') + "\n"]))
         myString = str(msg.payload.decode('utf-8')).split("$$$$")
         #Check WeakUntill
-        if len(myString) == 3 and myString[1] == "lw":
-            self.update_label_weak_until_left(myString[2], myString[0])
-        elif len(myString) == 3 and myString[1] == "rw":
-            self.update_label_weak_until_right(myString[2], myString[0])
-        elif len(myString) == 3 and myString[1] == "W":
-            self.update_label_weak_until_status(myString[2], myString[0])
-        #Check progross
-        #elif len(myString) == 3 and myString[1] == "lp":
-        #    self.update_label_progress_left(myString[2], myString[0])
-        #elif len(myString) == 3 and myString[1] == "rp":
-        #    self.update_label_progress_right(myString[2], myString[0])
-        #elif len(myString) == 3 and myString[1] == "P":
-        #    self.update_label_progress_status(myString[2], myString[0])
+        #Check 1
+        if len(myString) == 3 and myString[1] == "lw" and myString[2] == "0" :
+            self.update_label_weak_until_left(myString[3], myString[0])
+        elif len(myString) == 3 and myString[1] == "rw" and myString[2] == "0":
+            self.update_label_weak_until_right(myString[3], myString[0])
+        elif len(myString) == 3 and myString[1] == "W" and myString[2] == "0":
+            self.update_label_weak_until_status(myString[3], myString[0])
+        #Check 2
+        if len(myString) == 3 and myString[1] == "lw" and myString[2] == "1" :
+            self.update_label_weak_until_left(myString[3], myString[0])
+        elif len(myString) == 3 and myString[1] == "rw"and myString[2] == "1":
+            self.update_label_weak_until_right(myString[3], myString[0])
+        elif len(myString) == 3 and myString[1] == "W"and myString[2] == "1":
+            self.update_label_weak_until_status(myString[3], myString[0])
+        #Check 3
+        if len(myString) == 3 and myString[1] == "lw" and myString[2] == "2" :
+            self.update_label_weak_until_left(myString[3], myString[0])
+        elif len(myString) == 3 and myString[1] == "rw"and myString[2] == "2":
+            self.update_label_weak_until_right(myString[3], myString[0])
+        elif len(myString) == 3 and myString[1] == "W"and myString[2] == "2":
+            self.update_label_weak_until_status(myString[3], myString[0])
 
 def main():
     # Instantiate the MQTT client

@@ -117,12 +117,12 @@ class mainClass(QWidget):
         title1.setText("Fluent1")
         self.weakUntilAssert1.setText("Fluent goes here")
         self.weakTimeStamp1.setText("Time Stamp: Not updated yet")
-        self.weakStatus1.setText("Status: ok/failed")
+        self.weakStatus1.setText("Status: ok")
 
         title2.setText("Fluent2")
         self.weakUntilAssert2.setText("Fluent goes here")
         self.weakTimeStamp2.setText("Time Stamp: Not updated yet")
-        self.weakStatus2.setText("Status: ok/failed")
+        self.weakStatus2.setText("Status: ok")
 
 	
         title.setAlignment(Qt.AlignCenter)

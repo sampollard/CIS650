@@ -1,5 +1,13 @@
 # CIS 650
 Group members: Prachi Desai, Robert Sappington, Sam Pollard
+## Group assignment - Leader
+### Description
+This assignment has 4 programs:
+1. `client.py`. This runs the election process as described.
+2. `cheater.py`. This starts out as the leader and just sends the leader.
+3. `weak_until.py`. This tracks an assert `(!<l> W <r>) where `<l>` and `<r>` are command line arguments. These track whether the two messages have been received, and if `<l>` occurs before `<r>` then an error is flagged.
+4. `UI.py`. This runs the GUI. It can take in 3 asserts and reads their status. It doesn't manage the logic, just displays their statuses.
+
 ## Group assignment - Rollercoaster
 
 ### Description

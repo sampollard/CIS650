@@ -1,0 +1,50 @@
+const False = 0
+const True = 1
+const Straight = 0
+const Right = 1
+range Directions = 0..1
+range Bool = 0..1
+range Cars = 1..4
+range Queues = 1..4
+
+//CAR(ID=1) = CAR[ID],
+//CAR[id:Cars] = (
+//	  request_queue[id][q:Queues] -> enter_queue[id][q] -> go[id][q][d:Directions] -> exit[id][q][d] -> DONE
+//),
+//DONE = (wait -> DONE).
+
+//QUEUE(QID=1) = QUEUE[QID][False],
+//QUEUE[qid:Queues][full:Bool] = (
+//	  request_queue[cid:Cars][qid] ->
+//		if (full) then (go[anyid:Cars][qid][d:Directions] -> QUEUE[qid][False])
+//		else (request_queue[cid:Cars][qid] -> QUEUE[qid][lock]
+//).
+//LANE1 = ..
+//||VMEI = (CAR(1) || CAR(2) || QUEUE(1) || QUEUE(2)).
+
+// Any time there is [c][q], it's request car c into queue q
+CAR = (
+	request_queue[1][1] -> enter_queue[1][1] -> permitted[1][1] -> my_car_goes -> DONE
+),
+DONE = (car_exited -> DONE).
+
+PERMIT = PERMIT[1][1],
+PERMIT[cid:Cars][qid:Queues] = (
+	  when(qid == 0) enter_queue[1][1] -> PERMIT0
+	| when(qid == 1) enter_queue[1][1] -> PERMIT1
+	| when(qid == 2) enter_queue[1][1] -> PERMIT2
+	| when(qid == 3) enter_queue[1][1] -> PERMIT3
+),
+PERMIT0 = (acquire[3] -> acquire[0] -> permitted[1][1] -> my_car_goes -> release[0] -> release[3] -> PERMIT),
+PERMIT1 = (acquire[0] -> acquire[1] -> permitted[1][1] -> my_car_goes -> release[1] -> release[0] -> PERMIT),
+PERMIT2 = (acquire[1] -> acquire[2] -> permitted[1][1] -> my_car_goes -> release[2] -> release[1] -> PERMIT),
+PERMIT3 = (acquire[2] -> acquire[3] -> permitted[1][1] -> my_car_goes -> release[3] -> release[2] -> PERMIT).
+
+// False means the queue is empty
+QUEUE = QUEUE[False],
+QUEUE[full:Bool] = (
+	  when(full) my_car_goes -> QUEUE[False]
+	| when(!full) request_queue[1][1] -> enter_queue[1][1] -> QUEUE[True]
+).
+
+||VMEI = (CAR || QUEUE || PERMIT).

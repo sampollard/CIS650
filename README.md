@@ -1,5 +1,14 @@
 # CIS 650
 Group members: Prachi Desai, Robert Sappington, Sam Pollard
+butler		leader		rollercoaster	traffic
+## Group assignment - traffic
+### Description
+
+
+## Group assignment - Butler
+### Description
+
+
 ## Group assignment - Leader
 ### Description
 This assignment has 4 programs:
@@ -9,7 +18,6 @@ This assignment has 4 programs:
 4. `UI.py`. This runs the GUI. It can take in 3 asserts and reads their status. It doesn't manage the logic, just displays their statuses.
 
 ## Group assignment - Rollercoaster
-
 ### Description
 Each process is on its own edision. Each process is described below. The groupings are as follows:
 1. TURNSTILE and MONITOR

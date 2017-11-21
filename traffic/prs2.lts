@@ -1,0 +1,62 @@
+const False = 0
+const True = 1
+const Straight = 0
+const Right = 1
+range Directions = 0..1
+range Bool = 0..1
+range Cars = 0..3
+range Queues = 0..3
+
+//CAR(ID=1) = CAR[ID],
+//CAR[id:Cars] = (
+//	  request_queue[id][q:Queues] -> enter_queue[id][q] -> go[id][q][d:Directions] -> exit[id][q][d] -> DONE
+//),
+//DONE = (wait -> DONE).
+
+//QUEUE(QID=1) = QUEUE[QID][False],
+//QUEUE[qid:Queues][full:Bool] = (
+//	  request_queue[cid:Cars][qid] ->
+//		if (full) then (go[anyid:Cars][qid][d:Directions] -> QUEUE[qid][False])
+//		else (request_queue[cid:Cars][qid] -> QUEUE[qid][lock]
+//).
+//LANE1 = ..
+//||VMEI = (CAR(1) || CAR(2) || QUEUE(1) || QUEUE(2)).
+
+// Any time there is [c][q], it's request car c into queue q
+CAR(ID=1) = CAR[ID],
+CAR[id:Cars] = (
+	request_queue[id][q:Queues] -> enter_queue[id][q] -> permitted[id][q] -> my_car_goes[id] -> DONE[id]
+),
+DONE[id:Cars] = (car_exited[id] -> CAR[id]).
+
+//PERMIT(laneID=0 )= PERMIT[carId][],
+// We will need to handle these eventually
+PERMIT(LANE=0) = PERMIT[LANE],
+PERMIT[qid:Queues] = (
+	 // when(qid == 0) 
+      
+	enter_queue[c:Cars][0] -> PERMIT0[c][0]
+	//| when(qid == 1)
+	|enter_queue[c:Cars][1] -> PERMIT1[c][1]
+	//| when(qid == 2) 
+	|enter_queue[c:Cars][2] -> PERMIT2[c][2]
+	//| when(qid == 3) 
+	|enter_queue[c:Cars][3] -> PERMIT3[c][3]
+),
+PERMIT0[c:Cars][qid:Queues] = (acquire[3] -> acquire[0] -> permitted[c][0] -> my_car_goes[c] -> release[0] -> release[3] -> PERMIT[qid]),
+PERMIT1[c:Cars][qid:Queues] = (acquire[0] -> acquire[1] -> permitted[c][1] -> my_car_goes[c] -> release[1] -> release[0] -> PERMIT[qid]),
+PERMIT2[c:Cars][qid:Queues] = (acquire[1] -> acquire[2] -> permitted[c][2] -> my_car_goes[c] -> release[2] -> release[1] -> PERMIT[qid]),
+PERMIT3[c:Cars][qid:Queues] = (acquire[2] -> acquire[3] -> permitted[c][3] -> my_car_goes[c] -> release[3] -> release[2] -> PERMIT[qid]).
+
+// False means the queue is empty
+QUEUE(QID=0) = QUEUE[False],
+QUEUE[full:Bool] = (
+	  when(full) my_car_goes[c:Cars] -> QUEUE[False]
+	| when(!full) request_queue[c:Cars][1] -> enter_queue[c][1] -> QUEUE[True]
+).
+
+||VMEI = (  CAR(0) || QUEUE || PERMIT(0)|| PERMIT(1) || PERMIT(2) || PERMIT(3)).
+
+// TODO: combine QUEUE and PERMIT since there will be four of them
+// TODO: request_queue needs to work for multiple lanes and cars
+// TODO: How to combine PERMIT(0) and PERMIT(2) and QUEUE

@@ -6,6 +6,7 @@ import os
 import sys
 from datetime import datetime as dt
 #"DIRECT_CAR$$$$"+carID+"$$$$"+qzqueueID+"$$$$"+current+"$$$$command$$$$"+next;
+# python QUEUE.py 0 g0 g1 1
 # Set LEDs and sigint handler
 leds = []
 global isCaptain
@@ -39,7 +40,7 @@ signal.signal(signal.SIGINT, control_c_handler)
 # Set MQTT stuff
 MY_NAME = 'QUEUE'
 broker = 'iot.eclipse.org'
-topicname = "cis650prs"
+topicname = "cis650prs1"
 # Public brokers: https://github.com/mqtt/mqtt.github.io/wiki/public_brokers
 
 # Get your IP address
@@ -64,8 +65,8 @@ def on_message(client, userdata, msg):
     
     print msg.payload
     myString = str(msg.payload).split("====")
-    print "##########"
-    print(myString)
+    # print "##########"
+    # print(myString)
 
     # print (myString[1])
     if(len(myString)==5 and myString[1]=='REQUEST_ENTRY'  ):
@@ -118,14 +119,14 @@ mqtt_client.subscribe(topicname + "/#") #subscribe to all students in class
 mqtt_client.loop_start()  # just in case - starts a loop that listens for incoming data and keeps client alive
 cnt=5
 while True:
-   
-    # print("I am in while loop")
+    
+    print("I am in while loop")
     carAction="QUEUE_ALIVE===="+queueID
     timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
     # print carAction
     mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+carAction
     mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
-    time.sleep(2)
+    time.sleep(4)
   
 
     

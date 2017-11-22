@@ -23,25 +23,20 @@ LANE(Q=0,TOK=False) = EMPTY[Q][TOK],
 EMPTY[q:Queues][tok:Bool] = (
 	  car[c:Cars].enter.lane[q] -> FULL[c][q][tok]
 	| when(tok) lane[q].pass[(q+1)%NQ] -> EMPTY[q][False]
-	// | when(!tok) pass[q] -> EMPTY[q][True] // not ok?
+	//| when(!tok) pass[q] -> EMPTY[q][True] // not ok?
 ),
 FULL[c:Cars][q:Queues][tok:Bool] = (
 	  when(tok) car[c].go.lane[q] -> EMPTY[q][tok]
-	| when(!tok) lane[q].pass[q] -> FULL[c][q][True]
+	| when(!tok && q==0) lane[3].pass[0] -> FULL[c][q][True]
+	| when(!tok && q==1) lane[0].pass[1] -> FULL[c][q][True]
+	| when(!tok && q==2) lane[1].pass[2] -> FULL[c][q][True]
+	| when(!tok && q==3) lane[2].pass[3] -> FULL[c][q][True]
 ).
 
 
 ||VMEI = (CAR(0) || CAR(1) // || car[2]:CAR(2) || car[3]:CAR(3)
-	|| LANE(0,False) || LANE(1,True) || LANE(2,False) || LANE(3,False)
-	//|| RING(1) // The lane which starts with the token must be the same lane the ring starts at
-)
-/{
-        pass[0]/{lane[3],lane[0]}.pass[0],
-        pass[1]/{lane[0],lane[1]}.pass[1],
-        pass[2]/{lane[1],lane[2]}.pass[2],
-        pass[3]/{lane[2],lane[3]}.pass[3]
-}.
-
+	|| LANE(0,True) //|| LANE(1,True) || LANE(2,False) || LANE(3,False)
+).
 /*
 /{
 	// Remove duplicate lane's preceding the state transitions

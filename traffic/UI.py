@@ -56,10 +56,10 @@ class mainClass(QWidget):
     client_handler = QtCore.pyqtSignal(object)
 
     #Global car messages to update
-    car0 = "????"
-    car1 = "????"
-    car2 = "????"
-    car3 = "????"
+    g_car0 = "????"
+    g_car1 = "????"
+    g_car2 = "????"
+    g_car3 = "????"
 
     # Start out true, only can turn to False once
     #No weak untills yet
@@ -105,12 +105,12 @@ class mainClass(QWidget):
         self.car1= QLabel()
         self.car2= QLabel()
         self.car3= QLabel()
-        
-        self.title.setText("  Car     Currnet      Instruction          Next") 
-        self.car0.setText( "   0       Q0          Wait at L0               ")
-        self.car1.setText( "   1        Q1         Wait at L1              ")
-        self.car2.setText( "   2       Q2          Wait at L2               ")
-        self.car3.setText( "   3       Q3          Wait at L3               ")
+        #+carID+"$$$$"+qzqueueID+"$$$$"+current+"$$$$command$$$$"+next 
+        self.title.setText("  Car     qzqueueID    Current          command       next") 
+        self.car0.setText( "   waiting               ")
+        self.car1.setText( "   waiting              ")
+        self.car2.setText( "   waiting               ")
+        self.car3.setText( "   waiting               ")
         
      
 	
@@ -146,20 +146,38 @@ class mainClass(QWidget):
         #DIRECT_CAR+"$$$$"+carID+"$$$$"+qzqueueID+"$$$$"+current+"$$$$command$$$$"+next;
         # car id 0-4
         # qz 0-4
+        #$$$$DIRECT_CAR$$$$1$$$$qz0$$$$EXIT$$$$goForward$$$$qz0
+        #$$$$DIRECT_CAR$$$$1$$$$qz0$$$$OUT$$$$goForward$$$$qz0
         print(myString)
-        if len(myString) == 4 and myString[1] == "DIRECT_CAR" and myString[2] == "0" :
-            self.update_label_something(myString[2], myString[3],myString[4],myString[5],myString[6])
-        elif len(myString) == 4 and myString[1] == "DIRECT_CAR" and myString[2] == "1":
-            self.update_label_something(myString[2], myString[3],myString[4],myString[5],myString[6])
-        elif len(myString) == 4 and myString[1] == "DIRECT_CAR" and myString[2] == "2":
-            self.update_label_something(myString[2], myString[3],myString[4],myString[5],myString[6])
-        elif len(myString) == 4 and myString[1] == "DIRECT_CAR" and myString[2] == "3":
-            self.update_label_something(myString[2], myString[3],myString[4],myString[5],myString[6])
+        if not len(myString)==7:
+             print("length of steam:" + str(len(myString)))
+             return
+        for each in myString:
+            print(each)
+        if (myString[1] == "DIRECT_CAR" and myString[2] == "0") :
+            self.update_label_something0(myString[2], myString[3],myString[4],myString[5],myString[6])
+        elif  (myString[1] == "DIRECT_CAR" and myString[2] == "1"):
+            self.update_label_something1(myString[2], myString[3],myString[4],myString[5],myString[6])
+        elif  (myString[1] == "DIRECT_CAR" and myString[2] == "2"):
+            self.update_label_something2(myString[2], myString[3],myString[4],myString[5],myString[6])
+        elif ( myString[1] == "DIRECT_CAR" and myString[2] == "3"):
+            self.update_label_something3(myString[2], myString[3],myString[4],myString[5],myString[6])
+      
+    def update_label_something0(self, carID,qzqueueID,current,command,nextID):
+        temp = (str(carID)+ " " +str(qzqueueID)+ " " +str(current)+ " " + str(command) + " " +str(nextID) )
+        self.car0.setText(temp)
+    
+    def update_label_something1(self, carID,qzqueueID,current,command,nextID):
+        temp2 = (carID+ " " +qzqueueID+ " " +current+ " " + command + " " +nextID )
+        self.car1.setText(temp2)
 
-    def update_label_something1( carID,qzqueueID,current,command,nextID):
-        print("update_label_weak_until_left called")
-        self.car0 = (carID+ " " +qzqueueID+ " " +current+ " " + command + " " +nextID )
-        self.car0.setText(self.car0)
+    def update_label_something2(self, carID,qzqueueID,current,command,nextID):
+        temp3 = (carID+ " " +qzqueueID+ " " +current+ " " + command + " " +nextID )
+        self.car2.setText(temp3)
+    
+    def update_label_something3(self, carID,qzqueueID,current,command,nextID):
+        temp4 = (carID+ "     " +qzqueueID+ "     " +current+ "     " + command + "     " +nextID )
+        self.car3.setText(temp4)
 
 def main():
     # Instantiate the MQTT client

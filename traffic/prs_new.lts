@@ -1,0 +1,51 @@
+const False = 0
+const True = 1
+const Straight = 0
+const Right = 1
+range Directions = 0..1
+range Bool = 0..1
+range Cars = 0..1
+const NQ = 4
+range Queues = 0..3
+
+// Could add nondeterminism here: go could be go_straight or go_right
+CAR(ID=0) = CAR[ID],
+CAR[c:Cars] = (
+	  car[c].enter.lane[q:Queues] -> car[c].go.lane[q] -> DONE[c]
+),
+DONE[c:Cars] = (car_exited[c] -> DONE[c]).
+
+// Q is the lane which starts with the token
+//RING(Q=0) = RING[Q],
+//RING[q:Queues] = (lane[q].pass[(q+1)%NQ] -> RING[(q+1)%NQ]).
+
+LANE(Q=0,TOK=False) = EMPTY[Q][TOK],
+EMPTY[q:Queues][tok:Bool] = (
+	  car[c:Cars].enter.lane[q] -> FULL[c][q][tok]
+	| when(tok) lane[q].pass[(q+1)%NQ] -> EMPTY[q][False]
+	// | when(!tok) pass[q] -> EMPTY[q][True] // not ok?
+),
+FULL[c:Cars][q:Queues][tok:Bool] = (
+	  when(tok) car[c].go.lane[q] -> EMPTY[q][tok]
+	| when(!tok) lane[q].pass[q] -> FULL[c][q][True]
+).
+
+
+||VMEI = (CAR(0) || CAR(1) // || car[2]:CAR(2) || car[3]:CAR(3)
+	|| LANE(0,False) || LANE(1,True) || LANE(2,False) || LANE(3,False)
+	//|| RING(1) // The lane which starts with the token must be the same lane the ring starts at
+)
+/{
+        pass[0]/{lane[3],lane[0]}.pass[0],
+        pass[1]/{lane[0],lane[1]}.pass[1],
+        pass[2]/{lane[1],lane[2]}.pass[2],
+        pass[3]/{lane[2],lane[3]}.pass[3]
+}.
+
+/*
+/{
+	// Remove duplicate lane's preceding the state transitions
+	car[c:Cars].enter.lane[q:Queues]/lane[q].car[c].enter.lane[q],
+	car[c:Cars].go.lane[q:Queues]/lane[q].car[c].go.lane[q]
+}.
+*/

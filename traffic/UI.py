@@ -106,19 +106,19 @@ class mainClass(QWidget):
         self.car2= QLabel()
         self.car3= QLabel()
         
-        self.title.setText("  Car     Start      Instruction       End") 
-        self.car0.setText( "   0       Q0          Wait at L0       NA ")
-        self.car1.setText( "   1        Q1          Wait at L1        NA ")
-        self.car2.setText( "   2       Q2          Wait at L2       NA ")
-        self.car3.setText( "   3       Q3          Wait at L3       NA ")
+        self.title.setText("  Car     Currnet      Instruction          Next") 
+        self.car0.setText( "   0       Q0          Wait at L0               ")
+        self.car1.setText( "   1        Q1         Wait at L1              ")
+        self.car2.setText( "   2       Q2          Wait at L2               ")
+        self.car3.setText( "   3       Q3          Wait at L3               ")
         
      
 	
-        self.title.setAlignment(Qt.AlignLeft)
-        self.car0.setAlignment(Qt.AlignLeft)
-        self.car1.setAlignment(Qt.AlignLeft)
-        self.car2.setAlignment(Qt.AlignLeft)
-        self.car3.setAlignment(Qt.AlignLeft)
+        self.title.setAlignment(Qt.AlignCenter)
+        self.car0.setAlignment(Qt.AlignCenter)
+        self.car1.setAlignment(Qt.AlignCenter)
+        self.car2.setAlignment(Qt.AlignCenter)
+        self.car3.setAlignment(Qt.AlignCenter)
 
 
         #Add to layout
@@ -143,16 +143,23 @@ class mainClass(QWidget):
     def on_client_message(self, msg):
         print("Received" + ", ".join([msg.topic, msg.payload.decode('utf-8') + "\n"]))
         myString = str(msg.payload.decode('utf-8')).split("$$$$")
-        #Check WeakUntill
-        #Check 1
-        if len(myString) == 4 and myString[1] == "0" and myString[2] == "forward" :
-            self.update_label_something(myString[3], myString[0])
-        elif len(myString) == 4 and myString[1] == "0" and myString[2] == "right":
-            self.update_label_something(myString[3], myString[0])
-        elif len(myString) == 4 and myString[1] == "0" and myString[2] == "enter":
-            self.update_label_something(myString[3], myString[0])
-        elif len(myString) == 4 and myString[1] == "0" and myString[2] == "exit":
-            self.update_label_something(myString[3], myString[0])
+        #DIRECT_CAR+"$$$$"+carID+"$$$$"+qzqueueID+"$$$$"+current+"$$$$command$$$$"+next;
+        # car id 0-4
+        # qz 0-4
+        print(myString)
+        if len(myString) == 4 and myString[1] == "DIRECT_CAR" and myString[2] == "0" :
+            self.update_label_something(myString[2], myString[3],myString[4],myString[5],myString[6])
+        elif len(myString) == 4 and myString[1] == "DIRECT_CAR" and myString[2] == "1":
+            self.update_label_something(myString[2], myString[3],myString[4],myString[5],myString[6])
+        elif len(myString) == 4 and myString[1] == "DIRECT_CAR" and myString[2] == "2":
+            self.update_label_something(myString[2], myString[3],myString[4],myString[5],myString[6])
+        elif len(myString) == 4 and myString[1] == "DIRECT_CAR" and myString[2] == "3":
+            self.update_label_something(myString[2], myString[3],myString[4],myString[5],myString[6])
+
+    def update_label_something1( carID,qzqueueID,current,command,nextID):
+        print("update_label_weak_until_left called")
+        self.car0 = (carID+ " " +qzqueueID+ " " +current+ " " + command + " " +nextID )
+        self.car0.setText(self.car0)
 
 def main():
     # Instantiate the MQTT client

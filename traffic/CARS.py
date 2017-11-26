@@ -7,6 +7,7 @@ import sys
 from datetime import datetime as dt
 #"DIRECT_CAR$$$$"+carID+"$$$$"+qzqueueID+"$$$$"+current+"$$$$command$$$$"+next;
 # Set LEDs and sigint handler
+# python CARS.py <carID> <QueueId> <Direction>
 #python CARS.py 1 0 Right or python CARS.py 1 0 Straight
 leds = []
 global status
@@ -72,23 +73,23 @@ def on_message(client, userdata, msg):
     if status=="REQ":
         
         if(len(myString)>=4 and myString[1]=='GRANT'):
-            if(carID==myString[2]):
-                print(carID+"#############"+myString[2])
-            print("**************Permission Granted"+carID+myString[2])
+            # if(carID==myString[2]):
+            #     print(carID+"#############"+myString[2])
+            # print("**************Permission Granted"+carID+myString[2])
             
-            print len(myString)
+            # print len(myString)
             if (len(myString)==4):
                 
-                print("I am in right")
+                # print("I am in right")
                 if(carID==myString[2]):
                     status="OUT"
                     goRight(myString[3])
             if (len(myString)==5):
                 
-                print("I am in straight********************")
+                # print("I am in straight********************")
                 if(carID==myString[2]):
                     status="OUT"
-                    print ("I am in straight")
+                    # print ("I am in straight")
                     goStraight(myString[3],myString[4])
 
 def goStraight(grid1,grid2):
@@ -101,21 +102,21 @@ def goStraight(grid1,grid2):
     mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$'+messageUI
     mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
     status="qz"+queueID
-    print status
+    # print status
     time.sleep(2)
 
     messageUI="DIRECT_CAR$$$$"+carID+"$$$$qz"+queueID+"$$$$"+status+"$$$$goForward$$$$"+grid1;
     mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$'+ messageUI
     mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
     status=grid1
-    print status
+    # print status
     time.sleep(2)
 
     messageUI="DIRECT_CAR$$$$"+carID+"$$$$qz"+queueID+"$$$$"+status+"$$$$goForward$$$$"+grid2;
     mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$'+messageUI
     mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
     status=grid2
-    print status
+    # print status
     time.sleep(2)
 
 
@@ -123,7 +124,7 @@ def goStraight(grid1,grid2):
     mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$'+messageUI
     mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
     status="EXIT"
-    print status
+    # print status
     time.sleep(2)
 
 
@@ -136,21 +137,21 @@ def goRight(grid1):
     mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$'+messageUI
     mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
     status="qz"+queueID
-    print status
+    # print status
     time.sleep(2)
 
     messageUI="DIRECT_CAR$$$$"+carID+"$$$$qz"+queueID+"$$$$"+status+"$$$$goForward$$$$"+grid1;
     mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$'+messageUI
     mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
     status=grid1
-    print status
+    # print status
     time.sleep(2)
 
     messageUI="DIRECT_CAR$$$$"+carID+"$$$$qz"+queueID+"$$$$"+status+"$$$$goRight$$$$"+"exit";
     mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$'+messageUI
     mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
     status="EXIT"
-    print status
+    # print status
     time.sleep(2)
 
 # You can also add specific callbacks that match specific topics.
@@ -173,7 +174,7 @@ mqtt_client.on_log = on_log
 
 
 # See https://pypi.python.org/pypi/paho-mqtt#option-functions.
-mqtt_client.will_set(mqtt_topic, '______________Will of '+MY_NAME+' _________________\n\n', 0, False)
+mqtt_client.will_set(mqtt_topic, '______________Will of '+MY_NAME+' _________________'+carID+'\n\n', 0, False)
 
 mqtt_client.connect(broker, '1883')
 
@@ -186,7 +187,7 @@ mqtt_client.loop_start()  # just in case - starts a loop that listens for incomi
 
 while True:
     # global status
-    print status
+    # print status
     if(status=="REQ"):
     # print("I am in while loop")
         carAction="REQUEST_ENTRY===="+carID+"===="+queueID+"===="+direction

@@ -6,25 +6,61 @@ import os
 import sys
 from datetime import datetime as dt
 #"DIRECT_CAR$$$$"+carID+"$$$$"+qzqueueID+"$$$$"+current+"$$$$command$$$$"+next;
-# python QUEUE.py 0 g0 g1 1
+# python QUEUE.py 0 1
 # Set LEDs and sigint handler
 leds = []
+global subTokenComplete
+global meComplete
 global isCaptain
 global queueID
 global grid1
 global grid2
-isCaptain=False
-if len(sys.argv) == 5:
+global reqMade #this may change for queue its used to know if lane was requested a car
+#request if no lane with subtoken can send done immediately
+global subTokenToLane  #parallel lane allowed initialize when you know which queue id you have
+global subSubTokenToLane # right lane allowe initialize when you know which queue id you have
+isCaptain=False #release when CARS of his and subtoken and subsubtoken he had 
+#are done given out are done
+isSUBTOKEN=False #to know if lane has subtoken release when that lanes CARS are done
+isSUBSUBTOKEN=False #to know if lane has subsubtoken
+subTokenComplete=False #for captain to know if CARS of subtoken are done
+meComplete=False #to know if cars of captain complete
+reqMade=False
+# subTokenToLane=2
+if len(sys.argv) == 3:
     queueID = sys.argv[1]
-    grid1 = sys.argv[2]
-    grid2 = sys.argv[3]
-    isCaptain=int(sys.argv[4])
+    
+    isCaptain=int(sys.argv[2])
 else:
     print("usage: QUEUE.py  <queueID> <grid1> <grid2> <isCaptain>")
     sys.exit(1)
 
+#initialize lane related things
+if queueID=="0":
+    grid1 = "l0"
+    grid2 = "l1"
+    subTokenToLane="2"
+    subSubTokenToLane="3"
+
+if queueID=="1":
+    grid1 = "l1"
+    grid2 = "l2"
+    subTokenToLane="3"
+    subSubTokenToLane="0"
 
 
+if queueID=="2":
+    grid1 = "l2"
+    grid2 = "l3"
+    subTokenToLane="0"
+    subSubTokenToLane="1"
+
+
+if queueID=="3":
+    grid1 = "l3"
+    grid2 = "l0"
+    subTokenToLane="1"
+    subSubTokenToLane="2"
 #carAction="arrive"+"===="+carName
 def control_c_handler(signum, frame):
 #     for led in leds:
@@ -40,7 +76,7 @@ signal.signal(signal.SIGINT, control_c_handler)
 # Set MQTT stuff
 MY_NAME = 'QUEUE'
 broker = 'iot.eclipse.org'
-topicname = "cis650prs1"
+topicname = "cis650prs"
 # Public brokers: https://github.com/mqtt/mqtt.github.io/wiki/public_brokers
 
 # Get your IP address
@@ -62,34 +98,113 @@ def on_connect(client, userdata, flags, rc):
 # The callback for when a PUBLISH message is received from the server that matches any of your topics.
 # However, see note below about message_callback_add.
 def on_message(client, userdata, msg):
-    
+    global isSUBTOKEN
     print msg.payload
+    global subTokenComplete
+    global meComplete
+    global subTokenToLane
+    global reqMade
+    global isCaptain
     myString = str(msg.payload).split("====")
     # print "##########"
     # print(myString)
 
     # print (myString[1])
-    if(len(myString)==5 and myString[1]=='REQUEST_ENTRY'  ):
-        print "I am in on_message_Request"
-        if (len(myString)==5):
-            if(myString[3]==queueID and isCaptain):
-                carAction=""
-                if(myString[4]=="Right"):
-                    carAction="GRANT===="+myString[2]+"===="+grid1
-                if(myString[4]=="Straight"):
-                    carAction="GRANT===="+myString[2]+"===="+grid1+"===="+grid2
-                print carAction
-                timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
-   
-                mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+carAction
-                mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
-                time.sleep(5)
 
+    
+    if(len(myString)==3 and myString[1]=='NEXT_CAPTAIN'):
+        print("got next captain ****************************************"+queueID)
+        if queueID==myString[2]:
+            isCaptain=True
+
+
+    if(len(myString)==4 and myString[1]=='CAR_DONE'):
+        if(myString[3]==queueID):
+            if isCaptain:
+                meComplete=True
+                reqMade=False #CHK if this needed
+            if isSUBTOKEN:
+                reqMade=False
+                action="SUBTOKEN_DONE====qz===="+queueID
+                timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
+                mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+action
+                mqtt_client.publish(mqtt_topic, mqtt_message)  
+                time.sleep(3)    
+    if(len(myString)==4 and myString[1]=='SUBTOKEN_DONE'):
+        if(myString[3]==subTokenToLane):
+            if isCaptain:
+                subTokenComplete=True
+
+            #here code for CAR_DONE of himself and CAR_DONE of 
+
+
+    if(len(myString)==4 and myString[1]=='SUBTOKEN'):
+        print myString[3]
+        print queueID
+        print "***********"
+        if(myString[3]==queueID):
+            isSUBTOKEN=True
+            print ("subtoken has become true waiting for cars now"+str(isSUBTOKEN))
+            if not reqMade:
+                action="SUBTOKEN_DONE====qz===="+queueID
+                timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
+                mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+action
+                mqtt_client.publish(mqtt_topic, mqtt_message) 
+                isSUBTOKEN=False  
+                time.sleep(3)
+                 #give away the subtoken since no cars   
+
+    if(len(myString)==5 and myString[1]=='REQUEST_ENTRY'):
+        print "I am in on_message_Request"
+        if(myString[3]==queueID):
+            reqMade=True
+            onReqEntryAction(myString)
+          
 # You can also add specific callbacks that match specific topics.
 # See message_callback_add at https://pypi.python.org/pypi/paho-mqtt#callbacks.
 # When you have add ins, then the on_message handler just deals with topics
 # you have *not* written an add in for. You can just use the single on_message
 # handler for this problem.
+
+def onReqEntryAction(myString):
+    global subTokenToLane
+    global isSUBTOKEN
+    global subTokenComplete
+    global meComplete
+    #pass subtoken to pARALLEL LANE
+    print(str(isCaptain)+"iscaptain__")
+    print(str(isSUBTOKEN)+"isSUBTOKEN________")
+    if(isCaptain):
+        laneAction="SUBTOKEN====qz===="+subTokenToLane
+        timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
+
+        mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+laneAction
+        mqtt_client.publish(mqtt_topic, mqtt_message)  
+        time.sleep(3)
+        # remove comment when you implement sub_sub_token
+        # laneAction="SUB_SUBTOKEN====qz"+subSubTokenToLane
+        # timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
+
+        # mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+laneAction
+        # mqtt_client.publish(mqtt_topic, mqtt_message)  
+        # time.sleep(3)
+    #GRANT CARS THE REQ
+    if(isCaptain or isSUBTOKEN):
+        #This will have to be looked again when subSubToken
+        carAction=""
+        if(myString[4]=="Right"):
+            print("I am going right________")
+            carAction="GRANT===="+myString[2]+"===="+grid1
+        if(myString[4]=="Straight"):
+            print("I am going all straight________")
+            carAction="GRANT===="+myString[2]+"===="+grid1+"===="+grid2
+        print carAction
+        #reqMade=True
+        timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
+
+        mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+carAction
+        mqtt_client.publish(mqtt_topic, mqtt_message)  
+        time.sleep(5)
 
 def on_disconnect(client, userdata, rc):
 	print("Disconnected in a normal way")
@@ -120,17 +235,29 @@ mqtt_client.loop_start()  # just in case - starts a loop that listens for incomi
 cnt=5
 while True:
     
-    print("I am in while loop")
+   # print("I am in while loop")
     carAction="QUEUE_ALIVE===="+queueID
     timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
     # print carAction
     mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+carAction
-    mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
+    mqtt_client.publish(mqtt_topic, mqtt_message)  
     time.sleep(4)
-  
 
-    
-  
+    if(subTokenComplete and meComplete):
+        #pass token to next
+        print "pass to next leader"
+        nextCaptain=(int(queueID)+1)%4
+        carAction="NEXT_CAPTAIN===="+str(nextCaptain)
+        timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
+    # print carAction
+        mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+carAction
+        mqtt_client.publish(mqtt_topic, mqtt_message)  
+        time.sleep(4)
+
+        subTokenComplete=False
+        meComplete=False
+        isCaptain=False
+
 
   
 

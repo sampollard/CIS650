@@ -39,7 +39,7 @@ signal.signal(signal.SIGINT, control_c_handler)
 # Set MQTT stuff
 MY_NAME = 'CARS'
 broker = 'iot.eclipse.org'
-topicname = "cis650prs1"
+topicname = "cis650prs"
 # Public brokers: https://github.com/mqtt/mqtt.github.io/wiki/public_brokers
 
 # Get your IP address
@@ -70,14 +70,25 @@ def on_message(client, userdata, msg):
 
     # print (myString[1])
     if status=="REQ":
-         if(len(myString)>=4 and myString[1]=='GRANT'):
-            print("**************Permission Granted")
-            status="OUT"
+        
+        if(len(myString)>=4 and myString[1]=='GRANT'):
+            if(carID==myString[2]):
+                print(carID+"#############"+myString[2])
+            print("**************Permission Granted"+carID+myString[2])
+            
+            print len(myString)
             if (len(myString)==4):
+                
+                print("I am in right")
                 if(carID==myString[2]):
+                    status="OUT"
                     goRight(myString[3])
             if (len(myString)==5):
+                
+                print("I am in straight********************")
                 if(carID==myString[2]):
+                    status="OUT"
+                    print ("I am in straight")
                     goStraight(myString[3],myString[4])
 
 def goStraight(grid1,grid2):
@@ -175,6 +186,7 @@ mqtt_client.loop_start()  # just in case - starts a loop that listens for incomi
 
 while True:
     # global status
+    print status
     if(status=="REQ"):
     # print("I am in while loop")
         carAction="REQUEST_ENTRY===="+carID+"===="+queueID+"===="+direction
@@ -189,9 +201,13 @@ while True:
     # print carAction
         mqtt_message = "[%s] %s " % (timestamp,ip_addr) + "===="+carAction
         mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
-        time.sleep(5)
+        time.sleep(8)
+        mqtt_message = "[%s] %s " % (timestamp,ip_addr) + "===="+carAction
+        time.sleep(8)
+        sys.exit(1)
 
-    # time.sleep(2)
+        #just making sure the message was reached
+    time.sleep(2)
     # else:
     #     carAction="CAR_ALIVE===="+carID
     #     timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')

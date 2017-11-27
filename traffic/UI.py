@@ -223,8 +223,32 @@ class mainClass(QWidget):
                 self.update_label_something_token(myString[2])
     #TODO Figure out when the car moves form QZ ->l1 ->l2 ->EXIT to show that its light moves.
 
-    def update_fluent(self, cz, numCars):
-        action="FLUENT||||"+str(cz)+"||||"+str(numCars)
+    def update_fluent(self, nextID, current):
+        if nextID == "qz0":
+            self.countCZ0 = self.countCZ1 +1
+ 
+        elif nextID == "qz1":
+            self.countCZ1 = self.countCZ1 +1
+
+        elif nextID == "qz2":
+            self.countCZ2 = self.countCZ2 +1
+
+        elif nextID == "qz3":
+            self.countCZ3 = self.countCZ3 +1
+
+        if current == "qz0":
+            self.countCZ0 = self.countCZ1 -1  
+ 
+        elif current == "qz1":
+            self.countCZ1 = self.countCZ1 -1  
+        
+        elif current == "qz2":
+            self.countCZ2 = self.countCZ2 -1  
+
+        elif current == "qz3":
+            self.countCZ3 = self.countCZ3 -1  
+
+        action="FLUENT||||"+str(cz)+"||||"+str( self.countCZ0)+"||||"+str( self.countCZ1)+"||||" +str( self.countCZ2)+"||||"+str( self.countCZ3)
         timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
         mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '||||'+action
         self._mqtt_client.publish(self._mqtt_topic, mqtt_message) 
@@ -232,23 +256,23 @@ class mainClass(QWidget):
     def update_label_something0(self, carID,qzqueueID,current,command,nextID):
         temp = (str(carID)+ " " +str(qzqueueID)+ " " +str(current)+ " " + str(command) + " " +str(nextID) )
         self.car0.setText(temp)
-        
-        self.update_fluent(qzqueueID,0)
+        self.update_fluent(current,nextID) 
  
     def update_label_something1(self, carID,qzqueueID,current,command,nextID):
         temp2 = (carID+ " " +qzqueueID+ " " +current+ " " + command + " " +nextID )
         self.car1.setText(temp2)
-        self.update_fluent(qzqueueID,0)
+        self.update_fluent(current,nextID)
 
     def update_label_something2(self, carID,qzqueueID,current,command,nextID):
         temp3 = (carID+ " " +qzqueueID+ " " +current+ " " + command + " " +nextID )
         self.car2.setText(temp3)
-        self.update_fluent(qzqueueID,0)
+        self.update_fluent(current,nextID)
 
     def update_label_something3(self, carID,qzqueueID,current,command,nextID):
         temp4 = (carID+ "     " +qzqueueID+ "     " +current+ "     " + command + "     " +nextID )
         self.car3.setText(temp4)
-        self.update_fluent(qzqueueID,0)
+        self.update_fluent(current,nextID)
+
 
     def update_label_something_subtoken(self, laneID):
         temp5 = (laneID)

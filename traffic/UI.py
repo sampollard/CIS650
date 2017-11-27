@@ -252,7 +252,8 @@ class mainClass(QWidget):
         timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
         mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '||||'+action
         self._mqtt_client.publish(self._mqtt_topic, mqtt_message) 
-
+        #timestamp||||FLUENT||||CZ||||CZ0Count||||CZ1count||||CZ2Count||||CZ3Count
+ 
     def update_label_something0(self, carID,qzqueueID,current,command,nextID):
         temp = (str(carID)+ " " +str(qzqueueID)+ " " +str(current)+ " " + str(command) + " " +str(nextID) )
         self.car0.setText(temp)
@@ -281,7 +282,7 @@ class mainClass(QWidget):
         timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
         mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '||||'+action
         self._mqtt_client.publish(self._mqtt_topic, mqtt_message) 
-
+    #timestamp||||FLUENT||||SUBTOKEN||||IDWHOHASTOKEN
     def update_label_something_token(self, laneID):
         temp6 = (laneID)
         self.tokenLine.setText(temp6)

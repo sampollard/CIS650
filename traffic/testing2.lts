@@ -1,0 +1,86 @@
+/** Concurrency: State Models and Java Programs
+ *             Jeff Magee and Jeff Kramer
+ *  
+ */
+
+/* Single Lane bridge
+Red cars go from west to east
+Blue cars go from east to west
+*/
+
+const N = 3 // number of each type of car
+range T = 0..N // type of car count
+range ID= 0..N // car identities
+
+BRIDGE = BRIDGE[0][0][0][0],  //initially empty
+BRIDGE[ns:T][sn:T][ew:T][we:T] =    //nr is the red count, nb the blue count
+	(	when (ns == 0 && sn==0 && ew==0 && we==0) 
+              lane0[ID].enterlane  -> BRIDGE[ns+1][sn][ew][we]
+
+		//|when (ns >= 0 && sn==0 && ew==0 && we==0) 
+			 |lane0[ID].exitlane    -> BRIDGE[ns-1][sn][ew][we]
+	|when (ns==0 && sn == 0 && ew==0 && we==0)  
+              lane1[ID].enterlane  -> BRIDGE[ns][sn+1][ew][we]
+	//|when (ns==0 && sn > 0 && ew==0 && we==0)  
+			 |lane1[ID].exitlane    -> BRIDGE[ns][sn-1][ew][we]
+    |when (ns==0 && sn==0 && ew==0 &&we==0) 
+              lane2[ID].enterlane  -> BRIDGE[ns][sn][ew+1][we]
+	//|when (ns==0 && sn==0 && ew>0 &&we==0) 
+			|lane2[ID].exitlane   -> BRIDGE[ns][sn][ew-1][we]
+	|when (ns==0 && sn==0 && ew==0 && we ==0) 
+              lane3[ID].enterlane  -> BRIDGE[ns][sn][ew][we+1]
+	//|when (ns==0 && sn==0 && ew==0 && we >0) 
+			 |lane3[ID].exitlane    -> BRIDGE[ns][sn][ew][we-1]
+
+
+     ).
+
+CAR = (
+ enterlane->exitlane->CAR
+
+
+).
+
+/* cars may not overtake each other */
+NOPASS1   = C[0],
+C[i:ID]   = ( [i].enterlane -> C[i%N+1] 
+).
+
+NOPASS2   = C[0],
+C[i:ID]   = ([i].exitlane -> C[i%N+1]
+).
+
+||CONVOY = ([ID]:CAR || NOPASS1 || NOPASS2).
+
+||CARS = (lane0:CONVOY ||lane1:CONVOY || lane2:CONVOY ||lane3:CONVOY).
+
+||SingleLaneBridge = (CARS || BRIDGE || ONEWAY ).
+
+
+property ONEWAY = (	
+		   lane0[ID].enterlane -> LANE0[0] 
+		  |lane1[ID].enterlane -> LANE1[0] 
+		  |lane2[ID].enterlane -> LANE2[0] 
+		  |lane3[ID].enterlane -> LANE3[0] 
+
+		  ),
+LANE0[i:ID] = (lane0[ID].enter -> LANE0[i+1]
+            |when(i==0)lane0[ID].exitlane  -> ONEWAY
+            |when( i>0)lane0[ID].exitlane  -> LANE0[i-1]
+
+),
+LANE1[i:ID] = (lane1[ID].enter -> LANE1[i+1]
+            |when(i==0)lane1[ID].exitlane  -> ONEWAY
+            |when( i>0)lane1[ID].exitlane  -> LANE1[i-1]
+),
+LANE2[i:ID] = (lane2[ID].enter -> LANE2[i+1]
+            |when(i==0)lane2[ID].exitlane  -> ONEWAY
+            |when( i>0)lane2[ID].exitlane  -> LANE2[i-1]
+
+),
+LANE3[i:ID] = (lane3[ID].enter -> LANE3[i+1]
+            |when(i==0)lane3[ID].exitlane  -> ONEWAY
+            |when( i>0)lane3[ID].exitlane  -> LANE3[i-1]
+
+            )
+.

@@ -1,57 +1,85 @@
-const False = 0
-const True = 1
-const Straight = 0
-const Right = 1
-range Directions = 0..1
-range Bool = 0..1
-range Cars = 1..4
-range Queues = 0..3
+/** Concurrency: State Models and Java Programs
+ *             Jeff Magee and Jeff Kramer
+ *  
+ */
 
-//CAR(ID=1) = CAR[ID],
-//CAR[id:Cars] = (
-//	  request_queue[id][q:Queues] -> enter_queue[id][q] -> go[id][q][d:Directions] -> exit[id][q][d] -> DONE
-//),
-//DONE = (wait -> DONE).
+/* Single Lane bridge
+Red cars go from west to east
+Blue cars go from east to west
+*/
 
-//QUEUE(QID=1) = QUEUE[QID][False],
-//QUEUE[qid:Queues][full:Bool] = (
-//	  request_queue[cid:Cars][qid] ->
-//		if (full) then (go[anyid:Cars][qid][d:Directions] -> QUEUE[qid][False])
-//		else (request_queue[cid:Cars][qid] -> QUEUE[qid][lock]
-//).
-//LANE1 = ..
-//||VMEI = (CAR(1) || CAR(2) || QUEUE(1) || QUEUE(2)).
+const N = 4 // number of each type of car
+range T = 0..4 // type of car count
+range ID= 0..4 // car identities
 
-// Any time there is [c][q], it's request car c into queue q
-CAR(ID=1) = CAR[ID],
-CAR[id:Cars] = (
-	request_queue[id][q:Queues] -> enter_queue[id][q] -> permitted[id][q] -> my_car_goes[id] -> DONE[id]
-),
-DONE[id:Cars] = (car_exited[id] -> DONE[id]).
+BRIDGE = BRIDGE[0][0][0][0],  //initially empty
+BRIDGE[ns:T][sn:T][ew:T][we:T] =    //nr is the red count, nb the blue count
+	(	when ( ns < 2 && sn==0 && ew==0 && we==0) 
+              lane0[ID].enterlane  -> BRIDGE[ns+1][sn][ew][we]
+	|when (ns > 0 && sn==0 && ew==0 && we==0) 
+			 lane0[ID].exitlane    -> BRIDGE[ns-1][sn][ew][we]
+	|when (ns==0 && sn <2 && ew==0 && we==0)  
+              lane1[ID].enterlane  -> BRIDGE[ns][sn+1][ew][we]
+	|when (ns==0 && sn > 0 && ew==0 && we==0)  
+			 lane1[ID].exitlane    -> BRIDGE[ns][sn-1][ew][we]
+    |when (ns==0 && sn==0  && ew <2 && we==0) 
+              lane2[ID].enterlane  -> BRIDGE[ns][sn][ew+1][we]
+	|when (ns==0 && sn==0 && ew>0 &&we==0) 
+			lane2[ID].exitlane   -> BRIDGE[ns][sn][ew-1][we]
+	|when (ns==0 && sn==0 && ew==0 && we < 2) 
+              lane3[ID].enterlane  -> BRIDGE[ns][sn][ew][we+1]
+	|when (ns==0 && sn==0 && ew==0 && we >0) 
+			 lane3[ID].exitlane    -> BRIDGE[ns][sn][ew][we-1]
+     ).
 
-//PERMIT(laneID=0 )= PERMIT[carId][],
-// We will need to handle these eventually
-PERMIT(LANE=0) = PERMIT[LANE],
-PERMIT[qid:Queues] = (
-	  when(qid == 0) enter_queue[c:Cars][0] -> PERMIT0[c][qid]
-	| when(qid == 1) enter_queue[c:Cars][1] -> PERMIT1[c][qid]
-	| when(qid == 2) enter_queue[c:Cars][2] -> PERMIT2[c][qid]
-	| when(qid == 3) enter_queue[c:Cars][3] -> PERMIT3[c][qid]
-),
-PERMIT0[c:Cars][qid:Queues] = (acquire[3] -> acquire[0] -> permitted[c][0] -> my_car_goes[c] -> release[0] -> release[3] -> PERMIT[qid]),
-PERMIT1[c:Cars][qid:Queues] = (acquire[0] -> acquire[1] -> permitted[c][1] -> my_car_goes[c] -> release[1] -> release[0] -> PERMIT[qid]),
-PERMIT2[c:Cars][qid:Queues] = (acquire[1] -> acquire[2] -> permitted[c][2] -> my_car_goes[c] -> release[2] -> release[1] -> PERMIT[qid]),
-PERMIT3[c:Cars][qid:Queues] = (acquire[2] -> acquire[3] -> permitted[c][3] -> my_car_goes[c] -> release[3] -> release[2] -> PERMIT[qid]).
+CAR = (
+ enterlane->exitlane->CAR
 
-// False means the queue is empty
-QUEUE = QUEUE[False],
-QUEUE[full:Bool] = (
-	  when(full) my_car_goes -> QUEUE[False]
-	| when(!full) request_queue[1][1] -> enter_queue[1][1] -> QUEUE[True]
+
 ).
 
-||VMEI = (CAR(1) || CAR(2) || QUEUE || PERMIT(0) || PERMIT(2)).
+/* cars may not overtake each other */
+NOPASS1   = C[0],
+C[i:ID]   = ( [i].enterlane -> C[i%N+1] 
+).
 
-// TODO: combine QUEUE and PERMIT since there will be four of them
-// TODO: request_queue needs to work for multiple lanes and cars
-// TODO: How to combine PERMIT(0) and PERMIT(2) and QUEUE
+NOPASS2   = C[0],
+C[i:ID]   = ([i].exitlane -> C[i%N+1]
+).
+
+||CONVOY = ([ID]:CAR || NOPASS1 || NOPASS2).
+
+||CARS = (lane0:CONVOY ||lane1:CONVOY || lane2:CONVOY ||lane3:CONVOY).
+
+||SingleLaneBridge = (CARS || BRIDGE || ONEWAY(0) ).
+
+
+ONEWAY(TOK=0) = ONEWAY[TOK],
+ONEWAY[tok:T] = (	
+		   when(tok==0) lane0[ID].enterlane -> LANE0[0] 
+		  |when(tok==1) lane1[ID].enterlane -> LANE1[0] 
+		  |when(tok==2) lane2[ID].enterlane -> LANE2[0] 
+		  |when(tok==3) lane3[ID].enterlane -> LANE3[0] 
+
+		  ),
+LANE0[i:ID] = (
+             when(i<N) lane0[ID].enterlane -> LANE0[i+1]
+            |when(i==0)lane0[ID].exitlane  -> ONEWAY[1]
+            |when( i>0)lane0[ID].exitlane  -> LANE0[i-1]
+
+),
+LANE1[i:ID] = (
+			 when(i<N)lane1[ID].enterlane -> LANE1[i+1]
+            |when(i==0)lane1[ID].exitlane  -> ONEWAY[2]
+            |when( i>0)lane1[ID].exitlane  -> LANE1[i-1]
+),
+LANE2[i:ID] = (
+             when(i<N)lane2[ID].enterlane -> LANE2[i+1]
+            |when(i==0)lane2[ID].exitlane  -> ONEWAY[3]
+            |when( i>0)lane2[ID].exitlane  -> LANE2[i-1]
+),
+LANE3[i:ID] = (
+            when(i<N)lane3[ID].enterlane -> LANE3[i+1]
+            |when(i==0)lane3[ID].exitlane  -> ONEWAY[0]
+            |when( i>0)lane3[ID].exitlane  -> LANE3[i-1]
+).

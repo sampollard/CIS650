@@ -5,6 +5,7 @@ import time
 import os
 import sys
 from datetime import datetime as dt
+import random
 #"DIRECT_CAR$$$$"+carID+"$$$$"+qzqueueID+"$$$$"+current+"$$$$command$$$$"+next;
 # Set LEDs and sigint handler
 # python CARS.py <carID> <QueueId> <Direction>
@@ -14,7 +15,8 @@ global status
 global carID
 global queueID
 global direction
-slp=1
+moveslp=5
+slp=0.4
 status="REQ"
 if len(sys.argv) == 4:
     carID = sys.argv[1]
@@ -89,9 +91,8 @@ def on_message(client, userdata, msg):
                 
                 # print("I am in straight********************")
                 if(carID==myString[2]):
-                    status="OUT"
+                    status="GRANT"
                     # print ("I am in straight")
-                    goStraight(myString[3],myString[4])
 
 def goStraight(grid1,grid2):
     global status
@@ -99,61 +100,39 @@ def goStraight(grid1,grid2):
     global queueID
     global direction
     print "go straight"
+    timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
     messageUI="DIRECT_CAR$$$$"+carID+"$$$$qz"+queueID+"$$$$"+status+"$$$$goForward$$$$qz"+queueID;
     mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$'+messageUI
     mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
     status="qz"+queueID
     # print status
-    time.sleep(slp)
+    time.sleep(moveslp)
 
+    timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
     messageUI="DIRECT_CAR$$$$"+carID+"$$$$qz"+queueID+"$$$$"+status+"$$$$goForward$$$$"+grid1;
     mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$'+ messageUI
     mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
     status=grid1
     # print status
-    time.sleep(slp)
+    time.sleep(moveslp)
 
+    timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
     messageUI="DIRECT_CAR$$$$"+carID+"$$$$qz"+queueID+"$$$$"+status+"$$$$goForward$$$$"+grid2;
     mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$'+messageUI
     mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
     status=grid2
     # print status
-    time.sleep(slp)
+    time.sleep(moveslp)
 
 
+    timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
     messageUI="DIRECT_CAR$$$$"+carID+"$$$$qz"+queueID+"$$$$"+status+"$$$$goStraight$$$$"+"exit";
     mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$'+messageUI
     mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
     status="EXIT"
     # print status
-    time.sleep(2)
+    time.sleep(slp)
 
-
-def goRight(grid1):
-    global status
-    global carID
-    global queueID
-    global direction
-    messageUI="DIRECT_CAR$$$$"+carID+"$$$$qz"+queueID+"$$$$"+status+"$$$$goForward$$$$qz"+queueID;
-    mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$'+messageUI
-    mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
-    status="qz"+queueID
-    # print status
-    time.sleep(2)
-
-    messageUI="DIRECT_CAR$$$$"+carID+"$$$$qz"+queueID+"$$$$"+status+"$$$$goForward$$$$"+grid1;
-    mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$'+messageUI
-    mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
-    status=grid1
-    # print status
-    time.sleep(2)
-
-    messageUI="DIRECT_CAR$$$$"+carID+"$$$$qz"+queueID+"$$$$"+status+"$$$$goRight$$$$"+"exit";
-    mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$'+messageUI
-    mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
-    status="EXIT"
-    # print status
-    time.sleep(2)
 
 # You can also add specific callbacks that match specific topics.
 # See message_callback_add at https://pypi.python.org/pypi/paho-mqtt#callbacks.
@@ -203,10 +182,12 @@ while True:
     # print carAction
         mqtt_message = "[%s] %s " % (timestamp,ip_addr) + "===="+carAction
         mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
-        time.sleep(8)
+        time.sleep(slp)
         mqtt_message = "[%s] %s " % (timestamp,ip_addr) + "===="+carAction
-        time.sleep(8)
+        time.sleep(slp)
         sys.exit(1)
+    elif(status=="GRANT"):
+        goStraight(carID,queueID)
 
         #just making sure the message was reached
     time.sleep(2)

@@ -1,0 +1,45 @@
+/** Concurrency: State Models and Java Programs
+ *             Jeff Magee and Jeff Kramer
+ * CIS 650 Final Project
+ */
+const N = 4
+range Queues = 0..3
+range Cars = 0..3
+range Bool = 0..1
+const True = 1
+const False = 0
+
+// the order is lane[q][c], q is lane id, c is car id
+LANE(ME=0,TOK=False) = EMPTY[ME][TOK],
+EMPTY[me:Queues][tok:Bool] = (
+	  [c:Cars].enter -> FULL[me][tok][c] // A car can enter at any point
+	| when(tok == True)
+		pass[(me+1)%N] -> EMPTY[me][False]
+	| when(tok == False)
+		pass[me] -> EMPTY[me][True]
+),
+FULL[me:Queues][tok:Bool][c:Cars] = (
+	  when(tok == True)
+		[c].go -> [c].exited -> pass[(me+1)%N] -> EMPTY[me][False]
+	| when(tok == False)
+		pass[me] -> FULL[me][True][c]
+).
+
+CAR0 = (lane[q:Queues][0].enter -> lane[q][0].go -> lane[q][0].exited -> DONE0),
+DONE0 = (done0 -> DONE0).
+
+CAR1 = (lane[q:Queues][1].enter -> lane[q][1].go -> lane[q][1].exited -> DONE1),
+DONE1 = (done1 -> DONE1).
+
+||LANE0 = (lane[0]:LANE(0,False)).
+||LANE1 = (lane[1]:LANE(1,True)).
+||LANE2 = (lane[2]:LANE(2,False)).
+||LANE3 = (lane[3]:LANE(3,False)).
+||QUEUE = (LANE0 || LANE1 || LANE2 || LANE3 || CAR0 || CAR1)
+	/{
+		pass[0]/{lane[3],lane[0]}.pass[0],
+		pass[1]/{lane[0],lane[1]}.pass[1],
+		pass[2]/{lane[1],lane[2]}.pass[2],
+		pass[3]/{lane[2],lane[3]}.pass[3]
+	}.
+

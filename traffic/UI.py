@@ -1,4 +1,5 @@
 #Notes
+
 #TODO Adding three asserts to UI
 # Adding three weak untills`
 # !leader0 untill election0
@@ -60,6 +61,7 @@ class mainClass(QWidget):
     g_car1 = "????"
     g_car2 = "????"
     g_car3 = "????"
+    messageQueue = []
 
     # Start out true, only can turn to False once
     #No weak untills yet
@@ -129,6 +131,13 @@ class mainClass(QWidget):
         layout.addWidget(self.car2)
         layout.addWidget(self.car3)
 
+        pybutton = QPushButton('Take a Step', self)
+        pybutton.resize(100,32)
+       	layout.addWidget(pybutton) #pybutton.move(50, 50)        
+        pybutton.clicked.connect(self.step_message)
+
+   
+
         self.setLayout(layout) 
         self.setMinimumSize(600, 800)
         self.setWindowTitle("Leader Model Checker")
@@ -146,9 +155,25 @@ class mainClass(QWidget):
         #DIRECT_CAR+"$$$$"+carID+"$$$$"+qzqueueID+"$$$$"+current+"$$$$command$$$$"+next;
         # car id 0-4
         # qz 0-4
+        #Messages expecting
         #$$$$DIRECT_CAR$$$$1$$$$qz0$$$$EXIT$$$$goForward$$$$qz0
         #$$$$DIRECT_CAR$$$$1$$$$qz0$$$$OUT$$$$goForward$$$$qz0
-        print(myString)
+        if not len(myString)==7:
+            print("length of steam:" + str(len(myString)))
+            return
+
+
+        
+        print(msg)
+        if (myString[1] == "DIRECT_CAR"):
+            self.messageQueue.append(myString)
+
+
+    def step_message(self):
+        if len(self.messageQueue) == 0:
+            return  
+        myString= self.messageQueue.pop(0)
+      
         if not len(myString)==7:
              print("length of steam:" + str(len(myString)))
              return
@@ -162,7 +187,7 @@ class mainClass(QWidget):
             self.update_label_something2(myString[2], myString[3],myString[4],myString[5],myString[6])
         elif ( myString[1] == "DIRECT_CAR" and myString[2] == "3"):
             self.update_label_something3(myString[2], myString[3],myString[4],myString[5],myString[6])
-      
+        
     def update_label_something0(self, carID,qzqueueID,current,command,nextID):
         temp = (str(carID)+ " " +str(qzqueueID)+ " " +str(current)+ " " + str(command) + " " +str(nextID) )
         self.car0.setText(temp)
@@ -178,6 +203,7 @@ class mainClass(QWidget):
     def update_label_something3(self, carID,qzqueueID,current,command,nextID):
         temp4 = (carID+ "     " +qzqueueID+ "     " +current+ "     " + command + "     " +nextID )
         self.car3.setText(temp4)
+
 
 def main():
     # Instantiate the MQTT client

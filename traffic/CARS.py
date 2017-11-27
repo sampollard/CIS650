@@ -14,6 +14,7 @@ global status
 global carID
 global queueID
 global direction
+slp=1
 status="REQ"
 if len(sys.argv) == 4:
     carID = sys.argv[1]
@@ -103,21 +104,21 @@ def goStraight(grid1,grid2):
     mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
     status="qz"+queueID
     # print status
-    time.sleep(2)
+    time.sleep(slp)
 
     messageUI="DIRECT_CAR$$$$"+carID+"$$$$qz"+queueID+"$$$$"+status+"$$$$goForward$$$$"+grid1;
     mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$'+ messageUI
     mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
     status=grid1
     # print status
-    time.sleep(2)
+    time.sleep(slp)
 
     messageUI="DIRECT_CAR$$$$"+carID+"$$$$qz"+queueID+"$$$$"+status+"$$$$goForward$$$$"+grid2;
     mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$'+messageUI
     mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
     status=grid2
     # print status
-    time.sleep(2)
+    time.sleep(slp)
 
 
     messageUI="DIRECT_CAR$$$$"+carID+"$$$$qz"+queueID+"$$$$"+status+"$$$$goStraight$$$$"+"exit";

@@ -9,6 +9,7 @@ from datetime import datetime as dt
 # python QUEUE.py 0 1
 # python QUEUE.py <queueId> <isCaptain>
 # Set LEDs and sigint handler
+slp = 1
 leds = []
 global subSubTokenComplete
 global subTokenComplete
@@ -37,7 +38,7 @@ if len(sys.argv) == 3:
     
     isCaptain=int(sys.argv[2])
 else:
-    print("usage: QUEUE.py  <queueID> <grid1> <grid2> <isCaptain>")
+    print("usage: QUEUE.py  <queueID> <isCaptain>")
     sys.exit(1)
 
 #initialize lane related things
@@ -137,14 +138,14 @@ def on_message(client, userdata, msg):
                 timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
                 mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+action
                 mqtt_client.publish(mqtt_topic, mqtt_message)  
-                time.sleep(3)
+                time.sleep(slp)
             if isSUBSUBTOKEN:
                 reqMade=False
                 action="SUB_SUBTOKEN_DONE====qz===="+queueID #Say I am done n pass its own id
                 timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
                 mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+action
                 mqtt_client.publish(mqtt_topic, mqtt_message)  
-                time.sleep(3)        
+                time.sleep(slp)        
     if(len(myString)==4 and myString[1]=='SUBTOKEN_DONE'):
         if(myString[3]==subTokenToLane):
             if isCaptain:
@@ -168,7 +169,7 @@ def on_message(client, userdata, msg):
                 mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+action
                 mqtt_client.publish(mqtt_topic, mqtt_message) 
                 isSUBTOKEN=False  
-                time.sleep(3)
+                time.sleep(slp)
                  #give away the subtoken since no cars   
 
     if(len(myString)==4 and myString[1]=='SUB_SUBTOKEN'):
@@ -184,7 +185,7 @@ def on_message(client, userdata, msg):
                 mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+action
                 mqtt_client.publish(mqtt_topic, mqtt_message) 
                 isSUBSUBTOKEN=False  
-                time.sleep(3)
+                time.sleep(slp)
     
 
     if(len(myString)==5 and myString[1]=='REQUEST_ENTRY'):
@@ -216,14 +217,14 @@ def onReqEntryAction(myString):
 
         mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+laneAction
         mqtt_client.publish(mqtt_topic, mqtt_message)  
-        time.sleep(3)
+        time.sleep(slp)
         # remove comment when you implement sub_sub_token
         laneAction="SUB_SUBTOKEN====qz===="+subSubTokenToLane
         timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
 
         mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+laneAction
         mqtt_client.publish(mqtt_topic, mqtt_message)  
-        time.sleep(3)
+        time.sleep(slp)
     #GRANT CARS THE REQ
     if(isCaptain or isSUBTOKEN):
         #This will have to be looked again when subSubToken

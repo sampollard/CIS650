@@ -223,32 +223,34 @@ class mainClass(QWidget):
                 self.update_label_something_token(myString[2])
     #TODO Figure out when the car moves form QZ ->l1 ->l2 ->EXIT to show that its light moves.
 
-    def update_fluent(self, nextID, current):
-        if nextID == "qz0":
-            self.countCZ0 = self.countCZ1 +1
+    def update_fluent(self, current,nextID):
+        if nextID == "0":
+            self.countCZ0 = self.countCZ0 +1
  
-        elif nextID == "qz1":
+        elif nextID == "1":
             self.countCZ1 = self.countCZ1 +1
 
-        elif nextID == "qz2":
+        elif nextID == "2":
             self.countCZ2 = self.countCZ2 +1
 
-        elif nextID == "qz3":
+        elif nextID == "3":
             self.countCZ3 = self.countCZ3 +1
 
-        if current == "qz0":
-            self.countCZ0 = self.countCZ1 -1  
+        if current == "0":
+            self.countCZ0 = self.countCZ0 -1  
  
-        elif current == "qz1":
+        elif current == "1":
             self.countCZ1 = self.countCZ1 -1  
         
-        elif current == "qz2":
+        elif current == "2":
             self.countCZ2 = self.countCZ2 -1  
 
-        elif current == "qz3":
+        elif current == "3":
             self.countCZ3 = self.countCZ3 -1  
 
-        action="FLUENT||||"+str(cz)+"||||"+str( self.countCZ0)+"||||"+str( self.countCZ1)+"||||" +str( self.countCZ2)+"||||"+str( self.countCZ3)
+        print(str( self.countCZ0)+"||||"+str( self.countCZ1)+"||||" +str( self.countCZ2)+"||||"+str( self.countCZ3))
+
+        action="FLUENT||||count||||"+str( self.countCZ0)+"||||"+str( self.countCZ1)+"||||" +str( self.countCZ2)+"||||"+str( self.countCZ3)
         timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
         mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '||||'+action
         self._mqtt_client.publish(self._mqtt_topic, mqtt_message) 

@@ -56,30 +56,68 @@ C[i:ID]   = ([i].exitlane -> C[i%N+1]
 
 ONEWAY(TOK=0) = ONEWAY[TOK],
 ONEWAY[tok:T] = (	
+
 		   when(tok==0) lane0[ID].enterlane -> LANE0[0] 
+		  |when(tok==0) pass_token_to_1 ->ONEWAY[1]
 		  |when(tok==1) lane1[ID].enterlane -> LANE1[0] 
+		  |when(tok==1) pass_token_to_2  ->ONEWAY[2]
 		  |when(tok==2) lane2[ID].enterlane -> LANE2[0] 
+		  |when(tok==2) pass_token_to_3   ->ONEWAY[3] 
 		  |when(tok==3) lane3[ID].enterlane -> LANE3[0] 
+		  |when(tok==3) pass_token_to_0  ->ONEWAY[0]
 
 		  ),
 LANE0[i:ID] = (
-             when(i<N) lane0[ID].enterlane -> LANE0[i+1]
-            |when(i==0)lane0[ID].exitlane  -> ONEWAY[1]
+			 
+            when(i<N ) lane0[ID].enterlane -> LANE0[i+1]
+            |when(i==0)lane0[ID].exitlane -> pass_token[1] ->ONEWAY[1]
             |when( i>0)lane0[ID].exitlane  -> LANE0[i-1]
 
 ),
 LANE1[i:ID] = (
-			 when(i<N)lane1[ID].enterlane -> LANE1[i+1]
-            |when(i==0)lane1[ID].exitlane  -> ONEWAY[2]
+			 
+			when(i<N)lane1[ID].enterlane -> LANE1[i+1]
+            |when(i==0)lane1[ID].exitlane ->pass_token[2] -> ONEWAY[2]
             |when( i>0)lane1[ID].exitlane  -> LANE1[i-1]
 ),
 LANE2[i:ID] = (
-             when(i<N)lane2[ID].enterlane -> LANE2[i+1]
-            |when(i==0)lane2[ID].exitlane  -> ONEWAY[3]
+			
+            when(i<N)lane2[ID].enterlane -> LANE2[i+1]
+            |when(i==0)lane2[ID].exitlane  ->pass_token[3] -> ONEWAY[3]
             |when( i>0)lane2[ID].exitlane  -> LANE2[i-1]
 ),
 LANE3[i:ID] = (
+			
             when(i<N)lane3[ID].enterlane -> LANE3[i+1]
-            |when(i==0)lane3[ID].exitlane  -> ONEWAY[0]
+            |when(i==0)lane3[ID].exitlane  ->pass_token[0]-> ONEWAY[0]
             |when( i>0)lane3[ID].exitlane  -> LANE3[i-1]
 ).
+
+//Check no 2 are in the lane at the same time
+fluent CHECKLANE0[i:0..4] = < lane0[i].enterlane , lane0[i].exitlane> 
+fluent CHECKLANE1[i:0..4] = < lane1[i].enterlane , lane1[i].exitlane> 
+fluent CHECKLANE2[i:0..4] = < lane2[i].enterlane , lane2[i].exitlane> 
+fluent CHECKLANE3[i:0..4] = < lane3[i].enterlane , lane3[i].exitlane> 
+
+//Prop holds for sub set, so it should hold for all
+assert CHECKALLLANES0 = forall[i:0..3]![](CHECKLANE0[i]  && CHECKLANE1[i])
+assert CHECKALLLANES1 = forall[i:0..3]![](CHECKLANE1[i]  && CHECKLANE2[i])
+assert CHECKALLLANES2 = forall[i:0..3]![](CHECKLANE2[i]  && CHECKLANE3[i])
+assert CHECKALLLANES3 = forall[i:0..3]![](CHECKLANE3[i]  && CHECKLANE0[i])
+
+
+//Check that No 2 have token at the same time
+fluent TOKEN0 = <pass_token[0] , pass_token[1]>
+fluent TOKEN1 = <pass_token[1] , pass_token[2]>
+fluent TOKEN2 = <pass_token[2] , pass_token[3]>
+fluent TOKEN3 = <pass_token[3] ,pass_token[0]>
+
+//This line is the same as all 4 above
+fluent TOKEN[i:0..3] = <pass_token[i] , pass_token[(i+1)%4]>
+
+assert CHECKALLTOKEN = <>TOKEN[0..3]
+
+
+
+
+

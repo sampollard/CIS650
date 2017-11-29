@@ -58,13 +58,13 @@ ONEWAY(TOK=0) = ONEWAY[TOK],
 ONEWAY[tok:T] = (	
 
 		   when(tok==0) lane0[ID].enterlane -> LANE0[0] 
-		  |when(tok==0) pass_token_to_1 ->ONEWAY[1]
+		  |when(tok==0) pass_token[1] ->ONEWAY[1]
 		  |when(tok==1) lane1[ID].enterlane -> LANE1[0] 
-		  |when(tok==1) pass_token_to_2  ->ONEWAY[2]
+		  |when(tok==1) pass_token[2]  ->ONEWAY[2]
 		  |when(tok==2) lane2[ID].enterlane -> LANE2[0] 
-		  |when(tok==2) pass_token_to_3   ->ONEWAY[3] 
+		  |when(tok==2) pass_token[3]   ->ONEWAY[3] 
 		  |when(tok==3) lane3[ID].enterlane -> LANE3[0] 
-		  |when(tok==3) pass_token_to_0  ->ONEWAY[0]
+		  |when(tok==3) pass_token[0]  ->ONEWAY[0]
 
 		  ),
 LANE0[i:ID] = (

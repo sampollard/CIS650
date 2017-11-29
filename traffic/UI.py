@@ -119,12 +119,14 @@ class mainClass(QWidget):
         self.car1= QLabel()
         self.car2= QLabel()
         self.car3= QLabel()
+        self.car4= QLabel()
         #+carID+"$$$$"+qzqueueID+"$$$$"+current+"$$$$command$$$$"+next 
         self.title.setText("  Car     qzqueueID    Current          command       next") 
         self.car0.setText( "   waiting               ")
         self.car1.setText( "   waiting              ")
         self.car2.setText( "   waiting               ")
         self.car3.setText( "   waiting               ")
+        self.car4.setText( "   waiting               ")
         
      
 	
@@ -133,6 +135,7 @@ class mainClass(QWidget):
         self.car1.setAlignment(Qt.AlignCenter)
         self.car2.setAlignment(Qt.AlignCenter)
         self.car3.setAlignment(Qt.AlignCenter)
+        self.car4.setAlignment(Qt.AlignCenter)
 
         
         self.tokenLine.setAlignment(Qt.AlignCenter)
@@ -145,6 +148,7 @@ class mainClass(QWidget):
         layout.addWidget(self.car1)
         layout.addWidget(self.car2)
         layout.addWidget(self.car3)
+        layout.addWidget(self.car4)
         layout.addWidget(self.tokenLine)
         layout.addWidget(self.sub_tokenLine)
         pybutton = QPushButton('Take a Step', self)
@@ -181,10 +185,6 @@ class mainClass(QWidget):
         else:
             print("length of string:" + str(len(myString)))
             return
-
-
-        
-        print(msg)
         if (myString[1] == "DIRECT_CAR") or (myString[1] == "TOKEN") or (myString[1] == "SUBTOKEN") :
             self.messageQueue.append(myString)
 
@@ -211,6 +211,9 @@ class mainClass(QWidget):
         
             elif ( myString[1] == "DIRECT_CAR" and myString[2] == "3"):
                 self.update_label_something3(myString[2], myString[3],myString[4],myString[5],myString[6])
+
+            elif ( myString[1] == "DIRECT_CAR" and myString[2] == "4"):
+                self.update_label_something4(myString[2], myString[3],myString[4],myString[5],myString[6])
         
 
         elif len(myString)==3: 
@@ -274,6 +277,11 @@ class mainClass(QWidget):
     def update_label_something3(self, carID,qzqueueID,current,command,nextID):
         temp4 = (carID+ "     " +qzqueueID+ "     " +current+ "     " + command + "     " +nextID )
         self.car3.setText(temp4)
+        self.update_fluent(current,nextID)
+
+    def update_label_something4(self, carID,qzqueueID,current,command,nextID):
+        temp5 = (carID+ "     " +qzqueueID+ "     " +current+ "     " + command + "     " +nextID )
+        self.car4.setText(temp5)
         self.update_fluent(current,nextID)
 
 

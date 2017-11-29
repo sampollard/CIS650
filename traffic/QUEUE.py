@@ -26,7 +26,7 @@ isSUBTOKEN=False #to know if lane has subtoken release when that lanes CARS are 
 isSUBSUBTOKEN=False #to know if lane has subsubtoken
 subTokenComplete=False #for captain to know if CARS of subtoken are done
 meComplete=False #to know if cars of captain complete
-reqMade=False
+reqMade=[]
 # subTokenToLane=2
 if len(sys.argv) == 3:
     queueID = sys.argv[1]
@@ -122,10 +122,15 @@ def on_message(client, userdata, msg):
     if(len(myString)==4 and myString[1]=='CAR_DONE'):
         if(myString[3]==queueID):
             if isCaptain:
-                meComplete=True # TODO: Change to send off another car in the queue
-                reqMade=False #CHK if this needed
+                caridxs = [i for i,x in enumerate(reqMade) if x == int(myString[2])]
+                if len(caridxs) > 0:
+                    del reqMade[caridxs[0]]
+                if len(caridxs) > 1:
+                    print("Car got added twice, here's the message: {}".format(myString))
+                    sys.exit(1)
+                if len(reqMade) == 0:
+                    meComplete=True # TODO: Change to send off another car in the queue
             if isSUBTOKEN:
-                reqMade=False
                 action="SUBTOKEN_DONE====qz===="+queueID
                 timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
                 mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+action
@@ -152,7 +157,7 @@ def on_message(client, userdata, msg):
             mqtt_client.publish(mqtt_topic, mqtt_message)
 
             print ("subtoken has become true waiting for cars now"+str(isSUBTOKEN))
-            if not reqMade:
+            if len(reqMade) == 0:
                 action="SUBTOKEN_DONE====qz===="+queueID
                 timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
                 mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+action
@@ -164,7 +169,7 @@ def on_message(client, userdata, msg):
     if(len(myString)==5 and myString[1]=='REQUEST_ENTRY'):
         print "I am in on_message_Request"
         if(myString[3]==queueID):
-            reqMade=True
+            reqMade.append(int(myString[2]))
             onReqEntryAction(myString)
           
 # You can also add specific callbacks that match specific topics.

@@ -12,6 +12,11 @@ for i in range(4):
         print("started car" + str(i))
     except EnvironmentError as e:
         sys.exit('failed to start %r, reason: %s' % (executable, e))
+# Add a second car to queue 0
+i=4
+p = subprocess.Popen(['python2', 'CARS.py',str(i),str(0),'Straight'] )
+processwait.append(p)
+print("started car" + str(i))
 
 y=0
 for i in range(4):

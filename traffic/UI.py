@@ -260,27 +260,27 @@ class mainClass(QWidget):
         #timestamp||||FLUENT||||CZ||||CZ0Count||||CZ1count||||CZ2Count||||CZ3Count
  
     def update_label_something0(self, carID,qzqueueID,current,command,nextID):
-        temp = (str(carID)+ " " +str(qzqueueID)+ " " +str(current)+ " " + str(command) + " " +str(nextID) )
+        temp = (str(carID)+ "       " +str(qzqueueID)+ "          " +str(current)+ "         " + str(command) + "       " +str(nextID) )
         self.car0.setText(temp)
         self.update_fluent(current,nextID) 
  
     def update_label_something1(self, carID,qzqueueID,current,command,nextID):
-        temp2 = (carID+ " " +qzqueueID+ " " +current+ " " + command + " " +nextID )
+        temp2 = (carID+ "           " +qzqueueID+      "          " +current+     "           " + command +    "         " +str(nextID) )
         self.car1.setText(temp2)
         self.update_fluent(current,nextID)
 
     def update_label_something2(self, carID,qzqueueID,current,command,nextID):
-        temp3 = (carID+ " " +qzqueueID+ " " +current+ " " + command + " " +nextID )
+        temp3 = (carID+ "           " +qzqueueID+      "          " +current+     "           " + command +    "        " + str(nextID ))
         self.car2.setText(temp3)
         self.update_fluent(current,nextID)
 
     def update_label_something3(self, carID,qzqueueID,current,command,nextID):
-        temp4 = (carID+ "     " +qzqueueID+ "     " +current+ "     " + command + "     " +nextID )
+        temp4 = (carID+ "           " +qzqueueID+      "          " +current+     "           " + command +    "         " +nextID )
         self.car3.setText(temp4)
         self.update_fluent(current,nextID)
 
     def update_label_something4(self, carID,qzqueueID,current,command,nextID):
-        temp5 = (carID+ "     " +qzqueueID+ "     " +current+ "     " + command + "     " +nextID )
+        temp5 = (carID+ "           " +qzqueueID+      "          " +current+     "           " + command +    "         " +nextID )
         self.car4.setText(temp5)
         self.update_fluent(current,nextID)
 

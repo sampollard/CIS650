@@ -1,0 +1,136 @@
+/** Concurrency: State Models and Java Programs
+ *             Jeff Magee and Jeff Kramer
+ *  
+ */
+
+/* TODO: Pass tokens to non-conflicting lanes; both sync up on both_have_token */
+
+/* Single Lane bridge
+Red cars go from west to east
+Blue cars go from east to west
+*/
+
+const N = 4 // number of each type of car
+const Max = 2 // Maximum cars in a lane (+ 1)
+range T = 0..4 // type of car count
+range ID= 0..4 // car identities
+
+BRIDGE = BRIDGE[0][0][0][0],  //initially empty
+BRIDGE[ns:T][sn:T][ew:T][we:T] =    //nr is the red count, nb the blue count
+	(	when ( ns < Max && ew==0 && we==0) 
+              lane0[ID].enterlane  -> BRIDGE[ns+1][sn][ew][we]
+	|when (ns > 0 && ew==0 && we==0) 
+			 lane0[ID].exitlane    -> BRIDGE[ns-1][sn][ew][we]
+	|when (sn < Max && ew==0 && we==0)  
+              lane1[ID].enterlane  -> BRIDGE[ns][sn+1][ew][we]
+	|when (sn > 0 && ew==0 && we==0)  
+			 lane1[ID].exitlane    -> BRIDGE[ns][sn-1][ew][we]
+    |when (ns==0 && sn==0  && ew <Max) 
+              lane2[ID].enterlane  -> BRIDGE[ns][sn][ew+1][we]
+	|when (ns==0 && sn==0 && ew>0) 
+			lane2[ID].exitlane   -> BRIDGE[ns][sn][ew-1][we]
+	|when (ns==0 && sn==0 && we < Max) 
+              lane3[ID].enterlane  -> BRIDGE[ns][sn][ew][we+1]
+	|when (ns==0 && sn==0 && we >0) 
+			 lane3[ID].exitlane    -> BRIDGE[ns][sn][ew][we-1]
+     ).
+
+CAR = (
+ enterlane->exitlane->CAR
+).
+
+/* cars may not overtake each other */
+NOPASS1   = C[0],
+C[i:ID]   = ( [i].enterlane -> C[i%N+1] 
+).
+
+NOPASS2   = C[0],
+C[i:ID]   = ([i].exitlane -> C[i%N+1]
+).
+
+||CONVOY = ([ID]:CAR || NOPASS1 || NOPASS2).
+
+||CARS = (lane0:CONVOY ||lane1:CONVOY || lane2:CONVOY ||lane3:CONVOY).
+
+||SingleLaneBridge = (CARS || BRIDGE || ONEWAY(0) ).
+
+
+ONEWAY(TOK=0) = ONEWAY[TOK],
+ONEWAY[tok:T] = (
+		   when(tok==0 || tok == 2) lane0[ID].enterlane -> LANE02[tok][1][0] 
+		  |when(tok==0) pass_token[1] ->ONEWAY[1]
+		  |when(tok==1 || tok == 3) lane1[ID].enterlane -> LANE13[tok][1][0] 
+		  |when(tok==1) pass_token[2]  ->ONEWAY[2]
+		  |when(tok==2 || tok == 0) lane2[ID].enterlane -> LANE02[tok][0][1] 
+		  |when(tok==2) pass_token[3]   ->ONEWAY[3] 
+		  |when(tok==3 || tok == 1) lane3[ID].enterlane -> LANE13[tok][0][1] 
+		  |when(tok==3) pass_token[0]  ->ONEWAY[0]
+
+		  ),
+LANE02[tok:T][i:ID][j:ID] = (
+			when(i<N) lane0[ID].enterlane -> LANE02[tok][i+1][j]
+            |when(i==0 && j==0 && tok==0) pass_token[1] ->ONEWAY[1]
+            |when(i>0)lane0[ID].exitlane  -> LANE02[tok][i-1][j]
+			|when(j<N) lane2[ID].enterlane -> LANE02[tok][i][j+1]
+            |when(i==0 && j==0 && tok==2) pass_token[3] -> ONEWAY[3]
+            |when(j>0)lane2[ID].exitlane  -> LANE02[tok][i][j-1]
+),
+LANE13[tok:T][i:ID][j:ID] = (
+			when(i<N ) lane1[ID].enterlane -> LANE13[tok][i+1][j]
+            |when(i==0 && j==0 && tok==1) pass_token[2] ->ONEWAY[2]
+            |when(i>0)lane1[ID].exitlane  -> LANE13[tok][i-1][j]
+			|when(j<N) lane3[ID].enterlane -> LANE13[tok][i][j+1]
+            |when(i==0 && j==0 && tok==3) pass_token[0] -> ONEWAY[0]
+            |when(j>0)lane3[ID].exitlane  -> LANE13[tok][i][j-1]
+).
+/*
+LANE0[i:ID] = (
+			 
+            when(i<N ) lane0[ID].enterlane -> LANE0[i+1]
+            |when(i==0)lane0[ID].exitlane -> done02 ->ONEWAY[1]
+            |when( i>0)lane0[ID].exitlane  -> LANE0[i-1]
+
+),
+LANE1[i:ID] = (
+			 
+			when(i<N)lane1[ID].enterlane -> LANE1[i+1]
+            |when(i==0)lane1[ID].exitlane -> done13 -> ONEWAY[2]
+            |when( i>0)lane1[ID].exitlane  -> LANE1[i-1]
+),
+LANE2[i:ID] = (
+			
+            when(i<N)lane2[ID].enterlane -> LANE2[i+1]
+            |when(i==0)lane2[ID].exitlane  -> done02 -> ONEWAY[3]
+            |when( i>0)lane2[ID].exitlane  -> LANE2[i-1]
+),
+LANE3[i:ID] = (
+			
+            when(i<N)lane3[ID].enterlane -> LANE3[i+1]
+            |when(i==0)lane3[ID].exitlane  -> done13 -> ONEWAY[0]
+            |when( i>0)lane3[ID].exitlane  -> LANE3[i-1]
+).
+
+//Check no 2 are in the lane at the same time
+fluent CHECKLANE0[i:0..4] = < lane0[i].enterlane , lane0[i].exitlane> 
+fluent CHECKLANE1[i:0..4] = < lane1[i].enterlane , lane1[i].exitlane> 
+fluent CHECKLANE2[i:0..4] = < lane2[i].enterlane , lane2[i].exitlane> 
+fluent CHECKLANE3[i:0..4] = < lane3[i].enterlane , lane3[i].exitlane> 
+
+//Prop holds for sub set, so it should hold for all
+assert CHECKALLLANES0 = forall[i:0..3]![](CHECKLANE0[i]  && CHECKLANE1[i])
+assert CHECKALLLANES1 = forall[i:0..3]![](CHECKLANE1[i]  && CHECKLANE2[i])
+assert CHECKALLLANES2 = forall[i:0..3]![](CHECKLANE2[i]  && CHECKLANE3[i])
+assert CHECKALLLANES3 = forall[i:0..3]![](CHECKLANE3[i]  && CHECKLANE0[i])
+
+
+//Check that No 2 have token at the same time
+fluent TOKEN0 = <pass_token[0] , pass_token[1]>
+fluent TOKEN1 = <pass_token[1] , pass_token[2]>
+fluent TOKEN2 = <pass_token[2] , pass_token[3]>
+fluent TOKEN3 = <pass_token[3] ,pass_token[0]>
+
+//This line is the same as all 4 above
+fluent TOKEN[i:0..3] = <pass_token[i] , pass_token[(i+1)%4]>
+
+assert CHECKALLTOKEN = <>TOKEN[0..3]
+*/

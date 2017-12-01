@@ -16,6 +16,8 @@ global isCaptain
 global queueID
 global grid1
 global grid2
+global counter
+counter = 1
 global reqMade #this may change for queue its used to know if lane was requested a car
 #request if no lane with subtoken can send done immediately
 global subTokenToLane  #parallel lane allowed initialize when you know which queue id you have
@@ -41,27 +43,27 @@ if queueID=="0":
     grid1 = "l0"
     grid2 = "l1"
     subTokenToLane="2"
-    subSubTokenToLane="3"
+    #subSubTokenToLane="3"
 
 if queueID=="1":
     grid1 = "l1"
     grid2 = "l2"
     subTokenToLane="3"
-    subSubTokenToLane="0"
+    #subSubTokenToLane="0"
 
 
 if queueID=="2":
     grid1 = "l2"
     grid2 = "l3"
     subTokenToLane="0"
-    subSubTokenToLane="1"
+    #subSubTokenToLane="1"
 
 
 if queueID=="3":
     grid1 = "l3"
     grid2 = "l0"
     subTokenToLane="1"
-    subSubTokenToLane="2"
+    #subSubTokenToLane="2"
 #carAction="arrive"+"===="+carName
 def control_c_handler(signum, frame):
 #     for led in leds:
@@ -170,6 +172,7 @@ def on_message(client, userdata, msg):
         print "I am in on_message_Request"
         if(myString[3]==queueID):
             reqMade.append(int(myString[2]))
+            time.sleep(2)
             onReqEntryAction(myString)
           
 # You can also add specific callbacks that match specific topics.
@@ -210,12 +213,16 @@ def onReqEntryAction(myString):
     if(isCaptain or isSUBTOKEN):
         #This will have to be looked again when subSubToken
         carAction=""
+        global counter
+        counter = counter +2
         if(myString[4]=="Right"):
             print("I am going right________")
             carAction="GRANT===="+myString[2]+"===="+grid1
+
         if(myString[4]=="Straight"):
             print("I am going all straight________")
             carAction="GRANT===="+myString[2]+"===="+grid1+"===="+grid2
+        
         print carAction
         #reqMade=True
         timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
@@ -223,6 +230,7 @@ def onReqEntryAction(myString):
         mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+carAction
         mqtt_client.publish(mqtt_topic, mqtt_message)  
         time.sleep(slp)
+        time.sleep(counter)
 
 def on_disconnect(client, userdata, rc):
 	print("Disconnected in a normal way")
@@ -273,5 +281,7 @@ while True:
 
         subTokenComplete=False
         meComplete=False
-        isCaptain=False  
+        isCaptain=False
+        global counter
+        counter = 1  
 

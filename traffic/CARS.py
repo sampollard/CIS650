@@ -15,6 +15,8 @@ global status
 global carID
 global queueID
 global direction
+global grid1
+global grid2
 moveslp=5
 slp=0.4
 status="REQ"
@@ -87,19 +89,28 @@ def on_message(client, userdata, msg):
                 if(carID==myString[2]):
                     status="OUT"
                     goRight(myString[3])
+ 
             if (len(myString)==5):
                 
                 # print("I am in straight********************")
                 if(carID==myString[2]):
                     status="GRANT"
+                    global grid1
+                    global grid2
+                    grid1 = myString[3]
+                    grid2 = myString[4]
                     # print ("I am in straight")
 
-def goStraight(grid1,grid2):
+def goStraight():
     global status
     global carID
     global queueID
     global direction
+    global grid1
+    global grid2
     print "go straight"
+    
+    #time.sleep(1+int(carID))
     timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
     messageUI="DIRECT_CAR$$$$"+carID+"$$$$qz"+queueID+"$$$$"+status+"$$$$goForward$$$$qz"+queueID;
     mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$'+messageUI
@@ -115,6 +126,7 @@ def goStraight(grid1,grid2):
     status=grid1
     # print status
     time.sleep(moveslp)
+
 
     timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
     messageUI="DIRECT_CAR$$$$"+carID+"$$$$qz"+queueID+"$$$$"+status+"$$$$goForward$$$$"+grid2;
@@ -187,7 +199,7 @@ while True:
         time.sleep(slp)
         sys.exit(1)
     elif(status=="GRANT"):
-        goStraight(carID,queueID)
+        goStraight()
 
         #just making sure the message was reached
     time.sleep(2)

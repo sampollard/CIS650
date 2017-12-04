@@ -120,7 +120,7 @@ class mainClass(QWidget):
         self.car2= QLabel()
         self.car3= QLabel()
         self.car4= QLabel()
-	self.car5= QLabel()
+        self.car5= QLabel()
 
         #+carID+"$$$$"+qzqueueID+"$$$$"+current+"$$$$command$$$$"+next 
         self.title.setText("  Car     qzqueueID    Current          command       next") 
@@ -271,38 +271,38 @@ class mainClass(QWidget):
         #timestamp||||FLUENT||||CZ||||CZ0Count||||CZ1count||||CZ2Count||||CZ3Count
  
     def update_label_something0(self, carID,qzqueueID,current,command,nextID):
-        temp = (str(carID)+ "       " +str(qzqueueID)+ "          " +str(current)+ "         " + str(command) + "       " +str(nextID) )
-        self.car0.setText(temp)
+        temp0 = ("Lane " + qzqueueID + " gives car " + carID+ " permission to go from   "  + current+     "  via         " + command +    "   to      " +nextID )
+        self.car0.setText(temp0)
         self.update_fluent(current,nextID) 
  
     def update_label_something1(self, carID,qzqueueID,current,command,nextID):
-        temp2 = (carID+ "           " +qzqueueID+      "          " +current+     "           " + command +    "         " +str(nextID) )
-        self.car1.setText(temp2)
+        temp1 = ("Lane " + qzqueueID + " gives car " + carID+ " permission to go from  "  + current+     "  via         " + command +    "   to      " +nextID )
+        self.car1.setText(temp1)
         self.update_fluent(current,nextID)
 
     def update_label_something2(self, carID,qzqueueID,current,command,nextID):
-        temp3 = (carID+ "           " +qzqueueID+      "          " +current+     "           " + command +    "        " + str(nextID ))
-        self.car2.setText(temp3)
+        temp2 = ("Lane " + qzqueueID + " gives car " + carID+ " permission to go from  "  + current+     "  via         " + command +    "   to      " +nextID )
+        self.car2.setText(temp2)
         self.update_fluent(current,nextID)
 
     def update_label_something3(self, carID,qzqueueID,current,command,nextID):
-        temp4 = (carID+ "           " +qzqueueID+      "          " +current+     "           " + command +    "         " +nextID )
-        self.car3.setText(temp4)
+        temp3 = ("Lane " + qzqueueID + " gives car " + carID+ " permission to go from  "  + current+     "  via         " + command +    "   to      " +nextID )
+        self.car3.setText(temp3)
         self.update_fluent(current,nextID)
 
     def update_label_something4(self, carID,qzqueueID,current,command,nextID):
-        temp5 = (carID+ "           " +qzqueueID+      "          " +current+     "           " + command +    "         " +nextID )
-        self.car4.setText(temp5)
+        temp4 = ("Lane " + qzqueueID + " gives car " + carID+ " permission to go from  "  + current+     "  via         " + command +    "   to      " +nextID )
+        self.car4.setText(temp4)
         self.update_fluent(current,nextID)
 
     def update_label_something5(self, carID,qzqueueID,current,command,nextID):
-        temp5 = (carID+ "           " +qzqueueID+      "          " +current+     "           " + command +    "         " +nextID )
-        self.car4.setText(temp5)
+        temp5 = ("Lane " + qzqueueID + " gives car " + carID+ " permission to go from "  + current+     "  via         " + command +    "   to      " +nextID )
+        self.car5.setText(temp5)
         self.update_fluent(current,nextID)
 
     def update_label_something_subtoken(self, laneID):
-        temp5 = (laneID)
-        self.sub_tokenLine.setText(temp5)
+        temp6 = (laneID)
+        self.sub_tokenLine.setText(temp6)
         action="FLUENT||||SUBTOKEN||||"+str(laneID)
         timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
         mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '||||'+action

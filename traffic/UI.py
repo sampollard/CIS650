@@ -120,6 +120,8 @@ class mainClass(QWidget):
         self.car2= QLabel()
         self.car3= QLabel()
         self.car4= QLabel()
+	self.car5= QLabel()
+
         #+carID+"$$$$"+qzqueueID+"$$$$"+current+"$$$$command$$$$"+next 
         self.title.setText("  Car     qzqueueID    Current          command       next") 
         self.car0.setText( "   waiting               ")
@@ -127,6 +129,7 @@ class mainClass(QWidget):
         self.car2.setText( "   waiting               ")
         self.car3.setText( "   waiting               ")
         self.car4.setText( "   waiting               ")
+        self.car5.setText( "   waiting               ")
         
      
 	
@@ -136,6 +139,7 @@ class mainClass(QWidget):
         self.car2.setAlignment(Qt.AlignCenter)
         self.car3.setAlignment(Qt.AlignCenter)
         self.car4.setAlignment(Qt.AlignCenter)
+        self.car5.setAlignment(Qt.AlignCenter)
 
         
         self.tokenLine.setAlignment(Qt.AlignCenter)
@@ -149,6 +153,7 @@ class mainClass(QWidget):
         layout.addWidget(self.car2)
         layout.addWidget(self.car3)
         layout.addWidget(self.car4)
+        layout.addWidget(self.car5)
         layout.addWidget(self.tokenLine)
         layout.addWidget(self.sub_tokenLine)
         pybutton = QPushButton('Take a Step', self)
@@ -214,7 +219,12 @@ class mainClass(QWidget):
 
             elif ( myString[1] == "DIRECT_CAR" and myString[2] == "4"):
                 self.update_label_something4(myString[2], myString[3],myString[4],myString[5],myString[6])
-        
+
+            elif ( myString[1] == "DIRECT_CAR" and myString[2] == "5"):
+                self.update_label_something5(myString[2], myString[3],myString[4],myString[5],myString[6])
+
+       
+ 
 
         elif len(myString)==3: 
 
@@ -227,28 +237,29 @@ class mainClass(QWidget):
     #TODO Figure out when the car moves form QZ ->l1 ->l2 ->EXIT to show that its light moves.
 
     def update_fluent(self, current,nextID):
-        if nextID == "0":
+        print( "Message parsing " + str(current) +" " + str(nextID) )
+        if nextID == "l0":
             self.countCZ0 = self.countCZ0 +1
  
-        elif nextID == "1":
+        elif nextID == "l1":
             self.countCZ1 = self.countCZ1 +1
 
-        elif nextID == "2":
+        elif nextID == "l2":
             self.countCZ2 = self.countCZ2 +1
 
-        elif nextID == "3":
+        elif nextID == "l3":
             self.countCZ3 = self.countCZ3 +1
 
-        if current == "0":
+        if current == "l0":
             self.countCZ0 = self.countCZ0 -1  
  
-        elif current == "1":
+        elif current == "l1":
             self.countCZ1 = self.countCZ1 -1  
         
-        elif current == "2":
+        elif current == "l2":
             self.countCZ2 = self.countCZ2 -1  
 
-        elif current == "3":
+        elif current == "l3":
             self.countCZ3 = self.countCZ3 -1  
 
         print(str( self.countCZ0)+"||||"+str( self.countCZ1)+"||||" +str( self.countCZ2)+"||||"+str( self.countCZ3))
@@ -284,6 +295,10 @@ class mainClass(QWidget):
         self.car4.setText(temp5)
         self.update_fluent(current,nextID)
 
+    def update_label_something5(self, carID,qzqueueID,current,command,nextID):
+        temp5 = (carID+ "           " +qzqueueID+      "          " +current+     "           " + command +    "         " +nextID )
+        self.car4.setText(temp5)
+        self.update_fluent(current,nextID)
 
     def update_label_something_subtoken(self, laneID):
         temp5 = (laneID)

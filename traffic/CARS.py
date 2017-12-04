@@ -17,8 +17,10 @@ global queueID
 global direction
 global grid1
 global grid2
-moveslp=5
-slp=0.4
+global moveslp
+moveslp=1
+slp=1.2
+mid_moveslp=2.2
 status="REQ"
 if len(sys.argv) == 4:
     carID = sys.argv[1]
@@ -72,6 +74,7 @@ def on_message(client, userdata, msg):
     global status
     global grid1
     global grid2
+    global moveslp
     print msg.payload  
     myString = str(msg.payload).split("====")
     # print(myString)
@@ -79,27 +82,28 @@ def on_message(client, userdata, msg):
     # print (myString[1])
     if status=="REQ":
         
-        if(len(myString)>=4 and myString[1]=='GRANT'):
+        if(len(myString)>=5 and myString[1]=='GRANT'):
             # if(carID==myString[2]):
             #     print(carID+"#############"+myString[2])
             # print("**************Permission Granted"+carID+myString[2])
             
             # print len(myString)
-            if (len(myString)==4):
+            if (len(myString)==5):
                 
                 # print("I am in right")
                 if(carID==myString[2]):
-                    status="OUT"
                     status="GRANT"
                     grid1 = myString[3]
+                    moveslp = moveslp + float(myString[4])
  
-            if (len(myString)==5):
+            if (len(myString)==6):
                 
                 # print("I am in straight********************")
                 if(carID==myString[2]):
                     status="GRANT"
                     grid1 = myString[3]
                     grid2 = myString[4]
+                    moveslp = moveslp + float(myString[5]) 
                     # print ("I am in straight")
 
 def logString(grid):
@@ -118,8 +122,7 @@ def goRight(grid1):
     global carID
     global queueID
     global direction
-    time.sleep(moveslp)
-    f = open('MONITOR.log', 'a')
+    #f = open('MONITOR.log', 'a')
     messageUI="DIRECT_CAR$$$$"+carID+"$$$$qz"+queueID+"$$$$"+status+"$$$$goForward$$$$qz"+queueID;
     mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$'+messageUI
     mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
@@ -132,8 +135,9 @@ def goRight(grid1):
     mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
     status=grid1
     toLog=logString(grid1)+" "+carID+" "+"goRight"
-    f.write(toLog + "\n")
+    # f.write(toLog + "\n")
     # print status
+    time.sleep(mid_moveslp)
 
     messageUI="DIRECT_CAR$$$$"+carID+"$$$$qz"+queueID+"$$$$"+status+"$$$$goRight$$$$"+"exit";
     mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$'+messageUI
@@ -142,7 +146,7 @@ def goRight(grid1):
     # toLog=logString(grid1)+" "+carID+" "+"goRight"
     # f.write(toLog + "\n")
     # print status
-    f.close()
+    #f.close()
 
 def goStraight():
     global status
@@ -152,8 +156,7 @@ def goStraight():
     global grid1
     global grid2
     print "go straight"
-    f = open('MONITOR.log', 'a')
-    #time.sleep(1+int(carID))
+    #f = open('MONITOR.log', 'a')
     timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
     messageUI="DIRECT_CAR$$$$"+carID+"$$$$qz"+queueID+"$$$$"+status+"$$$$goForward$$$$qz"+queueID;
     mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$'+messageUI
@@ -168,22 +171,18 @@ def goStraight():
     mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
     status=grid1
     toLog=logString(grid1)+" "+carID+" "+"goForward"
-    f.write(toLog + "\n")
+    #f.write(toLog + "\n")
+    time.sleep(mid_moveslp)
        
-    # print status
-    time.sleep(moveslp)
-
-
     timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
     messageUI="DIRECT_CAR$$$$"+carID+"$$$$qz"+queueID+"$$$$"+status+"$$$$goForward$$$$"+grid2;
     mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$'+messageUI
     mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
     status=grid2
     toLog=logString(grid2)+" "+carID+" "+"goForward"
-    f.write(toLog + "\n")
+    # f.write(toLog + "\n")
     # print status
-    time.sleep(moveslp)
-
+    time.sleep(mid_moveslp)
 
     timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
     messageUI="DIRECT_CAR$$$$"+carID+"$$$$qz"+queueID+"$$$$"+status+"$$$$goForward$$$$"+"exit";
@@ -191,8 +190,7 @@ def goStraight():
     mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
     status="EXIT"
     # print status
-    time.sleep(slp)
-    f.close()
+    # f.close()
 
 # You can also add specific callbacks that match specific topics.
 # See message_callback_add at https://pypi.python.org/pypi/paho-mqtt#callbacks.
@@ -253,7 +251,7 @@ while True:
             goRight(grid1)
 
         #just making sure the message was reached
-    time.sleep(4)
+    time.sleep(4 + moveslp)
     # else:
     #     carAction="CAR_ALIVE===="+carID
     #     timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')

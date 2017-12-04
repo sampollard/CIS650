@@ -282,6 +282,5 @@ while True:
         subTokenComplete=False
         meComplete=False
         isCaptain=False
-        global counter
         counter = 1  
 

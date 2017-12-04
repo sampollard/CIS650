@@ -70,6 +70,8 @@ def on_connect(client, userdata, flags, rc):
 # However, see note below about message_callback_add.
 def on_message(client, userdata, msg):
     global status
+    global grid1
+    global grid2
     print msg.payload  
     myString = str(msg.payload).split("====")
     # print(myString)
@@ -88,15 +90,14 @@ def on_message(client, userdata, msg):
                 # print("I am in right")
                 if(carID==myString[2]):
                     status="OUT"
-                    goRight(myString[3])
+                    status="GRANT"
+                    grid1 = myString[3]
  
             if (len(myString)==5):
                 
                 # print("I am in straight********************")
                 if(carID==myString[2]):
                     status="GRANT"
-                    global grid1
-                    global grid2
                     grid1 = myString[3]
                     grid2 = myString[4]
                     # print ("I am in straight")
@@ -186,7 +187,7 @@ def goStraight():
 
 
     timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
-    messageUI="DIRECT_CAR$$$$"+carID+"$$$$qz"+queueID+"$$$$"+status+"$$$$goStraight$$$$"+"exit";
+    messageUI="DIRECT_CAR$$$$"+carID+"$$$$qz"+queueID+"$$$$"+status+"$$$$goForward$$$$"+"exit";
     mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '$$$$'+messageUI
     mqtt_client.publish(mqtt_topic, mqtt_message)  # by doing this publish, we should keep client alive
     status="EXIT"
@@ -247,7 +248,10 @@ while True:
         time.sleep(slp)
         sys.exit(1)
     elif(status=="GRANT"):
-        goStraight()
+        if direction=='Straight':
+            goStraight()
+        else:
+            goRight(grid1)
 
         #just making sure the message was reached
     time.sleep(2)

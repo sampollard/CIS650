@@ -15,10 +15,10 @@ for i in range(4):
 # Add a second car to queue 0
 p = subprocess.Popen(['python2', 'CARS.py',str(4),str(0),'Right'] )
 processwait.append(p)
-print("started car" + str(i))
+print("started car" + str(4))
 p = subprocess.Popen(['python2', 'CARS.py',str(5),str(0),'Straight'] )
 processwait.append(p)
-print("started car" + str(i))
+print("started car" + str(5))
 
 y=0
 for i in range(4):

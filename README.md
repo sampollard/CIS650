@@ -1,8 +1,30 @@
 # CIS 650
 Group members: Prachi Desai, Robert Sappington, Sam Pollard
+Assigmnents:
 butler		leader		rollercoaster	traffic
 ## Group assignment - traffic
 ### Description
+This manages a four-lane highway with 4 queuing zones acting as lanes in the following configuration
+```
+    |qz0|
+    +---+---+----
+    |l0 |l3 | qz3
+----+---+---+----
+qz1 |l1 |l2 |
+----+---+---+
+        |qz2|
+```
+There are the following scripts. To get this to work, they must be run in the following order:
+
+- `python3 UI.py`: Starts the UI. This processes the messages and you can click through to see what happens at your leisure
+
+- `python2 start_all.py`: This starts seven cars and four queues.
+
+- `python2 cars_fluent.py`: This tracks how many cars are in each restricted zone. It also outputs this into a file called MONITOR.log. Note this is appended, so after each run you should delete the file. Every time something changes (i.e. a token passes, a car enters or exits a qz or a restricted zone) this adds a line consisting of a four-tuple, counting the number of cars in each restricted zone. For example, `(0,1,1,0)` indicates l1 and l2 have one car in them each. This can be used to track efficiency, though keep in mind this is not a measure of elapsed time but only prints when an event happens. An example is shown in `sample_MONITOR.log`.
+
+- `python2 token_fluent.py`: Tracks which qz (lane) has the token. Only one should have it at at time!
+
+- `python2 subtoken_fluent.py`: Tracks which qz (lane) has the subtoken. Only one should have it at time!
 
 
 ## Group assignment - Butler

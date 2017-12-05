@@ -271,32 +271,32 @@ class mainClass(QWidget):
         #timestamp||||FLUENT||||CZ||||CZ0Count||||CZ1count||||CZ2Count||||CZ3Count
  
     def update_label_something0(self, carID,qzqueueID,current,command,nextID):
-        temp0 = ("Lane " + qzqueueID + " gives car " + carID+ " permission to go from   "  + current+     "  via         " + command +    "   to      " +nextID )
+        temp0 = ("Lane " + qzqueueID + "  car " + carID+ " to go from   "  + current+     "  via         " + command +    "   to      " +nextID )
         self.car0.setText(temp0)
         self.update_fluent(current,nextID) 
  
     def update_label_something1(self, carID,qzqueueID,current,command,nextID):
-        temp1 = ("Lane " + qzqueueID + " gives car " + carID+ " permission to go from  "  + current+     "  via         " + command +    "   to      " +nextID )
+        temp1 = ("Lane " + qzqueueID + "  car " + carID+ " to go from  "  + current+     "  via         " + command +    "   to      " +nextID )
         self.car1.setText(temp1)
         self.update_fluent(current,nextID)
 
     def update_label_something2(self, carID,qzqueueID,current,command,nextID):
-        temp2 = ("Lane " + qzqueueID + " gives car " + carID+ " permission to go from  "  + current+     "  via         " + command +    "   to      " +nextID )
+        temp2 = ("Lane " + qzqueueID + "  car " + carID+ " to go from  "  + current+     "  via         " + command +    "   to      " +nextID )
         self.car2.setText(temp2)
         self.update_fluent(current,nextID)
 
     def update_label_something3(self, carID,qzqueueID,current,command,nextID):
-        temp3 = ("Lane " + qzqueueID + " gives car " + carID+ " permission to go from  "  + current+     "  via         " + command +    "   to      " +nextID )
+        temp3 = ("Lane " + qzqueueID + "  car " + carID+ "  to go from  "  + current+     "  via         " + command +    "   to      " +nextID )
         self.car3.setText(temp3)
         self.update_fluent(current,nextID)
 
     def update_label_something4(self, carID,qzqueueID,current,command,nextID):
-        temp4 = ("Lane " + qzqueueID + " gives car " + carID+ " permission to go from  "  + current+     "  via         " + command +    "   to      " +nextID )
+        temp4 = ("Lane " + qzqueueID + "  car " + carID+ " to go from  "  + current+     "  via         " + command +    "   to      " +nextID )
         self.car4.setText(temp4)
         self.update_fluent(current,nextID)
 
     def update_label_something5(self, carID,qzqueueID,current,command,nextID):
-        temp5 = ("Lane " + qzqueueID + " gives car " + carID+ " permission to go from "  + current+     "  via         " + command +    "   to      " +nextID )
+        temp5 = ("Lane " + qzqueueID + "  car " + carID+ " to go from "  + current+     "  via         " + command +    "   to      " +nextID )
         self.car5.setText(temp5)
         self.update_fluent(current,nextID)
 

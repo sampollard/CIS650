@@ -137,7 +137,7 @@ def on_message(client, userdata, msg):
                 timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
                 mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+action
                 mqtt_client.publish(mqtt_topic, mqtt_message)  
-                time.sleep(slp)    
+                #time.sleep(slp)    
     if(len(myString)==4 and myString[1]=='SUBTOKEN_DONE'):
         if(myString[3]==subTokenToLane):
             if isCaptain:
@@ -165,14 +165,15 @@ def on_message(client, userdata, msg):
                 mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+action
                 mqtt_client.publish(mqtt_topic, mqtt_message) 
                 isSUBTOKEN=False  
-                time.sleep(slp)
+                #time.sleep(slp)
                  #give away the subtoken since no cars   
 
     if(len(myString)==5 and myString[1]=='REQUEST_ENTRY'):
         print "I am in on_message_Request"
         if(myString[3]==queueID):
-            reqMade.append(int(myString[2]))
-            time.sleep(2)
+            if int(myString[2]) not in reqMade:
+                reqMade.append(int(myString[2]))
+            #time.sleep(2)
             onReqEntryAction(myString)
           
 # You can also add specific callbacks that match specific topics.
@@ -201,7 +202,7 @@ def onReqEntryAction(myString):
 
         mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+laneAction
         mqtt_client.publish(mqtt_topic, mqtt_message)  
-        time.sleep(slp)
+        #time.sleep(slp)
         # remove comment when you implement sub_sub_token
         # laneAction="SUB_SUBTOKEN====qz"+subSubTokenToLane
         # timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
@@ -214,14 +215,19 @@ def onReqEntryAction(myString):
         #This will have to be looked again when subSubToken
         carAction=""
         global counter
-        counter = counter +2
+     
+        if ( isCaptain ):
+            counter = counter + 2 + 2
+        else:
+            counter = counter + 2
+
         if(myString[4]=="Right"):
             print("I am going right________")
-            carAction="GRANT===="+myString[2]+"===="+grid1
+            carAction="GRANT===="+myString[2]+"===="+grid1+"===="+str(counter)
 
         if(myString[4]=="Straight"):
             print("I am going all straight________")
-            carAction="GRANT===="+myString[2]+"===="+grid1+"===="+grid2
+            carAction="GRANT===="+myString[2]+"===="+grid1+"===="+grid2+"===="+str(counter)
         
         print carAction
         #reqMade=True
@@ -229,8 +235,8 @@ def onReqEntryAction(myString):
 
         mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+carAction
         mqtt_client.publish(mqtt_topic, mqtt_message)  
-        time.sleep(slp)
-        time.sleep(counter)
+        #time.sleep(slp)
+       # time.sleep(counter)
 
 def on_disconnect(client, userdata, rc):
 	print("Disconnected in a normal way")
@@ -282,5 +288,5 @@ while True:
         subTokenComplete=False
         meComplete=False
         isCaptain=False
-        counter = 1  
+        #counter = 1  
 

@@ -121,6 +121,7 @@ class mainClass(QWidget):
         self.car3= QLabel()
         self.car4= QLabel()
         self.car5= QLabel()
+        self.car6= QLabel()
 
         #+carID+"$$$$"+qzqueueID+"$$$$"+current+"$$$$command$$$$"+next 
         self.title.setText("  Car     qzqueueID    Current          command       next") 
@@ -130,6 +131,7 @@ class mainClass(QWidget):
         self.car3.setText( "   waiting               ")
         self.car4.setText( "   waiting               ")
         self.car5.setText( "   waiting               ")
+        self.car6.setText( "   waiting               ")
         
      
 	
@@ -140,6 +142,7 @@ class mainClass(QWidget):
         self.car3.setAlignment(Qt.AlignCenter)
         self.car4.setAlignment(Qt.AlignCenter)
         self.car5.setAlignment(Qt.AlignCenter)
+        self.car6.setAlignment(Qt.AlignCenter)
 
         
         self.tokenLine.setAlignment(Qt.AlignCenter)
@@ -154,6 +157,7 @@ class mainClass(QWidget):
         layout.addWidget(self.car3)
         layout.addWidget(self.car4)
         layout.addWidget(self.car5)
+        layout.addWidget(self.car6)
         layout.addWidget(self.tokenLine)
         layout.addWidget(self.sub_tokenLine)
         pybutton = QPushButton('Take a Step', self)
@@ -223,6 +227,8 @@ class mainClass(QWidget):
             elif ( myString[1] == "DIRECT_CAR" and myString[2] == "5"):
                 self.update_label_something5(myString[2], myString[3],myString[4],myString[5],myString[6])
 
+            elif ( myString[1] == "DIRECT_CAR" and myString[2] == "6"):
+                self.update_label_something6(myString[2], myString[3],myString[4],myString[5],myString[6])
        
  
 
@@ -298,6 +304,10 @@ class mainClass(QWidget):
     def update_label_something5(self, carID,qzqueueID,current,command,nextID):
         temp5 = ("Lane " + qzqueueID + "  car " + carID+ " to go from "  + current+     "  via         " + command +    "   to      " +nextID )
         self.car5.setText(temp5)
+        self.update_fluent(current,nextID)
+    def update_label_something6(self, carID,qzqueueID,current,command,nextID):
+        temp6 = ("Lane " + qzqueueID + "  car " + carID+ " to go from "  + current+     "  via         " + command +    "   to      " +nextID )
+        self.car6.setText(temp6)
         self.update_fluent(current,nextID)
 
     def update_label_something_subtoken(self, laneID):

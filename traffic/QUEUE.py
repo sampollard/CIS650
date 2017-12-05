@@ -133,11 +133,18 @@ def on_message(client, userdata, msg):
                 if len(reqMade) == 0:
                     meComplete=True # TODO: Change to send off another car in the queue
             if isSUBTOKEN:
-                action="SUBTOKEN_DONE====qz===="+queueID
-                timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
-                mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+action
-                mqtt_client.publish(mqtt_topic, mqtt_message)  
-                #time.sleep(slp)    
+                caridxs = [i for i,x in enumerate(reqMade) if x == int(myString[2])]
+                if len(caridxs) > 0:
+                    del reqMade[caridxs[0]]
+                if len(caridxs) > 1:
+                    print("Car got added twice, here's the message: {}".format(myString))
+                    sys.exit(1)
+                if len(reqMade) == 0:
+                    action="SUBTOKEN_DONE====qz===="+queueID
+                    timestamp = dt.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S.%f')
+                    mqtt_message = "[%s] %s " % (timestamp,ip_addr) + '===='+action
+                    mqtt_client.publish(mqtt_topic, mqtt_message)  
+                    #time.sleep(slp)    
     if(len(myString)==4 and myString[1]=='SUBTOKEN_DONE'):
         if(myString[3]==subTokenToLane):
             if isCaptain:
@@ -217,7 +224,10 @@ def onReqEntryAction(myString):
         global counter
      
         if ( isCaptain ):
-            counter = counter + 2 + 2
+            if counter < 5:
+                counter = counter + 2 + 3
+            else:
+                counter -= 2
         else:
             counter = counter + 2
 

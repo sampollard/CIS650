@@ -227,7 +227,7 @@ def onReqEntryAction(myString):
             if counter < 5:
                 counter = counter + 2 + 3
             else:
-                counter -= 2
+                counter += 2
         else:
             counter = counter + 2
 

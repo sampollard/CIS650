@@ -111,6 +111,17 @@ def on_message(client, userdata, msg):
             turnOn(6)
             turnOn(7)
             print("More than 1 car in CZ3!!!")
+        if on_edison:
+            global leds
+            f = open('MONITOR.log', 'a')
+            s = "({},{},{},{})".format(
+                    '1' if leds[0].read() == 0 else ('2' if leds[1].read() == 0 else '0'),
+                    '1' if leds[2].read() == 0 else ('2' if leds[3].read() == 0 else '0'),
+                    '1' if leds[4].read() == 0 else ('2' if leds[5].read() == 0 else '0'),
+                    '1' if leds[6].read() == 0 else ('2' if leds[7].read() == 0 else '0'),
+                )
+            f.write(s + "\n")
+            f.close()
 
 # You can also add specific callbacks that match specific topics.
 # See message_callback_add at https://pypi.python.org/pypi/paho-mqtt#callbacks.
